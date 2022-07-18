@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="../style.css">
+    <script type="text/javascript" src="data.js"></script>
+    <title>所有する同人誌</title>
+</head>
+
+<body>
+    <p class="title">所有する同人誌</p>
+    <p class="text">
+        紙媒体で所有し、かつ既読であるもののみをリストしている。<br>
+        検索機能は、サークル名・作者名・タイトルに関して全文一致、他に関して部分一致で評価する。
+    </p>
+    <p align="right">
+        <label id="counter"></label>
+        <input type="text" id="searchinput">
+        <select id="searchselect">
+            <option>サークル名</option>
+            <option>作者名</option>
+            <option>タイトル</option>
+            <option>発行日</option>
+            <option>概要</option>
+        </select>
+    </p>
+    <script type="text/javascript" src="table.js"></script>
+</body>
+
+</html>
