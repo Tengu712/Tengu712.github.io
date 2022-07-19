@@ -1,6 +1,6 @@
 div {
     margin: 1em;
-    overflow-x: scroll;
+    overflow-x: auto;
     -webkit-overflow-scrolling: touch;
 }
 
