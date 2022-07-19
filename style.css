@@ -47,21 +47,3 @@ p.title {
     margin: 0;
     padding: 0.5em 1em;
 }
-
-table {
-    margin: 0 auto;
-    border-style: collapse;
-    border-spacing: 0;
-}
-
-td {
-    background-color: rgba(0, 0, 0, 0.6);
-    border-bottom: solid 1px white;
-    padding: 5px;
-}
-
-th {
-    background-color: rgba(0, 0, 0, 0.6);
-    border: solid 1px white;
-    padding: 10px;
-}
