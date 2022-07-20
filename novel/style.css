@@ -1,0 +1,12 @@
+div {
+    background-color: rgba(0, 0, 0, 0.6);
+    margin: 0 auto;
+    padding: 1em;
+    width: 60%;
+}
+
+pre {
+    overflow: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}

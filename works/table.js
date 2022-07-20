@@ -74,6 +74,11 @@ function createTable(str, mode) {
                 thumb = document.createElement("p");
                 thumb.innerHTML = "To show image, check box.";
             }
+        } else if (n[0] == "novel") {
+            const words = n[2].split(',');
+            thumb = document.createElement("a");
+            thumb.href = "../novel/" + words[0];
+            thumb.innerHTML = words[1];
         }
         title.innerHTML = n[1];
         tag.innerHTML = n[3] + "<br>" + n[4];
