@@ -1,4 +1,5 @@
 const all = document.getElementById("all");
+const enableimg = document.getElementById("enableimg");
 const searchinput = document.getElementById("searchinput");
 const searchselect = document.getElementById("searchselect");
 const counter = document.getElementById("counter");
@@ -60,14 +61,19 @@ function createTable(str, mode) {
         const tag = document.createElement("p");
         let thumb = null;
         if (n[0] == "1img") {
-            thumb = document.createElement("img");
-            thumb.src = "../img/" + n[2];
-            thumb.addEventListener(
-                "click",
-                (event) => {
-                    show("<div class='oneimg'><img src='" + thumb.src + "'></img></div>");
-                }
-            );
+            if (enableimg.checked) {
+                thumb = document.createElement("img");
+                thumb.src = "../img/" + n[2];
+                thumb.addEventListener(
+                    "click",
+                    (event) => {
+                        show("<div class='oneimg'><img src='" + thumb.src + "'></img></div>");
+                    }
+                );
+            } else {
+                thumb = document.createElement("p");
+                thumb.innerHTML = "To show image, check box.";
+            }
         }
         title.innerHTML = n[1];
         tag.innerHTML = n[3] + "<br>" + n[4];
@@ -106,6 +112,7 @@ window.onload = () => {
         splited.push(lines[i].split('|'));
     }
     splited.pop();
+    enableimg.checked = false;
     createTable("", -1);
     searchinput.addEventListener("keypress", search);
 }
