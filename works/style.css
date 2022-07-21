@@ -1,15 +1,16 @@
 div#all {
     display: flex;
+    flex-wrap: wrap;
 }
 
 img {
-    max-width: 300px;
-    max-height: 300px;
+    max-width: 380px;
+    max-height: 280px;
 }
 
 table {
     border: solid 1px white;
-    max-width: 400px;
+    min-width: 400px;
 }
 
 td.thumb {
@@ -17,6 +18,8 @@ td.thumb {
     background-color: rgba(0, 0, 0, 0.6);
     border: solid 1px white;
     padding: 5px;
+    max-width: 400px;
+    max-height: 300px;
 }
 td.tag {
     background-color: rgba(0, 0, 0, 0.6);
@@ -26,7 +29,20 @@ td.tag {
 }
 
 th {
-    background-color: rgba(0, 0, 0, 0.6);
     border: solid 2px white;
     padding: 10px;
+    height: 60px;
+    white-space: nowrap;
+}
+
+th.image {
+    background-color: rgba(20, 0, 0, 0.6);
+}
+
+th.comic {
+    background-color: rgba(0, 0, 20, 0.6);
+}
+
+th.novel {
+    background-color: rgba(0, 20, 0, 0.6);
 }

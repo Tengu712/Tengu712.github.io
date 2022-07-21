@@ -15,8 +15,17 @@ function show(str) {
             <meta charset='utf-8'>\
             <style>\
                 body { background-color: black; margin: 0; }\
-                div.oneimg { width: 100%; height: 100%; }\
-                div.oneimg>img { margin: 0 auto; width: 100%; height: 100%; object-fit: contain; }\
+                div { width: 100%; height: 100%; }\
+                img.image { margin: 0 auto; width: 100%; height: 100%; object-fit: contain; }\
+                img.comic {\
+                    margin-top: 0;\
+                    margin-bottom: 1em;\
+                    margin-left: auto;\
+                    margin-right: auto;\
+                    width: 100%;\
+                    height: 100%;\
+                    object-fit: contain;\
+                }\
             </style>\
         </head>\
         <body>\
@@ -35,7 +44,7 @@ function createTable(str, mode) {
     splited.forEach(n => {
         switch (mode) {
             case 0:
-                if (str != n[1])
+                if (n[1].indexOf(str) == -1)
                     return;
                 break;
             case 1:
@@ -60,21 +69,42 @@ function createTable(str, mode) {
         const title = document.createElement("p");
         const tag = document.createElement("p");
         let thumb = null;
-        if (n[0] == "1img") {
+        if (n[0] == "image") {
+            th1.classList.add("image");
+            const path = "../img/" + n[2];
             if (enableimg.checked) {
                 thumb = document.createElement("img");
-                thumb.src = "../img/" + n[2];
-                thumb.addEventListener(
-                    "click",
-                    (event) => {
-                        show("<div class='oneimg'><img src='" + thumb.src + "'></img></div>");
-                    }
-                );
+                thumb.src = path;
             } else {
                 thumb = document.createElement("p");
                 thumb.innerHTML = "To show image, check box.";
             }
+            thumb.addEventListener(
+                "click",
+                (event) => {
+                    show("<div ><img class='image' src='" + path + "'></img></div>");
+                }
+            );
+        } else if (n[0] == "comic") {
+            th1.classList.add("comic");
+            const words = n[2].split(',');
+            let s = "";
+            words.forEach(n => s += "<img class='comic' src='../img/" + n + "'></img>");
+            if (enableimg.checked) {
+                thumb = document.createElement("img");
+                thumb.src = "../img/" + words[0];
+            } else {
+                thumb = document.createElement("p");
+                thumb.innerHTML = "To show image, check box.";
+            }
+            thumb.addEventListener(
+                "click",
+                (event) => {
+                    show("<div class='image'>" + s + "</div>");
+                }
+            );
         } else if (n[0] == "novel") {
+            th1.classList.add("novel");
             const words = n[2].split(',');
             thumb = document.createElement("a");
             thumb.href = "../novel/" + words[0];
