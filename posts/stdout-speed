@@ -1,0 +1,137 @@
+<h2>背景</h2>
+
+<p>
+ゲーム開発フレームワークを作る上で、ロガーが欲しくなった。
+文字列を出力するだけの簡単なもので良いため、外部ライブラリを用いるのは大げさであるため、簡単なロガーを実装することにした。
+</p>
+
+<p>
+ロガーを実装するには、高速な標準出力の手法を把握していなければならない。
+<a href="https://github.com/ChristianPanov/lwlog">lwlog</a>を見たところ、fwriteとsetvbufだけで高速になるように見える。
+</p>
+
+<p>
+これが本当か否かぱっと調べたところ、printfとfwrite・あるいはバッファリング有無の速度比較に関する文献がない。
+あまりにも検証が簡単だからであろうか。
+それとも、あまりにも初級的な議論であるからであろうか。
+</p>
+
+<p>
+ということで、簡単な実験をしたため、結果をまとめる。
+</p>
+
+<h2>プログラム</h2>
+
+<p>
+既定の文字列と外部から与えられた文字列を、10000行(一行ずつflush)出力するプログラムにおいて、次の四パターンを検証した。
+</p>
+
+<ul>
+  <li>printf</li>
+  <li>fwrite</li>
+  <li>printf(バッファリング有り)</li>
+  <li>fwrite(バッファリング有り)</li>
+</ul>
+
+<p>
+環境は以下。
+</p>
+
+<ul>
+  <li>Windows 10 Home</li>
+  <li>gcc.exe (x86_64-win32-seh-rev2, Built by MinGW-W64 project) 12.2.0
+  <li>Powershell</li>
+</ul>
+
+<p>
+ソースコードは以下。
+gccの-Dオプションでマクロを定義してパターンを切り替えられるようにした。「gcc -DPRINTF -DIOFBF main.c」のようにビルドして欲しい。
+</p>
+
+<pre class="prettyprint">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;windows.h&gt;
+
+LARGE_INTEGER freq;
+LARGE_INTEGER before;
+LARGE_INTEGER after;
+
+void test_printf(const char *msg) {
+    QueryPerformanceCounter(&before);
+    for (int i = 0; i &lt; 10000; ++i) {
+        printf("hello %s\n", msg);
+#ifdef IOFBF
+        fflush(stdout);
+#endif
+    }
+    QueryPerformanceCounter(&after);
+}
+
+void test_fwrite(const char *msg) {
+    QueryPerformanceCounter(&before);
+    for (int i = 0; i &lt; 10000; ++i) {
+        fwrite("hello ", sizeof(char), 6, stdout);
+        fwrite(msg, sizeof(char), strlen(msg), stdout);
+        fwrite("\n", sizeof(char), 1, stdout);
+#ifdef IOFBF
+        fflush(stdout);
+#endif
+    }
+    QueryPerformanceCounter(&after);
+}
+
+int main() {
+    QueryPerformanceFrequency(&freq);
+#ifdef IOFBF
+    setvbuf(stdout, NULL, _IOFBF, 1024);
+#endif
+#ifdef PRINTF
+    test_printf("world!");
+    printf("printf\n");
+#elif FWRITE
+    test_fwrite("world!");
+    printf("fwrite\n");
+#endif
+#ifdef IOFBF
+    printf("with _IOFBF\n");
+#endif
+    printf("%lf ms\n", (after.QuadPart - before.QuadPart) * 1000.0 / freq.QuadPart);
+    return 0;
+}</pre>
+
+<p>
+ラインバッファリング(_IOLBF)を用いるべきであろうが、何故か期待通りにflushされなかったため、一行ずつfflush()を呼び出している。
+</p>
+
+<h2>結果</h2>
+
+<p>
+五回実行した。結果を以下にまとめる。単位はミリ秒(ms)である。小数点以下は切り捨てる。
+</p>
+
+<table>
+  <thead>
+    <tr><th></th><th>printf</th><th>fwrite</th><th>printf(_IOFBF)</th><th>fwrite(_IOFBF)</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>1</td><td>4992</td><td>2439</td><td>425</td><td>432</td></tr>
+    <tr><td>2</td><td>6060</td><td>1919</td><td>542</td><td>430</td></tr>
+    <tr><td>3</td><td>4722</td><td>2411</td><td>440</td><td>542</td></tr>
+    <tr><td>4</td><td>6099</td><td>1876</td><td>544</td><td>461</td></tr>
+    <tr><td>5</td><td>5080</td><td>1923</td><td>433</td><td>543</td></tr>
+    <tr><td>Average</td><td>5390</td><td>2113</td><td>476</td><td>481</td></tr>
+  </tbody>
+</table>
+
+<p>
+バッファリングなしでは圧倒的にfwriteが速く、バッファリングありでは両者大差ないという結果を得られた。
+</p>
+
+<p>
+printfは整形をする分遅いであろうと想定できるが、であればバッファリングありで大差ない理由がわからない。
+この点は検証の余地がある。
+</p>
+
+<p>
+取り敢えずロガーは、取り回しの良いバッファリングありのprintfで実装するのが良さそうだ。
+</p>
