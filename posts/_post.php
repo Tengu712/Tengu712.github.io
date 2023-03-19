@@ -85,20 +85,20 @@ if ($type === 'post') {
       $flag = false;
       foreach ($indecies as $key => $tmp) {
         if ($flag) {
-          $next_id = $key;
+          $prev_id = $key;
           break;
         }
         if ($key === $id) {
           $flag = true;
           continue;
         }
-        $prev_id = $key;
+        $next_id = $key;
       }
       if ($next_id != '') {
           echo '<div id="postfooter-next">';
               echo 'Next Article';
               echo '<br>';
-              echo '<a href="./?type=article&id=';
+              echo '<a href="./?type=post&id=';
                   echo $next_id;
                   echo '">';
                   echo $indecies[$next_id]['title'];
@@ -109,7 +109,7 @@ if ($type === 'post') {
           echo '<div id="postfooter-prev">';
               echo 'Prev Article';
               echo '<br>';
-              echo '<a href="./?type=article&id=';
+              echo '<a href="./?type=post&id=';
                   echo $prev_id;
                   echo '">';
                   echo $indecies[$prev_id]['title'];
