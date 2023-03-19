@@ -1,0 +1,210 @@
+body {
+    -webkit-text-size-adjust: 100%;
+    display: flex;
+    flex-flow: column;
+    font-size: 1rem;
+    margin: 0;
+    min-height: 100vh;
+}
+
+/* ========================================================================= */
+/*     header & footer                                                       */
+/* ========================================================================= */
+
+div#header {
+    background-color: rgb(35, 35, 35);
+    color: white;
+    display: flex;
+    font-size: 1em;
+    left: 0;
+    top: 0;
+    position: fixed;
+    max-width: 100%;
+    min-width: 100%;
+}
+
+div#header div {
+    margin: 0.5em;
+}
+
+div#header div#logo {
+    margin-left: 1em;
+    margin-right: auto;
+}
+
+div#header div.menu {
+    margin-right: 1em;
+}
+
+div#header a {
+    color: white;
+    text-decoration: none;
+}
+
+div#header a:hover {
+    color: red;
+    text-decoration: none;
+}
+
+div#footer {
+    color: white;
+    font-size: 1em;
+    margin-top: auto;
+    margin-bottom: 0;
+    text-align: center;
+}
+
+/* ========================================================================= */
+/*     content                                                               */
+/* ========================================================================= */
+
+/*  general */
+
+div#content {
+    margin: 1.5em;
+    margin-bottom: 3em;
+}
+
+div#content h2 {
+    margin-top: 2em;
+}
+
+div#content a {
+    color: black;
+}
+
+div#content a:hover {
+    color: red;
+}
+
+div#content b {
+    color: red;
+}
+
+div#content div.posttags {
+    color: gray;
+    display: flex;
+}
+
+div#content div.posttags div.posttag {
+    margin-right: 0.5em;
+}
+
+div#content div.posttags div.posttag a {
+    color: gray;
+    text-decoration: none;
+}
+
+div#content div.posttags div.postdate {
+    margin-left: auto;
+}
+
+div#content pre {
+    padding: 1em 2em;
+    white-space: pre-wrap;
+}
+
+div#content table {
+    border-collapse: collapse;
+    margin: auto auto;
+}
+
+div#content table td,
+div#content table th {
+    border-left: solid 1px black;
+    border-right: solid 1px black;
+    padding: 0 10px;
+}
+
+div#content table th {
+    border-top: solid 1px black;
+    border-bottom: solid 1px black;
+}
+
+div#content table tr.top-border {
+    border-top: solid 1px black;
+}
+
+div#content table tr:last-child td {
+    border-bottom: solid 1px black;
+}
+
+div#content table td:first-child,
+div#content table th:first-child {
+    border-left: none;
+}
+
+div#content table td:last-child,
+div#content table th:last-child {
+    border-right: none;
+}
+
+/* index */
+
+div#content div.postindex {
+    margin: 2em 0;
+}
+
+div#content div.postindex div.posttitle a {
+    font-size: 1.5em;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+div#content-wrapper img#catch-image {
+    width: 100%;
+}
+
+/* post */
+
+div#content p {
+    margin: 2em 0;
+}
+
+div#content p.caption {
+    font-size: 0.8em;
+    margin: 0;
+}
+
+div#content div.images {
+    display: flex;
+    justify-content: center;
+}
+
+div#content div#tombstone-wrapper {
+    margin-top: 2em;
+    margin-bottom: 1em;
+}
+
+div#content div#tombstone {
+    background-color: black;
+    margin-left: auto;
+    margin-right: 1em;
+    min-width: 1em;
+    max-width: 1em;
+    min-height: 1em;
+    max-height: 1em;
+}
+
+div#content div#postfooter {
+    display: flex;
+    margin-top: 1em;
+}
+
+div#content div#postfooter a {
+    font-weight: bold;
+    text-decoration: none;
+}
+
+div#content div#postfooter-next {
+    margin-right: auto;
+}
+
+div#content div#postfooter-prev {
+    margin-left: auto;
+}
+
+div.content-allwidth {
+    background-color: white;
+    padding: 1.5em;
+}
