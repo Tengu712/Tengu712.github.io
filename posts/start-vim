@@ -66,7 +66,7 @@ VSCodeでは、地道に一行ずつ行頭に「//」を挿入する他ない。
 <li>画面を移動：Ctrl+w w</li>
 </ul>
 
-<div class="images"><img src="./img/vimstart-img01.png" width="60%"></img></div>
+<div class="images"><img src="/img/vimstart-img01.png" width="60%"></img></div>
 
 <p>
 タブを使う場合は以下のコマンドを用いる。
@@ -77,7 +77,7 @@ VSCodeでは、地道に一行ずつ行頭に「//」を挿入する他ない。
 <li>タブを移動：:tabn</li>
 </ul>
 
-<div class="images"><img src="./img/vimstart-img02.png" width="60%"></img></div>
+<div class="images"><img src="/img/vimstart-img02.png" width="60%"></img></div>
 
 <h2>ターミナル</h2>
 
@@ -93,7 +93,7 @@ VSCodeでは、地道に一行ずつ行頭に「//」を挿入する他ない。
 結果は、画面分割されて表示される。
 </p>
 
-<div class="images"><img src="./img/vimstart-img03.png" width="60%"></img></div>
+<div class="images"><img src="/img/vimstart-img03.png" width="60%"></img></div>
 
 <h2>プロジェクトごとのvimrc</h2>
 

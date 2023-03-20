@@ -1,1 +1,2 @@
-DirectoryIndex index.php
+RewriteEngine on
+RewriteRule ^$ %{REQUEST_URL}/posts/index.php [R=301,L]

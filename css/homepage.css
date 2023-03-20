@@ -86,15 +86,9 @@ div#content-wrapper {
     min-width: 900px; /* exception */
 }
 
-div#content-wrapper img#catch-image {
-    width: 100%;
-}
-
 /* ========================================================================= */
 /*     content                                                               */
 /* ========================================================================= */
-
-/*  general */
 
 div#content {
     margin: 1.5em;
@@ -163,20 +157,6 @@ div#content table th:last-child {
     border-right: none;
 }
 
-/* index */
-
-div#content div.postindex {
-    margin: 2em 0;
-}
-
-div#content div.postindex div.posttitle a {
-    font-size: 1.5em;
-    font-weight: bold;
-    text-decoration: none;
-}
-
-/* post */
-
 div#content p {
     margin: 2em 0;
 }
@@ -189,44 +169,6 @@ div#content p.caption {
 div#content div.images {
     display: flex;
     justify-content: center;
-}
-
-div#content div#tombstone-wrapper {
-    margin-top: 2em;
-    margin-bottom: 1em;
-}
-
-div#content div#tombstone {
-    background-color: black;
-    margin-left: auto;
-    margin-right: 1em;
-    min-width: 1em;
-    max-width: 1em;
-    min-height: 1em;
-    max-height: 1em;
-}
-
-div#content div#postfooter {
-    display: flex;
-    margin-top: 1em;
-}
-
-div#content div#postfooter a {
-    font-weight: bold;
-    text-decoration: none;
-}
-
-div#content div#postfooter-next {
-    margin-right: auto;
-}
-
-div#content div#postfooter-prev {
-    margin-left: auto;
-}
-
-div.content-allwidth {
-    background-color: white;
-    padding: 1.5em;
 }
 
 /* ========================================================================= */
