@@ -19,4 +19,9 @@ get_bin img/vimstart-img01.png img/vimstart-img01.png
 get_bin img/vimstart-img02.png img/vimstart-img02.png
 get_bin img/vimstart-img03.png img/vimstart-img03.png
 get_bin img/windows-to-ubuntu-img01.png img/windows-to-ubuntu-img01.png
+get_bin img/gensou_no_yukue/set.png img/gensou_no_yukue/set.png
+get_bin img/gensou_no_yukue/sister.png img/gensou_no_yukue/sister.png
+get_bin img/gensou_no_yukue/marisa.png img/gensou_no_yukue/marisa.png
+get_bin img/gensou_no_yukue/reimu.png img/gensou_no_yukue/reimu.png
+get_bin img/gensou_no_yukue/mima.png img/gensou_no_yukue/mima.png
 mv .binary_tmp .binary
