@@ -111,19 +111,21 @@ int main() {
 五回実行した。結果を以下にまとめる。単位はミリ秒(ms)である。小数点以下は切り捨てる。
 </p>
 
-<table>
-  <thead>
-    <tr><th></th><th>printf</th><th>fwrite</th><th>printf(_IOFBF)</th><th>fwrite(_IOFBF)</th></tr>
-  </thead>
-  <tbody>
-    <tr><td>1</td><td>4992</td><td>2439</td><td>425</td><td>432</td></tr>
-    <tr><td>2</td><td>6060</td><td>1919</td><td>542</td><td>430</td></tr>
-    <tr><td>3</td><td>4722</td><td>2411</td><td>440</td><td>542</td></tr>
-    <tr><td>4</td><td>6099</td><td>1876</td><td>544</td><td>461</td></tr>
-    <tr><td>5</td><td>5080</td><td>1923</td><td>433</td><td>543</td></tr>
-    <tr><td>Average</td><td>5390</td><td>2113</td><td>476</td><td>481</td></tr>
-  </tbody>
-</table>
+<div class="xcontainer">
+  <table>
+    <thead>
+      <tr><th></th><th>printf</th><th>fwrite</th><th>printf(_IOFBF)</th><th>fwrite(_IOFBF)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>4992</td><td>2439</td><td>425</td><td>432</td></tr>
+      <tr><td>2</td><td>6060</td><td>1919</td><td>542</td><td>430</td></tr>
+      <tr><td>3</td><td>4722</td><td>2411</td><td>440</td><td>542</td></tr>
+      <tr><td>4</td><td>6099</td><td>1876</td><td>544</td><td>461</td></tr>
+      <tr><td>5</td><td>5080</td><td>1923</td><td>433</td><td>543</td></tr>
+      <tr><td>Average</td><td>5390</td><td>2113</td><td>476</td><td>481</td></tr>
+    </tbody>
+  </table>
+</div>
 
 <p>
 バッファリングなしでは圧倒的にfwriteが速く、バッファリングありでは両者大差ないという結果を得られた。

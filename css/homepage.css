@@ -1,21 +1,38 @@
 body {
     -webkit-text-size-adjust: 100%;
+    background-color: rgb(35, 35, 35);
     display: flex;
     flex-flow: column;
-    font-size: 1rem;
+    font-size: 16px;
     margin: 0;
     min-height: 100vh;
 }
 
+a {
+    color: black;
+}
+
+a:hover {
+    color: red;
+}
+
+b {
+    color: red;
+}
+
+div.xcontainer {
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
 /* ========================================================================= */
-/*     header & footer                                                       */
+/*     header                                                                */
 /* ========================================================================= */
 
 div#header {
     background-color: rgb(35, 35, 35);
     color: white;
     display: flex;
-    font-size: 1em;
     left: 0;
     top: 0;
     position: fixed;
@@ -46,12 +63,31 @@ div#header a:hover {
     text-decoration: none;
 }
 
+/* ========================================================================= */
+/*     footer                                                                */
+/* ========================================================================= */
+
 div#footer {
     color: white;
-    font-size: 1em;
     margin-top: auto;
     margin-bottom: 0;
     text-align: center;
+}
+
+/* ========================================================================= */
+/*     content-wrapper                                                       */
+/* ========================================================================= */
+
+div#content-wrapper {
+    background-color: white;
+    margin: 3em auto;
+    min-height: 80vh;
+    max-width: 100vh;
+    min-width: 900px; /* exception */
+}
+
+div#content-wrapper img#catch-image {
+    width: 100%;
 }
 
 /* ========================================================================= */
@@ -67,18 +103,6 @@ div#content {
 
 div#content h2 {
     margin-top: 2em;
-}
-
-div#content a {
-    color: black;
-}
-
-div#content a:hover {
-    color: red;
-}
-
-div#content b {
-    color: red;
 }
 
 div#content div.posttags {
@@ -151,10 +175,6 @@ div#content div.postindex div.posttitle a {
     text-decoration: none;
 }
 
-div#content-wrapper img#catch-image {
-    width: 100%;
-}
-
 /* post */
 
 div#content p {
@@ -207,4 +227,23 @@ div#content div#postfooter-prev {
 div.content-allwidth {
     background-color: white;
     padding: 1.5em;
+}
+
+/* ========================================================================= */
+/*     responsive                                                            */
+/* ========================================================================= */
+
+@media screen and (max-width: 1000px) {
+    body {
+        background-color: white;
+    }
+
+    div#footer {
+        background-color: rgb(35, 35, 35);
+    }
+
+    div#content-wrapper {
+        max-width: 100vw;
+        min-width: 100vw;
+    }
 }

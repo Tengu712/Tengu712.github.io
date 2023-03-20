@@ -2,11 +2,12 @@
 <html lang="ja">
 
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, user-scalable=yes">
   <title>天狗会議録</title>
   <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
   <link rel="stylesheet" type="text/css" href="./css/atelier-dune-dark.css">
-  <script type="text/javascript" src="./js/cssselector.js"></script>
+  <link rel="stylesheet" type="text/css" href="./css/homepage.css">
 </head>
 
 <body>
