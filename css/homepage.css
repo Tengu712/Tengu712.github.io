@@ -119,7 +119,7 @@ div#content div.posttags div.postdate {
 
 div#content pre {
     padding: 1em 2em;
-    white-space: pre-wrap;
+    overflow-x: auto;
 }
 
 div#content table {

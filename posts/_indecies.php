@@ -1,6 +1,11 @@
 <?php
 
 $indecies = array(
+  'com-in-rust' => array(
+    'title' => 'COMの構造とRust FFIで扱う手法',
+    'date' => '2023/3/22',
+    'tag' => array('windowsapi', 'rust'),
+  ),
   'stdout-speed' => array(
     'title' => 'printf vs fwrite',
     'date' => '2023/3/20',
