@@ -22,6 +22,9 @@
       </ul>
 
       <h2>プログラミング関連</h2>
+      <ul>
+        <li><a href="./programming/latex-book-template.php">LaTeX 技術系同人誌用テンプレート</a></li>
+      </ul>
 
     </div>
   </div>
