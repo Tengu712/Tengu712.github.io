@@ -13,7 +13,7 @@
     <div id="content">
         <h1>LaTeX 技術系同人誌用テンプレート</h1>
         <hr>
-        <pre>% 本形式 11pt
+        <pre class="codeblock latex">% 本形式 11pt
 % 章は左右どちらでも開始可能
 \documentclass[11pt, openany]{jsbook}
 
