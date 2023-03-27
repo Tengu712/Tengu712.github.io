@@ -44,7 +44,7 @@ WindowsやC言語に限らず、何事にも言える話であるが、後方互
 ウィンドウアプリケーションのウィンドウタイトルを列挙するプログラムのソースコードを以下に示す。言語はC言語であり、一応GNU C Compilerを想定している。
 </p>
 
-<pre class="prettyprint">#include &lt;windows.h&gt;
+<pre class="codeblock c">#include &lt;windows.h&gt;
 #include &lt;dwmapi.h&gt;
 #include &lt;stdio.h&gt;
 #include &lt;string.h&gt;

@@ -34,8 +34,16 @@ pre.codeblock>span.keyword {
     color: #b854d4;
 }
 
+pre.codeblock>span.id {
+    color: lightblue;
+}
+
 pre.codeblock>span.type {
     color: #6684e1;
+}
+
+pre.codeblock>span.function {
+    color: #fdf5e6;
 }
 
 pre.codeblock>span.escape {
