@@ -50,7 +50,7 @@ C言語のみで記述している都合上、言語(あるいは主要言語処
 gccの-Dオプションでパターンを切り替えられるようにした。「gcc -DPRINTF -DIOFBF main.c」のようにビルドして欲しい。
 </p>
 
-<pre class="prettyprint">#include &lt;stdio.h&gt;
+<pre class="codeblock c">#include &lt;stdio.h&gt;
 #include &lt;string.h&gt;
 #include &lt;windows.h&gt;
 

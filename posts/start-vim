@@ -101,7 +101,7 @@ VSCodeでは、地道に一行ずつ行頭に「//」を挿入する他ない。
 プロジェクトルートに.localvimrcを置き、~/.vimrcに次を加えて実現する。
 </p>
 
-<pre class="prettyprint">let s:localvimrc = findfile(".localvimrc", getcwd() . ';')
+<pre class="codeblock">let s:localvimrc = findfile(".localvimrc", getcwd() . ';')
 if s:localvimrc != ""
 source \`=s:localvimrc\`
 endif</pre>
@@ -121,7 +121,7 @@ VSCodeで独自のシンタックスハイライトを作るのは、非常に�
 例えば、「;」から行末をコメントとしてハイライトする場合、次を実行すればいい。
 </p>
 
-<pre class="prettyprint">syntax match Comment /;.*\\n/</pre>
+<pre class="codeblock">syntax match Comment /;.*\\n/</pre>
 
 <p>
 Commentというシンタックスグループを、正規表現にマッチする文と定義しているだけである。
@@ -135,7 +135,7 @@ Commentというシンタックスグループを、正規表現にマッチす�
 この色をIgnoreグループと同じ色に設定する場合、次を実行する。
 </p>
 
-<pre class="prettyprint">highlight link SpecialKey Ignore</pre>
+<pre class="codeblock">highlight link SpecialKey Ignore</pre>
 
 <h2>autocmd</h2>
 
@@ -149,7 +149,7 @@ Commentというシンタックスグループを、正規表現にマッチす�
 例えば、拡張子がstrであるファイルが開かれたときにsyntaxを実行する場合は、次のように記す。
 </p>
 
-<pre class="prettyprint">autocmd BufNewFile,BufRead *.str syntax match Comment /;.*\\n/</pre>
+<pre class="codeblock">autocmd BufNewFile,BufRead *.str syntax match Comment /;.*\\n/</pre>
 
 <p>
 autocmdは実行される度に<b>重複せずに</b>追加される。
@@ -172,7 +172,7 @@ autocmdは実行される度に<b>重複せずに</b>追加される。
 例えば、次のようにすればいい。
 </p>
 
-<pre class="prettyprint">augroup hoge_group
+<pre class="codeblock">augroup hoge_group
 autocmd!
 autocmd BufNewFile * echo 'hoge'
 augroup END</pre>

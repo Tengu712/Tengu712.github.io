@@ -1,0 +1,51 @@
+pre.codeblock {
+    background: #202020;
+    color: white;
+    font-family:
+        'Noto Sans Mono CJK JP',
+        'Source Han Code JP',
+        SFMono-Regular,
+        Consolas,
+        'Roboto Mono',
+        'Courier New',
+        Meiryo,
+        monospace;
+    overflow-x: scroll;
+}
+
+pre.codeblock>span.error {
+    color: red;
+    font-weight: bold;
+}
+
+pre.codeblock>span.comment {
+    color: #7d7a68;
+}
+
+pre.codeblock>span.string {
+    color: #60ac39;
+}
+
+pre.codeblock>span.literal {
+    color: #b65611;
+}
+
+pre.codeblock>span.keyword {
+    color: #b854d4;
+}
+
+pre.codeblock>span.id {
+    color: lightblue;
+}
+
+pre.codeblock>span.type {
+    color: #6684e1;
+}
+
+pre.codeblock>span.function {
+    color: #fdf5e6;
+}
+
+pre.codeblock>span.escape {
+    color: orange;
+}
