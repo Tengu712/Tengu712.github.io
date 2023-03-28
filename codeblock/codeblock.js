@@ -21,7 +21,7 @@ function patterns_c() {
         [/"([^\n\\]|\\[^\n])*"/sd, "string", null],
         [/\/\/[^\n]*\n/sd, "comment", null],
         [/\/\*([^\*]|\*[^\\])*\*\//sd, "comment", null],
-        [/#[^\n]*\n/sd, "comment", null],
+        [/#[^\n]*\n/sd, "directive", null],
         [/[\s\n]+/sd, "space", null],
         [/\(/sd, "plain", fun_parenthesis],
         [/\)|{|}|\[|\]|,|:|;|&&|\|\||->|\+|-|\*|\/|=|>|<|!|&|\|/sd, "parser", null],

@@ -18,40 +18,38 @@ pre.codeblock>span.error {
     font-weight: bold;
 }
 
+pre.codeblock>span.directive,
 pre.codeblock>span.comment {
     color: #7d7a68;
 }
 
-pre.codeblock>span.string {
-    color: #60ac39;
-}
-
+pre.codeblock>span.string,
 pre.codeblock>span.literal {
-    color: #b65611;
+    color: #DC8C5A;
 }
 
 pre.codeblock>span.keyword {
-    color: #b854d4;
+    color: #BE8CD2;
 }
 
 pre.codeblock>span.id {
-    color: lightblue;
+    color: #96DCF0;
 }
 
 pre.codeblock>span.const {
-    color: #4AA6D5;
+    color: #50B4DC;
 }
 
 pre.codeblock>span.function {
-    color: #EAEAB0;
+    color: #E6DCAA;
 }
 
 pre.codeblock>span.utype {
-    color: #4ABC93;
+    color: #4EDCB0;
 }
 
 pre.codeblock>span.type {
-    color: #6684e1;
+    color: #5A96D7;
 }
 
 pre.codeblock>span.escape {
