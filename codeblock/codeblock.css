@@ -38,12 +38,20 @@ pre.codeblock>span.id {
     color: lightblue;
 }
 
-pre.codeblock>span.type {
-    color: #6684e1;
+pre.codeblock>span.const {
+    color: #4AA6D5;
 }
 
 pre.codeblock>span.function {
     color: #EAEAB0;
+}
+
+pre.codeblock>span.utype {
+    color: #4ABC93;
+}
+
+pre.codeblock>span.type {
+    color: #6684e1;
 }
 
 pre.codeblock>span.escape {
