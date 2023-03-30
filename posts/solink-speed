@@ -212,22 +212,22 @@ fn main() {
 <pre class="codeblock make">.PHONY: all
 all: testdll.dll imtest.exe extest.exe
 testdll.dll: dllsrcgen.rs
-	rustc dllsrcgen.rs
-	dllsrcgen > dllsrc.c
-	gcc -shared -o testdll.dll dllsrc.c
+    rustc dllsrcgen.rs
+    dllsrcgen > dllsrc.c
+    gcc -shared -o testdll.dll dllsrc.c
 imtest.exe: imsrcgen.rs
-	rustc imsrcgen.rs
-	imsrcgen > imsrc.c
-	gcc -o imtest.exe imsrc.c testdll.dll
+    rustc imsrcgen.rs
+    imsrcgen > imsrc.c
+    gcc -o imtest.exe imsrc.c testdll.dll
 extest.exe: exsrcgen.rs
-	rustc exsrcgen.rs
-	exsrcgen > exsrc.c
-	gcc -o extest.exe exsrc.c
+    rustc exsrcgen.rs
+    exsrcgen > exsrc.c
+    gcc -o extest.exe exsrc.c
 clean:
-	del /F \
-	  testdll.dll dllsrc.c dllsrcgen.pdb dllsrcgen.exe \
-	  imtest.exe imsrc.c imsrcgen.pdb imsrcgen.exe \
-	  extest.exe exsrc.c exsrcgen.pdb exsrcgen.exe</pre>
+    del /F \
+      testdll.dll dllsrc.c dllsrcgen.pdb dllsrcgen.exe \
+      imtest.exe imsrc.c imsrcgen.pdb imsrcgen.exe \
+      extest.exe exsrc.c exsrcgen.pdb exsrcgen.exe</pre>
 
 <p>
     計測結果は以下のよう。ただし、小数点第二位四捨五入している。

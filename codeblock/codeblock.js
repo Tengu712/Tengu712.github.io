@@ -12,6 +12,16 @@ function patterns_latex() {
     ];
 }
 
+function patterns_make() {
+    return [
+        [/\n/sd, "parser", null],
+        [/^\..+/sd, "type", null],
+        [/^.+:/sd, "function", null],
+        [/^    .+/sd, "keyword", null],
+        [/.+/sd, "id", null],
+    ];
+}
+
 function patterns_c() {
     const fun_parenthesis = (codeblock) => {
         event_make_prev_token_function(codeblock);
@@ -47,6 +57,9 @@ window.onload = function () {
         switch (codeblock.classList[1]) {
             case "latex":
                 patterns = patterns_latex();
+                break;
+            case "make":
+                patterns = patterns_make();
                 break;
             case "c":
                 patterns = patterns_c();
@@ -180,6 +193,6 @@ function match(code, codeblock, patterns) {
         if (pattern[2] !== null) pattern[2](codeblock);
         return end;
     }
-    append_span("error", "FORMATTING ERROR: NO MATCH", codeblock);
+    append_span("error", "FORMATTING ERROR: NO MATCH FOR `\n" + code + "\n`", codeblock);
     return Number.MAX_SAFE_INTEGER;
 }
