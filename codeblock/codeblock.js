@@ -29,19 +29,49 @@ function patterns_c() {
     };
     return [
         [/"([^\n\\]|\\[^\n])*"/sd, "string", null],
+        [/'([^\n\\]|\\[^\n])*'/sd, "string", null],
         [/\/\/[^\n]*\n/sd, "comment", null],
         [/\/\*([^\*]|\*[^\\])*\*\//sd, "comment", null],
         [/#[^\n]*\n/sd, "directive", null],
         [/[\s\n]+/sd, "space", null],
-        [/\(/sd, "plain", fun_parenthesis],
-        [/\)|{|}|\[|\]|,|:|;|&&|\|\||->|\+|-|\*|\/|=|>|<|!|&|\|/sd, "parser", null],
-        [/^(if|for|while|switch|case|return|continue|break|sizeof|typedef|__[a-zA-Z0-9_]+)$/sd, "keyword", null],
+        [/\(/sd, "parser", fun_parenthesis],
+        [/\)|{|}|\[|\]|,|:|;|&&|\|\||->|\+|-|\*|\/|=|>|<|!|\?|&|\|/sd, "parser", null],
+        [/^(if|for|do|while|switch|case|return|continue|break|sizeof|typedef|__[a-zA-Z0-9_]+)$/sd, "keyword", null],
         [/^(void|char|short|int|long|float|double|struct|union|const|static|auto|extern)\**$/sd, "type", event_make_prev_token_utype],
         [/^[A-Z_][A-Z0-9_]*\**$/sd, "const", event_make_prev_token_utype],
         [/^[A-Z_][a-zA-Z0-9_]*\**$/sd, "utype", event_make_prev_token_utype],
         [/^[a-z_][a-zA-Z0-9_]*\**$/sd, "id", event_make_prev_token_utype],
         [/\d+(\.\d+)?(f|)/sd, "literal", null],
-        [/\./sd, "plain", null],
+        [/\./sd, "parser", null],
+        [/.+/sd, "plain", null],
+    ];
+}
+
+function patterns_rust() {
+    const event_make_annotated_id = (codeblock) => {
+        const pt = get_prev_token(codeblock.lastChild.previousElementSibling);
+        if (!is_id(pt)) return;
+        const ppt = get_prev_token(pt.previousElementSibling);
+        if (ppt !== null && ppt.innerText !== "const") pt.className = "id";
+    }
+    return [
+        [/"([^\\"]|\\.)*"/sd, "string", null],
+        [/'([^\\]|\\.)'/sd, "string", null],
+        [/\/\/[^\n]*\n/sd, "comment", null],
+        [/\/\*([^\*]|\*[^\\])*\*\//sd, "comment", null],
+        [/#[^\n]*\n/sd, "directive", null],
+        [/[\s\n]+/sd, "space", null],
+        [/\(/sd, "parser", event_make_prev_token_function],
+        [/::/sd, "parser", event_make_namespace_utype],
+        [/:/sd, "parser", event_make_annotated_id],
+        [/\)|{|}|\[|\]|\.\.|,|;|&&|\|\||=>|->|\+|-|\*|\/|=|>|<|\?|&|\|/sd, "parser", null],
+        [/^(if|for|in|while|loop|match|return|continue|break|use)$/sd, "keyword", null],
+        [/^(let|mut|fn|struct|trait|impl|const|type|i8|i16|i32|i64|u8|u16|u32|u64|f32|f64|'[a-zA-Z0-9_]+)$/sd, "type", null],
+        [/^[A-Z_][A-Z0-9_]*$/sd, "const", null],
+        [/^[A-Z_][a-zA-Z0-9_]*$/sd, "utype", null],
+        [/^[a-z_][a-zA-Z0-9_]*!?$/sd, "id", event_make_annotation_utype],
+        [/\d+(\.\d+)?(i8|i16|i32|i64|u8|u16|u32|u64|f32|f64)?/sd, "literal", null],
+        [/\.|!/sd, "parser", null],
         [/.+/sd, "plain", null],
     ];
 }
@@ -64,6 +94,9 @@ window.onload = function () {
             case "c":
                 patterns = patterns_c();
                 break;
+            case "rust":
+                patterns = patterns_rust();
+                break;
         }
         if (patterns === null)
             continue;
@@ -82,7 +115,7 @@ window.onload = function () {
 
 const event_make_prev_token_function = (codeblock) => {
     const pt = get_prev_token(codeblock.lastChild.previousElementSibling);
-    if (pt !== null && is_id(pt)) pt.className = "function";
+    if (is_id(pt)) pt.className = "function";
 }
 
 const event_make_prev_token_infrontof_parenthesis_utype = (codeblock) => {
@@ -91,6 +124,25 @@ const event_make_prev_token_infrontof_parenthesis_utype = (codeblock) => {
 }
 
 const event_make_prev_token_utype = (codeblock) => make_prev_token_utype(codeblock.lastChild);
+
+const event_make_annotation_utype = (codeblock) => {
+    let pt = get_prev_token(codeblock.lastChild.previousElementSibling);
+    while (pt !== null) {
+        if (pt.innerText === ":" || pt.innerText === "::") {
+            codeblock.lastChild.className = "utype";
+            return;
+        }
+        if (pt.className !== "type" && pt.className !== "utype" && pt.innerText !== "*" && pt.innerText !== "&") {
+            return;
+        } 
+        pt = get_prev_token(pt.previousElementSibling);
+    }
+}
+
+const event_make_namespace_utype = (codeblock) => {
+    const pt = get_prev_token(codeblock.lastChild.previousElementSibling);
+    if (is_id(pt)) make_id_utype(pt);
+}
 
 /* ================================================================================================================= */
 /*         Functions                                                                                                 */

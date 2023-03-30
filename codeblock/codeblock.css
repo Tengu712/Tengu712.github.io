@@ -23,13 +23,16 @@ pre.codeblock>span.comment {
     color: #7d7a68;
 }
 
-pre.codeblock>span.string,
+pre.codeblock>span.string {
+    color: #dda17c;
+}
+
 pre.codeblock>span.literal {
-    color: #DC8C5A;
+    color: #dc785a;
 }
 
 pre.codeblock>span.keyword {
-    color: #BE8CD2;
+    color: #e290e9;
 }
 
 pre.codeblock>span.id {
@@ -37,11 +40,11 @@ pre.codeblock>span.id {
 }
 
 pre.codeblock>span.const {
-    color: #50B4DC;
+    color: #28c2ff;
 }
 
 pre.codeblock>span.function {
-    color: #E6DCAA;
+    color: #fff8b9;
 }
 
 pre.codeblock>span.utype {
@@ -49,7 +52,7 @@ pre.codeblock>span.utype {
 }
 
 pre.codeblock>span.type {
-    color: #5A96D7;
+    color: #5190d4;
 }
 
 pre.codeblock>span.escape {
