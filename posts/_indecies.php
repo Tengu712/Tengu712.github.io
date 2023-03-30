@@ -1,6 +1,11 @@
 <?php
 
 $indecies = array(
+  'solink-speed' => array(
+    'title' => '動的リンクライブラリの暗黙的/動的リンクの速度比較',
+    'date' => '2023/3/30',
+    'tag' => array('experiment'),
+  ),
   'com-in-rust' => array(
     'title' => 'COMの構造とRust FFIで扱う手法',
     'date' => '2023/3/22',
