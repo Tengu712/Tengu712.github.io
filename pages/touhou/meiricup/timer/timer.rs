@@ -126,8 +126,7 @@ fn write_file(file: &mut std::fs::File, text: &str) {
 fn write_limit(file: &mut std::fs::File, limit: u32) -> String {
     let s = limit / 60;
     let m = s / 60;
-    let h = m / 60;
-    let fmt = format!("{:>02}:{:>02}:{:>02}", h, m % 60, s % 60);
+    let fmt = format!("{:>02}:{:>02}", m, s % 60);
     write_file(file, &fmt);
     fmt
 }
