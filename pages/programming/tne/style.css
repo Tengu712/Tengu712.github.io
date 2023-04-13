@@ -1,0 +1,67 @@
+.a {
+    display: block;
+}
+.b {
+    display: none;
+}
+img#a {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 1280px;
+    max-width: 1280px;
+    min-height: 720px;
+    max-height: 720px;
+}
+img#b {
+}
+p#c {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 160px);
+    min-width: 1280px;
+    max-width: 1280px;
+    min-height: 200px;
+    max-height: 200px;
+    background-color: rgba(1.0, 1.0, 1.0, 0.6);
+    color: white;
+    font-size: 32px;
+    padding: 32px;
+    margin: 0;
+    box-sizing: border-box;
+    cursor: default;
+}
+p#d {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) translate(0, -100px);
+    min-width: 640px;
+    max-width: 640px;
+    min-height: 100px;
+    max-height: 100px;
+    background-color: rgba(1.0, 1.0, 1.0, 0.6);
+    color: white;
+    font-size: 32px;
+    text-align: center;
+    line-height: 100px;
+    cursor: default;
+}
+p#e {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 640px;
+    max-width: 640px;
+    min-height: 100px;
+    max-height: 100px;
+    background-color: rgba(1.0, 1.0, 1.0, 0.6);
+    color: white;
+    font-size: 32px;
+    text-align: center;
+    line-height: 100px;
+    cursor: default;
+}
