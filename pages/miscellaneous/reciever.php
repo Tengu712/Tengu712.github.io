@@ -1,6 +1,6 @@
 <?php
 
-$pass = file_get_contents('./.keyword');
+$pass = rtrim(file_get_contents('./.keyword'), "\n");
 if ($pass != $_POST['pass']) {
     $res['msg'] = 'password incorrect';
     echo json_encode($res);
