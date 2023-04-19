@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, user-scalable=yes">
+<title>recorder</title>
+<style>
+    body {
+        text-align: center;
+    }
+    button {
+        width: 50%;
+        height: 3em;
+        margin: 1em;
+    }
+</style>
+
+<button id="btn_calendar">Calendar</button>
+
+<script>
+    function record_calendar() {
+        const date = window.prompt('yy/mm/dd', '');
+        if (date === null || date === '')
+            return;
+        const content = window.prompt('content', '');
+        if (content === null || content === '')
+            return;
+        const pass = window.prompt('password', '');
+        if (pass === null || pass === '')
+            return;
+        const obj = {
+            date: date,
+            content: content,
+            pass: pass,
+        };
+        const data = new FormData();
+        data.append('date', date);
+        data.append('content', content);
+        data.append('pass', pass);
+        data.append('type', 'calendar');
+        fetch("./reciever.php", {method: 'POST', body: data})
+            .then(res => res.json())
+            .then(res => {
+                if (res.msg !== null && res.msg !== undefined && res.msg !== '')
+                    alert(res.msg);
+                else
+                    alert("unexpected error occured");
+            })
+            .catch(err => alert(err));
+    }
+    btn_calendar.onclick = record_calendar;
+</script>
+
