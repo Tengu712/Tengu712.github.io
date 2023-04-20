@@ -7,6 +7,11 @@
     body {
         text-align: center;
     }
+    input {
+        width: 50%;
+	height: 2em;
+	margin: 0.5em;
+    }
     button {
         width: 50%;
         height: 3em;
@@ -14,24 +19,27 @@
     }
 </style>
 
-<button id="btn_calendar">Calendar</button>
+<input id="inp_pass" placeholder="password"></input>
+
+<br>
+
+<h1>Calendar</h1>
+<input type="date" id="inp_date"></input><br>
+<input id="inp_content" placeholder="content"></input><br>
+<button id="btn_calendar">submit</button>
 
 <script>
     function record_calendar() {
-        const date = window.prompt('yy/mm/dd', '');
-        if (date === null || date === '')
+        const date_ = inp_date.value;
+        if (date_ === null || date_ === '')
             return;
-        const content = window.prompt('content', '');
+        const date = date_.substr(2);
+        const content = inp_content.value;
         if (content === null || content === '')
             return;
-        const pass = window.prompt('password', '');
+        const pass = inp_pass.value; 
         if (pass === null || pass === '')
             return;
-        const obj = {
-            date: date,
-            content: content,
-            pass: pass,
-        };
         const data = new FormData();
         data.append('date', date);
         data.append('content', content);

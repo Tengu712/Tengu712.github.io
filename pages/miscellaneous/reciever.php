@@ -14,9 +14,9 @@ if ($type == 'calendar') {
     $json = json_decode(file_get_contents('./calendar.json'), true);
 
     // split date
-    $date_splited = explode('/', $_POST['date']);
+    $date_splited = explode('-', $_POST['date']);
     if (count($date_splited) < 3) {
-        $res['msg'] = 'date must be yy/mm/dd';
+        $res['msg'] = 'date must be yy-mm-dd';
         echo json_encode($res);
         return;
     }
