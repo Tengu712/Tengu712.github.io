@@ -27,6 +27,11 @@
         <li><a href="./programming/latex-book-template.php">LaTeX 技術系同人誌用テンプレート</a></li>
       </ul>
 
+      <h2>その他</h2>
+      <ul>
+        <li><a href="./miscellaneous/calendar.php">予定表</a></li>
+      </ul>
+
     </div>
   </div>
   
