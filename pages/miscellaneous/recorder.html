@@ -27,9 +27,10 @@
 <input type="date" id="inp_date"></input><br>
 <input id="inp_content" placeholder="content"></input><br>
 <button id="btn_calendar">submit</button>
+<button id="btn_calendar_remove">remove</button>
 
 <script>
-    function record_calendar() {
+    btn_calendar.onclick = () => {
         const date_ = inp_date.value;
         if (date_ === null || date_ === '')
             return;
@@ -41,10 +42,10 @@
         if (pass === null || pass === '')
             return;
         const data = new FormData();
+        data.append('type', 'record');
         data.append('date', date);
         data.append('content', content);
         data.append('pass', pass);
-        data.append('type', 'calendar');
         fetch("./reciever.php", {method: 'POST', body: data})
             .then(res => res.json())
             .then(res => {
@@ -54,7 +55,24 @@
                     alert("unexpected error occured");
             })
             .catch(err => alert(err));
-    }
-    btn_calendar.onclick = record_calendar;
+    };
+    btn_calendar_remove.onclick = () => {
+        const date_ = inp_date.value;
+        if (date_ === null || date_ === '')
+            return;
+        const date = date_.substr(2);
+        const data = new FormData();
+        data.append('type', 'remove');
+        data.append('date', date);
+        fetch("./reciever.php", {method: 'POST', body: data})
+            .then(res => res.json())
+            .then(res => {
+                if (res.msg !== null && res.msg !== undefined && res.msg !== '')
+                    alert(res.msg);
+                else
+                    alert("unexpected error occured");
+            })
+            .catch(err => alert(err));
+    };
 </script>
 

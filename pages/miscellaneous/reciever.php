@@ -9,7 +9,7 @@ if ($pass != $_POST['pass']) {
 
 $type = $_POST['type'];
 
-if ($type == 'calendar') {
+if ($type == 'record') {
     // get json data
     $json = json_decode(file_get_contents('./calendar.json'), true);
 
@@ -54,7 +54,16 @@ if ($type == 'calendar') {
     // finish
     $encoded = json_encode($json);
     if ($encoded) file_put_contents('./calendar.json', $encoded);
-} else {
+}
+else if ($type === 'remove') {
+    $json = json_decode(file_get_contents('./calendar.json'), true);
+    if (!isset($json[$year][$month][$day]))
+        return;
+    $json[$year][$month][$day] = array();
+    $encoded = json_encode($json);
+    if ($encoded) file_put_contents('./calendar.json', $encoded);
+}
+else {
     $res['msg'] = 'invalid query type: ' . $type;
     echo json_encode($res);
     return;
