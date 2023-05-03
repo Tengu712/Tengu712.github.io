@@ -57,8 +57,20 @@ if ($type == 'record') {
 }
 else if ($type === 'remove') {
     $json = json_decode(file_get_contents('./calendar.json'), true);
-    if (!isset($json[$year][$month][$day]))
+    $date_splited = explode('-', $_POST['date']);
+    if (count($date_splited) < 3) {
+        $res['msg'] = 'date must be yy-mm-dd';
+        echo json_encode($res);
         return;
+    }
+    $year = $date_splited[0];
+    $month = $date_splited[1];
+    $day = $date_splited[2];
+    if (!isset($json[$year][$month][$day])) {
+        $res['msg'] = 'empty';
+        echo json_encode($res);
+        return;
+    }
     $json[$year][$month][$day] = array();
     $encoded = json_encode($json);
     if ($encoded) file_put_contents('./calendar.json', $encoded);
