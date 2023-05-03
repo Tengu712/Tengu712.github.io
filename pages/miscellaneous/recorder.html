@@ -60,10 +60,14 @@
         const date_ = inp_date.value;
         if (date_ === null || date_ === '')
             return;
+            const pass = inp_pass.value; 
+        if (pass === null || pass === '')
+            return;
         const date = date_.substr(2);
         const data = new FormData();
         data.append('type', 'remove');
         data.append('date', date);
+        data.append('pass', pass);
         fetch("./reciever.php", {method: 'POST', body: data})
             .then(res => res.json())
             .then(res => {
