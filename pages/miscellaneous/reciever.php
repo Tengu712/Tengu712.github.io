@@ -63,9 +63,9 @@ else if ($type === 'remove') {
         echo json_encode($res);
         return;
     }
-    $year = $date_splited[0];
-    $month = $date_splited[1];
-    $day = $date_splited[2];
+    $year = (string)((int)$date_splited[0]);
+    $month = (string)((int)$date_splited[1]);
+    $day = (string)((int)$date_splited[2]);
     if (!isset($json[$year][$month][$day])) {
         $res['msg'] = 'empty';
         echo json_encode($res);
