@@ -673,56 +673,56 @@ function td($title, $header, $name, $fullname, $with_release)
             <td rowspan="2">E</td>
             <?php td("東方星蓮船", "th12_Easy_ReimuA", "霊A", "霊夢A", true); ?>
             <?php td("東方星蓮船", "th12_Easy_MarisaA", "魔A", "魔理沙A", true); ?>
-            <?php td("東方星蓮船", "th12_Easy_SakuyaA", "早A", "早苗A", true); ?>
+            <?php td("東方星蓮船", "th12_Easy_SanaeA", "早A", "早苗A", true); ?>
           </tr>
           <tr>
             <?php td("東方星蓮船", "th12_Easy_ReimuB", "霊B", "霊夢B", true); ?>
             <?php td("東方星蓮船", "th12_Easy_MarisaB", "魔B", "魔理沙B", true); ?>
-            <?php td("東方星蓮船", "th12_Easy_SakuyaB", "早B", "早苗B", true); ?>
+            <?php td("東方星蓮船", "th12_Easy_SanaeB", "早B", "早苗B", true); ?>
           </tr>
           <tr>
             <td rowspan="2">N</td>
             <?php td("東方星蓮船", "th12_Normal_ReimuA", "霊A", "霊夢A", true); ?>
             <?php td("東方星蓮船", "th12_Normal_MarisaA", "魔A", "魔理沙A", true); ?>
-            <?php td("東方星蓮船", "th12_Normal_SakuyaA", "早A", "早苗A", true); ?>
+            <?php td("東方星蓮船", "th12_Normal_SanaeA", "早A", "早苗A", true); ?>
           </tr>
           <tr>
             <?php td("東方星蓮船", "th12_Normal_ReimuB", "霊B", "霊夢B", true); ?>
             <?php td("東方星蓮船", "th12_Normal_MarisaB", "魔B", "魔理沙B", true); ?>
-            <?php td("東方星蓮船", "th12_Normal_SakuyaB", "早B", "早苗B", true); ?>
+            <?php td("東方星蓮船", "th12_Normal_SanaeB", "早B", "早苗B", true); ?>
           </tr>
           <tr>
             <td rowspan="2">H</td>
             <?php td("東方星蓮船", "th12_Hard_ReimuA", "霊A", "霊夢A", true); ?>
             <?php td("東方星蓮船", "th12_Hard_MarisaA", "魔A", "魔理沙A", true); ?>
-            <?php td("東方星蓮船", "th12_Hard_SakuyaA", "早A", "早苗A", true); ?>
+            <?php td("東方星蓮船", "th12_Hard_SanaeA", "早A", "早苗A", true); ?>
           </tr>
           <tr>
             <?php td("東方星蓮船", "th12_Hard_ReimuB", "霊B", "霊夢B", true); ?>
             <?php td("東方星蓮船", "th12_Hard_MarisaB", "魔B", "魔理沙B", true); ?>
-            <?php td("東方星蓮船", "th12_Hard_SakuyaB", "早B", "早苗B", true); ?>
+            <?php td("東方星蓮船", "th12_Hard_SanaeB", "早B", "早苗B", true); ?>
           </tr>
           <tr>
             <td rowspan="2">L</td>
             <?php td("東方星蓮船", "th12_Lunatic_ReimuA", "霊A", "霊夢A", true); ?>
             <?php td("東方星蓮船", "th12_Lunatic_MarisaA", "魔A", "魔理沙A", true); ?>
-            <?php td("東方星蓮船", "th12_Lunatic_SakuyaA", "早A", "早苗A", true); ?>
+            <?php td("東方星蓮船", "th12_Lunatic_SanaeA", "早A", "早苗A", true); ?>
           </tr>
           <tr>
             <?php td("東方星蓮船", "th12_Lunatic_ReimuB", "霊B", "霊夢B", true); ?>
             <?php td("東方星蓮船", "th12_Lunatic_MarisaB", "魔B", "魔理沙B", true); ?>
-            <?php td("東方星蓮船", "th12_Lunatic_SakuyaB", "早B", "早苗B", true); ?>
+            <?php td("東方星蓮船", "th12_Lunatic_SanaeB", "早B", "早苗B", true); ?>
           </tr>
           <tr>
             <td rowspan="2">X</td>
             <?php td("東方星蓮船", "th12_Extra_ReimuA", "霊A", "霊夢A", true); ?>
             <?php td("東方星蓮船", "th12_Extra_MarisaA", "魔A", "魔理沙A", true); ?>
-            <?php td("東方星蓮船", "th12_Extra_SakuyaA", "早A", "早苗A", true); ?>
+            <?php td("東方星蓮船", "th12_Extra_SanaeA", "早A", "早苗A", true); ?>
           </tr>
           <tr>
             <?php td("東方星蓮船", "th12_Extra_ReimuB", "霊B", "霊夢B", true); ?>
             <?php td("東方星蓮船", "th12_Extra_MarisaB", "魔B", "魔理沙B", true); ?>
-            <?php td("東方星蓮船", "th12_Extra_SakuyaB", "早B", "早苗B", true); ?>
+            <?php td("東方星蓮船", "th12_Extra_SanaeB", "早B", "早苗B", true); ?>
           </tr>
         </table>
       </td>
