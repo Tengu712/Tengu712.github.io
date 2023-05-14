@@ -157,13 +157,19 @@ function without_release($prof)
 
 function with_release($prof)
 {
-  if (strpos($prof, "NMNBNR", false) !== false) {
+  if (strpos($prof, "NMNBNR", false) !== false
+      || strpos($prof, "NMNBNV", false) !== false
+      || strpos($prof, "NMNBNT", false) !== false
+      || strpos($prof, "NMNBNC", false) !== false) {
     return "nmnbnr";
   } else if (strpos($prof, "NMNB") !== false) {
     return "nmnb";
   } else if (strpos($prof, "NM") !== false) {
     return "nm";
-  } else if (strpos($prof, "NBNR", false) !== false) {
+  } else if (strpos($prof, "NBNR", false) !== false
+      || strpos($prof, "NBNV", false) !== false
+      || strpos($prof, "NBNT", false) !== false
+      || strpos($prof, "NBNC", false) !== false) {
     return "nbnr";
   } else if (strpos($prof, "NB", false) !== false) {
     return "nb";
