@@ -1,6 +1,11 @@
 <?php
 
 $indecies = array(
+  'allocate-descriptor-sets' => array(
+    'title' => 'VkDescriptorPoolSizeの誤りが検出されない',
+    'date' => '2023/5/17',
+    'tag' => array('vulkan'),
+  ),
   'solink-speed' => array(
     'title' => '動的リンクライブラリの暗黙的/動的リンクの速度比較',
     'date' => '2023/3/30',
