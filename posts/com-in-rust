@@ -204,9 +204,3 @@ struct ID3D12Device {
 <pre class="codeblock rust">
 let mut fence = std::ptr::null();
 ((*(*device).lpVtbl).CreateFence)(device, 0, D3D12_FENCE_FLAG_NONE, &iid, &mut fence);</pre>
-
-<h2>成果物</h2>
-
-<p>
-    <a href="https://github.com/Tengu712/homepage/tree/master/pages/touhou/meiricup/timer">[GitHub] 東方原作STG大会用に作ったタイマー</a>
-</p>
