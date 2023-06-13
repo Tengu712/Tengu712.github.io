@@ -1,6 +1,11 @@
 <?php
 
 $indecies = array(
+  'ai-illustration' => array(
+    'title' => 'AI絵を不快に感じる理由',
+    'date' => '2023/6/13',
+    'tag' => array('essay'),
+  ),
   'allocate-descriptor-sets' => array(
     'title' => 'VkDescriptorPoolSizeの誤りが検出されない',
     'date' => '2023/5/17',
