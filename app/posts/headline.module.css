@@ -1,0 +1,17 @@
+.all {
+  width: 100%;
+}
+
+.tags {
+  color: gray;
+  display: flex;
+}
+
+.tags span {
+  margin-right: 0.5rem;
+}
+
+.tags span:last-child {
+  margin: 0;
+  margin-left: auto;
+}

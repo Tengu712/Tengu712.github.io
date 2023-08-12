@@ -1,0 +1,21 @@
+.links {
+  width: 100%;
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.links a {
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.links div:last-child {
+  margin: 0;
+  margin-left: auto;
+}
+
+@media screen and (max-width: 950px) {
+  .links {
+    display: block;
+  }
+}

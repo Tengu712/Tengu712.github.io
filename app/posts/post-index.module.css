@@ -1,0 +1,27 @@
+.all {
+  margin: 1.5rem 0;
+  width: 100%;
+}
+
+.all a {
+  text-decoration: none;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.tags {
+  color: gray;
+  display: flex;
+}
+
+.tags span {
+  margin-right: 0.5rem;
+}
+
+.tags span:last-child {
+  margin: 0;
+  margin-left: auto;
+}

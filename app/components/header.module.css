@@ -1,0 +1,36 @@
+.header {
+  background-color: rgb(35, 35, 35);
+  color: white;
+  display: flex;
+  position: fixed;
+  left: 0;
+  top: 0;
+  max-width: 100%;
+  min-width: 100%;
+}
+
+.header a {
+  color: white;
+  text-decoration: none;
+}
+
+.header a:hover {
+  color: red;
+  text-decoration: none;
+}
+
+.logo {
+  margin: 0.5em;
+  margin-left: 1em;
+  margin-right: auto;
+}
+
+.menu {
+  margin: 0.5em;
+  margin-right: 1em;
+}
+
+.spacer {
+  max-width: 100%;
+  min-width: 100%;
+}

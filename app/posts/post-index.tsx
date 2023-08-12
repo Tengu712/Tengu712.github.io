@@ -1,0 +1,22 @@
+import { POST_DATA } from "./data"
+import style from './post-index.module.css'
+
+type Props = {
+  data: POST_DATA,
+}
+
+export function Index({ data }: Props) {
+  return (
+    <div className={style.all}>
+      <div className={style.title}>
+        <a href={'posts/' + data.url}>{data.title}</a>
+      </div>
+      <div className={style.tags}>
+        {data.tags.map((n, i) => (
+          <span key={i}>#{n}</span>
+        ))}
+        <span>{data.date}</span>
+      </div>
+    </div>
+  )
+}
