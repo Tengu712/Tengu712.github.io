@@ -1,11 +1,11 @@
-export type POST_DATA = {
+export type PostData = {
   url: string;
   title: string;
   date: string;
   tags: string[];
 }
 
-export const POSTS_DATA: POST_DATA[] = [
+export const POST_DATA: PostData[] = [
   {
     url: 'ai-illustration',
     title: 'AI絵を不快に感じる理由',
@@ -55,3 +55,7 @@ export const POSTS_DATA: POST_DATA[] = [
     tags: ['diary'],
   },
 ]
+
+export function getPostData(url: string): PostData | undefined {
+  return POST_DATA.find((n) => n.url === url)
+}

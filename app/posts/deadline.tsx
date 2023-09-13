@@ -1,25 +1,25 @@
-import { POSTS_DATA, POST_DATA } from "./data"
+import { POST_DATA, PostData } from "./data"
 import style from "./deadline.module.css"
 
 type Props = {
-  url: string,
+  data: PostData,
 }
 
 type PropsPrevNextLink = {
   text: string,
-  data: POST_DATA,
+  data: PostData,
 }
 
-function getPrevNext(url: string): [POST_DATA | null, POST_DATA | null] {
+function getPrevNext(data: PostData): [PostData | null, PostData | null] {
   let prev = null
   let next = null
   let flag = false
-  for (const n of POSTS_DATA) {
+  for (const n of POST_DATA) {
     if (flag) {
       prev = n
       break
     }
-    if (n.url === url) {
+    if (n.url === data.url) {
       flag = true
       continue
     }
@@ -37,8 +37,8 @@ function PrevNextLink({ text, data }: PropsPrevNextLink) {
   )
 }
 
-export function Deadline({ url }: Props) {
-  const [prev, next] = getPrevNext(url)
+export function Deadline({ data }: Props) {
+  const [prev, next] = getPrevNext(data)
   return (
     <>
       <p className="ta-right">■</p>

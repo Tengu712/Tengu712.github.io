@@ -1,12 +1,21 @@
-import { Codeblock, Language } from "@/app/components/codeblock";
-import { Deadline } from "../deadline";
-import { Headline } from "../headline";
+import { Metadata } from "next"
+
+import { Codeblock, Language } from "@/app/components/codeblock"
+
+import { Deadline } from "../deadline"
+import { Headline } from "../headline"
+import { getPostData } from "../data"
+
+const data = getPostData("allocate-descriptor-sets")!
+
+export const metadata: Metadata = {
+  title: data.title,
+}
 
 export default function Content() {
-  const url = "allocate-descriptor-sets";
   return (
     <main>
-      <Headline url={url} />
+      <Headline data={data} />
       <h2>概要</h2>
 
       <p>
@@ -83,7 +92,7 @@ export default function Content() {
         非内蔵GPUでは、上手いことしてくれるのかもしれないが、バグの発見が遅れるのでやめてほしい。
       </p>
       
-      <Deadline url={url} />
+      <Deadline data={data} />
     </main>
   )
 }

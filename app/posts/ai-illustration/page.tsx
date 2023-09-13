@@ -1,11 +1,19 @@
-import { Deadline } from "../deadline";
-import { Headline } from "../headline";
+import { Metadata } from "next"
+
+import { Deadline } from "../deadline"
+import { Headline } from "../headline"
+import { getPostData } from "../data"
+
+const data = getPostData("ai-illustration")!
+
+export const metadata: Metadata = {
+  title: data.title,
+}
 
 export default function Content() {
-  const url = "ai-illustration";
   return (
     <main>
-      <Headline url={url} />
+      <Headline data={data} />
 
       <p><i>おことわり。私は潜在拡散モデルはおろか、ニューラルネットワーク、人工知能について詳しくありません。あくまでそれらの概要や簡単な解説をさらった程度の人間からの批評であることをご了承ください。また、新規性のある主張をするつもりはなく、普遍的に正しいことを書いてまとめるだけのつもりです。従って、むしろ、読んで頂いたあと何も学びがないことを願っております。</i></p>
 
@@ -68,7 +76,7 @@ export default function Content() {
 
       <p>それでもなお、改善は可能である。ここまで通読した物好きのあなたは、どうか、上の単純な理解を実践して欲しい。</p>
 
-      <Deadline url={url} />
+      <Deadline data={data} />
     </main>
   )
 }

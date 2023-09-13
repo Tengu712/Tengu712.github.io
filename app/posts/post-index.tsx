@@ -1,8 +1,8 @@
-import { POST_DATA } from "./data"
+import { PostData } from "./data"
 import style from './post-index.module.css'
 
 type Props = {
-  data: POST_DATA,
+  data: PostData,
 }
 
 export function Index({ data }: Props) {

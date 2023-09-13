@@ -1,12 +1,11 @@
-import { POSTS_DATA } from "./data";
+import { PostData } from "./data";
 import style from "./headline.module.css"
 
 type Props = {
-  url: string,
+  data: PostData,
 }
 
-export function Headline({ url }: Props) {
-  const data = POSTS_DATA.find((n) => n.url === url);
+export function Headline({ data }: Props) {
   if (data === undefined) {
     return (
       <></>
