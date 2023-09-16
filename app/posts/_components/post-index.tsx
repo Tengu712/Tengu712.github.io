@@ -1,5 +1,6 @@
-import { PostData } from "./data"
 import style from './post-index.module.css'
+
+import { PostData } from "../data"
 
 type Props = {
   data: PostData,

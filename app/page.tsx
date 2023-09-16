@@ -1,14 +1,18 @@
+import NormalLayout from "@/app/_layout/normal"
+
+import { Index } from "./posts/_components/post-index"
 import { POST_DATA } from "./posts/data"
-import { Index } from "./posts/post-index"
 
 export default function Home() {
   return (
-    <main>
-      <div>
-        {POST_DATA.map((n, i) => (
-          <Index key={i} data={n} />
-        ))}
-      </div>
-    </main>
+    <NormalLayout>
+      <main>
+        <div>
+          {POST_DATA.map((n, i) => (
+            <Index key={i} data={n} />
+          ))}
+        </div>
+      </main>
+    </NormalLayout>
   )
 }

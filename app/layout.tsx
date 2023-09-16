@@ -1,6 +1,5 @@
 import './default.css'
-import { Header } from './components/header'
-import { Footer } from './components/footer'
+
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -15,13 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang='ja'>
-      <body>
-        <Header />
-        <div id='content'>
-          {children}
-        </div>
-        <Footer />
-      </body>
+      {children}
     </html>
   )
 }

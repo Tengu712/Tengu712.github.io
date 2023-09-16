@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 
-import { Deadline } from "../deadline"
-import { Headline } from "../headline"
+import { Deadline } from "../_components/deadline"
+import { Headline } from "../_components/headline"
 import { getPostData } from "../data"
 
 const data = getPostData("ai-illustration")!

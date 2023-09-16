@@ -1,16 +1,12 @@
-import { PostData } from "./data";
 import style from "./headline.module.css"
+
+import { PostData } from "../data";
 
 type Props = {
   data: PostData,
 }
 
 export function Headline({ data }: Props) {
-  if (data === undefined) {
-    return (
-      <></>
-    )
-  }
   return (
     <div>
       <h1>{data.title}</h1>

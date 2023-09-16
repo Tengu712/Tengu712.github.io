@@ -1,5 +1,6 @@
-import { POST_DATA, PostData } from "./data"
 import style from "./deadline.module.css"
+
+import { POST_DATA, PostData } from "../data"
 
 type Props = {
   data: PostData,

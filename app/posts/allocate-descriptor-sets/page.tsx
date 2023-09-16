@@ -1,9 +1,9 @@
 import { Metadata } from "next"
 
-import { Codeblock, Language } from "@/app/components/codeblock"
+import { Codeblock, Language } from "@/app/_components/codeblock"
 
-import { Deadline } from "../deadline"
-import { Headline } from "../headline"
+import { Deadline } from "../_components/deadline"
+import { Headline } from "../_components/headline"
 import { getPostData } from "../data"
 
 const data = getPostData("allocate-descriptor-sets")!
