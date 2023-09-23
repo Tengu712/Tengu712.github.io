@@ -30,9 +30,14 @@
 }
 
 .content h2 {
+	margin-top: 3rem;
 	padding: 0.25rem 0.8rem;
 	background: transparent;
 	border-left: solid 0.5rem black;
+}
+
+.content h3 {
+	margin-top: 2rem;
 }
 
 @media screen and (max-width: 900px) {

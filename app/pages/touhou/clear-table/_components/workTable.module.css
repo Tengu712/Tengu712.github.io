@@ -1,0 +1,27 @@
+.th6,
+.th10,
+.th11,
+.th12,
+.th13,
+.th14,
+.th15,
+.th18 {
+  width: 100%;
+  height: 100%;
+  font-size: 1.0rem;
+}
+
+.th7,
+.th17 {
+  width: 100%;
+  height: 100%;
+  font-size: 0.7rem;
+}
+
+.th8,
+.th9,
+.th16 {
+  width: 100%;
+  height: 100%;
+  font-size: 0.7rem;
+}

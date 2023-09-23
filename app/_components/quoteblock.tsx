@@ -1,14 +1,13 @@
 import style from "./quoteblock.module.css"
 
 type Props = {
-  text: string,
   cite?: string,
 }
 
-export function Quoteblock({ text, cite }: Props) {
+export function Quoteblock({ cite, children }: Props & {children: React.ReactNode}) {
   return (
     <blockquote className={style.quoteblock}>
-      <p>{text}</p>
+      {children}
       { cite !== undefined && (<cite>{cite}</cite>) }
     </blockquote>
   )
