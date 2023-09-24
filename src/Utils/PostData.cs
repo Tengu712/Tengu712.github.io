@@ -1,3 +1,5 @@
+using Ssg.Components;
+
 namespace Ssg.Utils;
 
 public class PostData
@@ -6,5 +8,5 @@ public class PostData
     public string Title { get; init; } = "";
     public string[] Tags { get; init; } = new string[] { };
     public string Date { get; init; } = "";
-    public string Content { get; init; } = "";
+    public IComponent? Content { get; init; } = null;
 }

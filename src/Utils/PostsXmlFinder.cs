@@ -1,4 +1,5 @@
 using System.Xml;
+using Ssg.Components;
 
 namespace Ssg.Utils;
 
@@ -102,10 +103,8 @@ public class PostsXmlFinder
         {
             tags[i] = tagsNodes[i]!.InnerText;
         }
-
         var contentNode = this.selectNodes(xmlDoc, xmlPath, "blob/main")[0]!;
-        // TODO: replace custom tags.
-        var content = contentNode.OuterXml;
+        var content = this.parseContent(contentNode);
 
         this.postDatas[idx] = new PostData { Id = id, Title = title, Tags = tags, Date = date, Content = content };
 
@@ -115,10 +114,39 @@ public class PostsXmlFinder
     private XmlNodeList selectNodes(XmlDocument xmlDoc, string xmlPath, string tagPath)
     {
         var nodeList = xmlDoc.SelectNodes(tagPath);
-        if (nodeList == null)
+        if (nodeList == null || nodeList.Count == 0)
         {
             throw new Exception($"[ error ] PostsXmlFinder.selectNodes(): {tagPath} not found. : {xmlPath}");
         }
         return nodeList;
+    }
+
+    private IComponent parseContent(XmlNode node)
+    {
+        switch (node.Name)
+        {
+            case "Codeblock":
+                return new Codeblock(node.Attributes?["lang"]?.Value, node.InnerText);
+            default:
+                var res = new Node(node.Name);
+                if (node.Attributes != null)
+                {
+                    foreach (XmlAttribute attribute in node.Attributes)
+                    {
+                        res.AddAttribute(attribute.Name, attribute.Value);
+                    }
+                }
+                if (node.ChildNodes.Count == 0
+                    || node.ChildNodes.Count == 1 && node.ChildNodes[0]!.NodeType == XmlNodeType.Text)
+                {
+                    res.SetInnerText(node.InnerText);
+                    return res;
+                }
+                foreach (XmlNode child in node.ChildNodes)
+                {
+                    res.AddChild(this.parseContent(child));
+                }
+                return res;
+        }
     }
 }

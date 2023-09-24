@@ -25,13 +25,14 @@ public class Post : ANormalPage
     {
         this.headline.OutputRequirements(sw);
         this.deadline.OutputRequirements(sw);
+        this.postData.Content?.OutputRequirements(sw);
         sw.WriteLine($"<title>{this.postData.Title}</title>");
     }
 
     protected override void outputContent(StreamWriter sw)
     {
         this.headline.Output(sw);
-        sw.WriteLine(this.postData.Content);
+        this.postData.Content?.Output(sw);
         this.deadline.Output(sw);
     }
 }
