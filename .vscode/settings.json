@@ -1,0 +1,15 @@
+{
+  "[csharp]": {
+    "editor.tabSize": 4,
+  },
+  "[css]": {
+    "editor.tabSize": 2
+  },
+  "[javascript]": {
+    "editor.tabSize": 2
+  },
+  "[xml]": {
+    "editor.tabSize": 2
+  },
+  "editor.codeLens": false,
+}

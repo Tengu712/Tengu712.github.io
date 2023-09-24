@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<blob>
+
+  <title>VkDescriptorPoolSizeの誤りが検出されない</title>
+  <date>2023/5/17</date>
+  <tags>
+    <tag>vulkan</tag>
+  </tags>
+
+  <main>
+    <h2>概要</h2>
+
+    <p>
+      VkDescriptorPoolSize構造体は、ディスクリプタプールに含まれるディスクリプタの種類とそれぞれの数を指定する。
+      VkDescriptorPoolCreateInfo構造体へ配列で渡され、vkCreateDescriptorPool関数によりディスクリプタプールオブジェクトが生成される。
+      このディスクリプタプールオブジェクトをもとに、vkAllocateDescriptorSets関数によりメモリを確保する。
+    </p>
+
+    <p>
+      状況に対して誤ったVkDescriptorPoolSize構造体配列を作成しても、次の環境ではエラーが検出されず、かつ期待通りの結果が得られた。
+    </p>
+
+    <ul>
+      <li>OS:  Windows 10, Ubuntu 22.04.1</li>
+      <li>CPU: AMD Ryzen 5 3600</li>
+      <li>GPU: NVIDIA GeForce GTX 1650</li>
+    </ul>
+
+    <p>
+      また、以下の環境では、vkAllocateDescriptorSets関数の返り値が VK_ERROR_OUT_OF_POOL_MEMORY となった。
+    </p>
+
+    <ul>
+      <li>OS:  Windows 10, Archlinux</li>
+      <li>CPU: AMD Ryzen 5 3500U</li>
+      <li>GPU: Radeon Vega 8 Graphics</li>
+    </ul>
+
+    <h2>詳細</h2>
+
+    <p>
+      一つの Uniform Buffer と一つの Combined Image Sampler をバインディングとして持つとすると、
+      VkDescriptorPoolSize構造体配列は、以下のようにならなければならない。
+    </p>
+
+    <Codeblock lang="C">const VkDescriptorPoolSize desc_pool_sizes[] = {
+  {
+    VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+    1,
+  },
+  {
+    VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+    1,
+  },
+};</Codeblock>
+
+    <p>
+      しかし、以下のようにしても異常が検出されず、かつ期待通りに動作してしまった。
+    </p>
+
+    <Codeblock lang="C">const VkDescriptorPoolSize desc_pool_sizes[] = {
+  {
+    VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+    2,
+  },
+};</Codeblock>
+
+    <p>
+      また、以下のようにしても同様である。
+    </p>
+
+    <Codeblock lang="C">VkDescriptorPoolSize desc_pool_sizes[] = {
+  {
+    VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+    1,
+  },
+  {
+    VK_DESCRIPTOR_TYPE_SAMPLER,
+    1,
+  },
+};</Codeblock>
+
+    <p>
+      非内蔵GPUでは、上手いことしてくれるのかもしれないが、バグの発見が遅れるのでやめてほしい。
+    </p>
+  </main>
+
+</blob>
