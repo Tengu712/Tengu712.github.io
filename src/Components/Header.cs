@@ -1,11 +1,13 @@
+using Ssg.IO;
+
 namespace Ssg.Components;
 
 public class Header : IComponent
 {
-    public void OutputRequirements(StreamWriter sw) =>
-        sw.WriteLine("<link rel='stylesheet' type='text/css' href='/req/components/header.css'>");
+    public void OutputRequirements(IWriter writer) =>
+        writer.Write("<link rel='stylesheet' type='text/css' href='/req/components/header.css'>");
 
-    public void Output(StreamWriter sw)
+    public void Output(IWriter writer)
     {
         new Node("div")
           .AddAttribute("class", "header-header")
@@ -13,9 +15,9 @@ public class Header : IComponent
           .AddChild(new Node("a").AddAttribute("href", "/").SetInnerText("Posts"))
           .AddChild(new Node("a").AddAttribute("href", "/pages/").SetInnerText("Pages"))
           .AddChild(new Node("a").AddAttribute("href", "/about/").SetInnerText("About"))
-          .Output(sw);
+          .Output(writer);
         new Node("div")
           .AddAttribute("class", "header-spacer")
-          .Output(sw);
+          .Output(writer);
     }
 }

@@ -1,4 +1,5 @@
 using Ssg.Components;
+using Ssg.IO;
 
 namespace Ssg.Pages.Root.Pages;
 
@@ -10,11 +11,11 @@ public class Index : ANormalPage
 
     protected override string getPath() => "/pages/";
 
-    protected override void outputHead(StreamWriter sw)
+    protected override void outputHead(IWriter writer)
     {
-        this.content.OutputRequirements(sw);
-        sw.WriteLine("<title>Pages</title>");
+        this.content.OutputRequirements(writer);
+        writer.Write("<title>Pages</title>");
     }
 
-    protected override void outputContent(StreamWriter sw) => this.content.Output(sw);
+    protected override void outputContent(IWriter writer) => this.content.Output(writer);
 }

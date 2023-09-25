@@ -1,3 +1,5 @@
+using Ssg.IO;
+
 using System.Xml;
 
 namespace Ssg.Components;
@@ -81,6 +83,6 @@ public class FromXml : IComponent
         return children;
     }
 
-    public void OutputRequirements(StreamWriter sw) => this.content.OutputRequirements(sw);
-    public void Output(StreamWriter sw) => this.content.Output(sw);
+    public void OutputRequirements(IWriter writer) => this.content.OutputRequirements(writer);
+    public void Output(IWriter writer) => this.content.Output(writer);
 }

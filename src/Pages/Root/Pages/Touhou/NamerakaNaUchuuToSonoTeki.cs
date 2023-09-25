@@ -1,4 +1,5 @@
 using Ssg.Components;
+using Ssg.IO;
 
 namespace Ssg.Pages.Root.Pages.Touhou;
 
@@ -10,11 +11,11 @@ public class NamerakaNaUchuuToSonoTeki : ANormalPage
 
     protected override string getPath() => "/pages/touhou/nameraka-na-uchuu-to-sono-teki/";
 
-    protected override void outputHead(StreamWriter sw)
+    protected override void outputHead(IWriter writer)
     {
-        this.content.OutputRequirements(sw);
-        sw.WriteLine("<title>『なめらかな宇宙と、その敵。』解説</title>");
+        this.content.OutputRequirements(writer);
+        writer.Write("<title>『なめらかな宇宙と、その敵。』解説</title>");
     }
 
-    protected override void outputContent(StreamWriter sw) => this.content.Output(sw);
+    protected override void outputContent(IWriter writer) => this.content.Output(writer);
 }

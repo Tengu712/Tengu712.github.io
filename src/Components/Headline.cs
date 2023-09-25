@@ -1,3 +1,5 @@
+using Ssg.IO;
+
 namespace Ssg.Components;
 
 public class Headline : IComponent
@@ -13,10 +15,10 @@ public class Headline : IComponent
         this.date = date;
     }
 
-    public void OutputRequirements(StreamWriter sw) =>
-        sw.WriteLine("<link rel='stylesheet' type='text/css' href='/req/components/headline.css'>");
+    public void OutputRequirements(IWriter writer) =>
+        writer.Write("<link rel='stylesheet' type='text/css' href='/req/components/headline.css'>");
 
-    public void Output(StreamWriter sw)
+    public void Output(IWriter writer)
     {
         var tagsNode = new Node("div");
         tagsNode.AddAttribute("class", "headline-tags");
@@ -30,6 +32,6 @@ public class Headline : IComponent
             .AddChild(new Node("h1").SetInnerText(this.title))
             .AddChild(tagsNode)
             .AddChild(new Node("hr"))
-            .Output(sw);
+            .Output(writer);
     }
 }

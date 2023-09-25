@@ -1,3 +1,5 @@
+using Ssg.IO;
+
 namespace Ssg.Components;
 
 /// <summary>
@@ -49,37 +51,37 @@ public class Node : IComponent
         return this;
     }
 
-    public void OutputRequirements(StreamWriter sw)
+    public void OutputRequirements(IWriter writer)
     {
         foreach (IComponent child in this.children)
         {
-            child.OutputRequirements(sw);
+            child.OutputRequirements(writer);
         }
     }
 
-    public void Output(StreamWriter sw)
+    public void Output(IWriter writer)
     {
-        sw.Write($"<{this.name}");
+        writer.Write($"<{this.name}");
         foreach (string attribute in this.attributes)
         {
-            sw.Write(" ");
-            sw.Write(attribute);
+            writer.Write(" ");
+            writer.Write(attribute);
         }
-        sw.Write(">");
+        writer.Write(">");
 
         if (this.selfClosing)
         {
             if (this.children.Count > 0)
             {
-                Console.WriteLine($"[ warning ] Node.Output(): this {this.name} node is self-closing-node but this has {this.children.Count} children.");
+                Console.Write($"[ warning ] Node.Output(): this {this.name} node is self-closing-node but this has {this.children.Count} children.");
             }
             return;
         }
 
         foreach (IComponent child in this.children)
         {
-            child.Output(sw);
+            child.Output(writer);
         }
-        sw.WriteLine($"{this.innerText}</{this.name}>");
+        writer.Write($"{this.innerText}</{this.name}>");
     }
 }

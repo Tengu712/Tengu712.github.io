@@ -1,3 +1,5 @@
+using Ssg.IO;
+
 namespace Ssg.Pages;
 
 /// <summary>
@@ -7,20 +9,23 @@ public abstract class APlainPage : APage
 {
     protected override void output(StreamWriter sw)
     {
-        sw.WriteLine("<!DOCTYPE html>");
-        sw.WriteLine("<html lang='ja'>");
-        sw.WriteLine("<head>");
-        sw.WriteLine("<meta charset='utf-8'>");
-        sw.WriteLine("<meta name='viewport' content='width=device-width, initial-scale=1, minimum-scale=1, user-scalable=yes'>");
-        sw.WriteLine("<link rel='stylesheet' type='text/css' href='/req/default.css'>");
-        this.outputHead(sw);
-        sw.WriteLine("</head>");
-        sw.WriteLine("<body>");
-        this.outputContent(sw);
-        sw.WriteLine("</body>");
-        sw.WriteLine("</html>");
+        var hw = new HeadWriter(sw);
+        var cw = new ContentWriter(sw);
+
+        sw.Write("<!DOCTYPE html>");
+        sw.Write("<html lang='ja'>");
+        sw.Write("<head>");
+        sw.Write("<meta charset='utf-8'>");
+        sw.Write("<meta name='viewport' content='width=device-width, initial-scale=1, minimum-scale=1, user-scalable=yes'>");
+        sw.Write("<link rel='stylesheet' type='text/css' href='/req/default.css'>");
+        this.outputHead(hw);
+        sw.Write("</head>");
+        sw.Write("<body>");
+        this.outputContent(cw);
+        sw.Write("</body>");
+        sw.Write("</html>");
     }
 
-    protected abstract void outputHead(StreamWriter sw);
-    protected abstract void outputContent(StreamWriter sw);
+    protected abstract void outputHead(IWriter writer);
+    protected abstract void outputContent(IWriter writer);
 }

@@ -1,3 +1,5 @@
+using Ssg.IO;
+
 using Ssg.Utils;
 
 namespace Ssg.Components;
@@ -8,21 +10,21 @@ public class Deadline : IComponent
 
     public Deadline(string id) => this.id = id;
 
-    public void OutputRequirements(StreamWriter sw) =>
-        sw.WriteLine("<link rel='stylesheet' type='text/css' href='/req/components/deadline.css'>");
+    public void OutputRequirements(IWriter writer) =>
+        writer.Write("<link rel='stylesheet' type='text/css' href='/req/components/deadline.css'>");
 
-    public void Output(StreamWriter sw)
+    public void Output(IWriter writer)
     {
         var next = PostsXmlFinder.GetInstance().GetNextOf(this.id);
         var prev = PostsXmlFinder.GetInstance().GetPrevOf(this.id);
 
-        new Tombstone().Output(sw);
-        new Node("hr").Output(sw);
+        new Tombstone().Output(writer);
+        new Node("hr").Output(writer);
         new Node("div")
             .AddAttribute("class", "deadline-links")
             .AddChild(next != null ? this.createLink(next, "Next Article") : new Node("div"))
             .AddChild(prev != null ? this.createLink(prev, "Prev Article") : new Node("div"))
-            .Output(sw);
+            .Output(writer);
     }
 
     private IComponent createLink(PostData postData, string text) =>

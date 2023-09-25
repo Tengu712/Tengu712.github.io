@@ -1,3 +1,5 @@
+using Ssg.IO;
+
 namespace Ssg.Components;
 
 public class Quoteblock : IComponent
@@ -11,16 +13,16 @@ public class Quoteblock : IComponent
         this.children = children;
     }
 
-    public void OutputRequirements(StreamWriter sw)
+    public void OutputRequirements(IWriter writer)
     {
-        sw.WriteLine("<link rel='stylesheet' type='text/css' href='/req/components/quoteblock.css'>");
+        writer.Write("<link rel='stylesheet' type='text/css' href='/req/components/quoteblock.css'>");
         foreach (IComponent child in this.children)
         {
-            child.OutputRequirements(sw);
+            child.OutputRequirements(writer);
         }
     }
 
-    public void Output(StreamWriter sw)
+    public void Output(IWriter writer)
     {
         var node = new Node("blockquote").AddAttribute("class", "quoteblock-quoteblock");
         foreach (IComponent child in this.children)
@@ -31,6 +33,6 @@ public class Quoteblock : IComponent
         {
             node.AddChild(new Node("cite").SetInnerText(this.cite));
         }
-        node.Output(sw);
+        node.Output(writer);
     }
 }

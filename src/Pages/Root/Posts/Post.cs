@@ -1,4 +1,5 @@
 using Ssg.Components;
+using Ssg.IO;
 using Ssg.Utils;
 
 namespace Ssg.Pages.Root.Posts;
@@ -21,18 +22,18 @@ public class Post : ANormalPage
 
     protected override string getPath() => $"/posts/{this.postData.Id}/";
 
-    protected override void outputHead(StreamWriter sw)
+    protected override void outputHead(IWriter writer)
     {
-        this.headline.OutputRequirements(sw);
-        this.deadline.OutputRequirements(sw);
-        this.postData.Content?.OutputRequirements(sw);
-        sw.WriteLine($"<title>{this.postData.Title}</title>");
+        this.headline.OutputRequirements(writer);
+        this.deadline.OutputRequirements(writer);
+        this.postData.Content?.OutputRequirements(writer);
+        writer.Write($"<title>{this.postData.Title}</title>");
     }
 
-    protected override void outputContent(StreamWriter sw)
+    protected override void outputContent(IWriter writer)
     {
-        this.headline.Output(sw);
-        this.postData.Content?.Output(sw);
-        this.deadline.Output(sw);
+        this.headline.Output(writer);
+        this.postData.Content?.Output(writer);
+        this.deadline.Output(writer);
     }
 }

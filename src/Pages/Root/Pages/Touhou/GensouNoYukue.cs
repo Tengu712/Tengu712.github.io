@@ -1,4 +1,5 @@
 using Ssg.Components;
+using Ssg.IO;
 
 namespace Ssg.Pages.Root.Pages.Touhou;
 
@@ -10,11 +11,11 @@ public class GensouNoYukue : ANormalPage
 
     protected override string getPath() => "/pages/touhou/gensou-no-yukue/";
 
-    protected override void outputHead(StreamWriter sw)
+    protected override void outputHead(IWriter writer)
     {
-        this.content.OutputRequirements(sw);
-        sw.WriteLine("<title>『幻想の行方』解説</title>");
+        this.content.OutputRequirements(writer);
+        writer.Write("<title>『幻想の行方』解説</title>");
     }
 
-    protected override void outputContent(StreamWriter sw) => this.content.Output(sw);
+    protected override void outputContent(IWriter writer) => this.content.Output(writer);
 }

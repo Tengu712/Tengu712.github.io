@@ -1,4 +1,5 @@
 using System.Text;
+using Ssg.IO;
 
 namespace Ssg.Pages;
 

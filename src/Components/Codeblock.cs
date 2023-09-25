@@ -1,3 +1,5 @@
+using Ssg.IO;
+
 namespace Ssg.Components;
 
 public class Codeblock : IComponent
@@ -11,14 +13,14 @@ public class Codeblock : IComponent
         this.code = code;
     }
 
-    public void OutputRequirements(StreamWriter sw) =>
-        sw.WriteLine("<link rel='stylesheet' type='text/css' href='/req/components/codeblock.css'>");
+    public void OutputRequirements(IWriter writer) =>
+        writer.Write("<link rel='stylesheet' type='text/css' href='/req/components/codeblock.css'>");
 
-    public void Output(StreamWriter sw)
+    public void Output(IWriter writer)
     {
         new Node("pre")
             .AddAttribute("class", "codeblock-codeblock")
             .SetInnerText(this.code)
-            .Output(sw);
+            .Output(writer);
     }
 }
