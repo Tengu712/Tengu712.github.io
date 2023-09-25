@@ -6,5 +6,6 @@ public class Program
     {
         new Pages.Root.Posts.Post("ai-illustration").Generate();
         new Pages.Root.Posts.Post("allocate-descriptor-sets").Generate();
+        new Pages.Root.About.About().Generate();
     }
 }

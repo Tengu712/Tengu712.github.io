@@ -7,6 +7,7 @@ namespace Ssg.Components;
 public class Node : IComponent
 {
     private readonly string name;
+    private readonly bool selfClosing;
 
     private string innerText;
     private IList<string> attributes;
@@ -18,6 +19,7 @@ public class Node : IComponent
         this.innerText = "";
         this.attributes = new List<string>();
         this.children = new List<IComponent>();
+        this.selfClosing = name.Equals("br") || name.Equals("hr") || name.Equals("img");
     }
 
     public Node SetInnerText(string innerText)
@@ -55,6 +57,16 @@ public class Node : IComponent
             sw.Write(attribute);
         }
         sw.Write(">");
+
+        if (this.selfClosing)
+        {
+            if (this.children.Count > 0)
+            {
+                Console.WriteLine($"[ warning ] Node.Output(): this {this.name} node is self-closing-node but this has {this.children.Count} children.");
+            }
+            return;
+        }
+
         foreach (IComponent child in this.children)
         {
             child.Output(sw);
