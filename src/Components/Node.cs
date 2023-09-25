@@ -26,7 +26,11 @@ public class Node : IComponent
 
     public Node SetInnerText(string innerText)
     {
-        this.innerText = innerText;
+        var sb = new System.Text.StringBuilder(innerText);
+        sb.Replace("&", "&amp;");
+        sb.Replace("<", "&lt;");
+        sb.Replace("<", "&gt;");
+        this.innerText = sb.ToString();
         return this;
     }
 

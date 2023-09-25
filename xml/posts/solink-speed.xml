@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<blob>
+  <title>動的リンクライブラリの暗黙的/動的リンクの速度比較</title>
+  <date>2023/3/30</date>
+  <tags><tag>experiment</tag></tags>
+
+  <main>
+    <h2>背景</h2>
+
+    <p>
+      ゲーム制作向けフロントエンドフレームワークのAPIをどうしようかと考えたところ、どっちかを動的リンクライブラリにするのが良いだろうという結論に至った。
+    </p>
+
+    <p>
+      動的リンクには、暗黙的なリンクと動的的なリンクの二つの手法がある。
+      事前に用いるライブラリ名(とその検索パス)を指定しておく方法と、dlsym関数やGetProcAddress関数を用いて動的に関数を取得する方法とである。
+    </p>
+
+    <p>
+      なんとなく、関数を余計に呼び出す分、速度が落ちるのではないかと思い、速度比較実験を行ってみた。
+      <b>ただし、リンクする関数の数が少ない場合は、僅差過ぎて測れないだろうので、考慮しないものとする。</b>
+    </p>
+
+    <h2>Linux</h2>
+
+    <p>
+      今回用いたソースファイルは以下。
+    </p>
+
+    <ul>
+      <li>sosrcgen.rs：共有ライブラリのソースコード生成器</li>
+      <li>imsrcgen.rs：暗黙的リンク用のソースコード生成器</li>
+      <li>exsrcgen.rs：動的リンク用のソースコード生成器</li>
+      <li>Makefile：ビルド用</li>
+    </ul>
+
+    <p>
+      コードは順に以下のよう。簡単に言えば、100000個の外部関数を動的にリンクするプログラムである。
+    </p>
+
+    <Codeblock lang="Rust">// sosrcgen.rs
+use std::io::Write;
+fn main() {
+  let mut out = std::io::BufWriter::new(std::io::stdout().lock());
+  for i in 0..100000 {
+      write!(out, "int f{0}() {{ return {0}; }} ", i).unwrap();
+  }
+}</Codeblock>
+
+    <Codeblock lang="Rust">// imsrcgen.rs
+use std::io::Write;
+const MAIN1: &amp;'static str = "
+#include &lt;stdio.h&gt;
+int main() {
+  int sum = 0;
+";
+const MAIN2: &amp;'static str = "
+  printf(\"sum = %d\\n\", sum);
+  return 0;
+}
+";
+fn main() {
+  let mut out = std::io::BufWriter::new(std::io::stdout().lock());
+  for i in 0..100000 {
+      write!(out, "int f{}(); ", i).unwrap();
+  }
+  write!(out, "{}", MAIN1).unwrap();
+  for i in 0..100000 {
+      write!(out, "sum += f{}(); ", i).unwrap();
+  }
+  write!(out, "{}", MAIN2).unwrap();
+}</Codeblock>
+
+    <Codeblock lang="Rust">// exsrcgen.rs
+use std::io::Write;
+const MAIN1: &amp;'static str = "
+#include &lt;stdio.h&gt;
+#include &lt;dlfcn.h&gt;
+int (*fs[100000])();
+int main() {
+  int sum = 0;
+  void *handle = dlopen(\"./libtestso.so\", RTLD_LAZY);
+";
+const MAIN2: &amp;'static str = "
+  printf(\"sum = %d\\n\", sum);
+  return 0;
+}
+";
+fn main() {
+  let mut out = std::io::BufWriter::new(std::io::stdout().lock());
+  write!(out, "{}", MAIN1).unwrap();
+  for i in 0..100000 {
+      write!(out, "fs[{0}] = (int (*)())dlsym(handle, \"f{0}\"); ", i).unwrap();
+  }
+  for i in 0..100000 {
+      write!(out, "sum += (*fs[{}])(); ", i).unwrap();
+  }
+  write!(out, "{}", MAIN2).unwrap();
+}</Codeblock>
+
+    <Codeblock lang="Make">.PHONY: all
+all: libtestso.so imtest extest
+libtestso.so: sosrcgen.rs
+  rustc sosrcgen.rs
+  ./sosrcgen &gt; sosrc.c
+  gcc -shared -fPIC -o libtestso.so sosrc.c
+imtest: imsrcgen.rs
+  rustc imsrcgen.rs
+  ./imsrcgen &gt; imsrc.c
+  gcc -o imtest imsrc.c libtestso.so -Wl,-rpath,'$$ORIGIN/'
+extest: exsrcgen.rs
+  rustc exsrcgen.rs
+  ./exsrcgen &gt; exsrc.c
+  gcc -o extest exsrc.c
+clean:
+  rm -f \
+    libtestso.so sosrc.c sosrcgen \
+    imtest imsrc.c imsrcgen \
+    extest exsrc.c exsrcgen</Codeblock>
+
+    <p>
+      雑にtimeコマンドで計測した結果、実行時間は両者とも15ミリ秒程度で、目立った差はなかった。
+      <b>どころか、動的リンクの方がファイルサイズが小さく、かつ実行時間が僅差で短かった。</b>
+    </p>
+
+    <p>
+      本来ならば、やたら複雑な関数をリンクするならば遅くなるのかとか、ばらばらのタイミングでリンクすると遅くなるのかとか、検証すべきケースは考えられるが、これほど速ければ特に変わりないのではと思える。
+    </p>
+
+    <h2>Windows</h2>
+
+    <p>
+      ソースファイルは以下。
+      imtest.exeのビルド(恐らくリンク)にとんでもない時間が掛かって途中でプロセスが吹き飛んだため、Linuxと違って、20000個の関数をリンクすることにした。
+      また、QueryPerformanceCounterでリンクと計算にかかった時間を計測した。
+    </p>
+
+    <ul>
+      <li>dllsrcgen.rs：DLLのソースコード生成器</li>
+      <li>imsrcgen.rs：暗黙的リンク用のソースコード生成器</li>
+      <li>exsrcgen.rs：動的リンク用のソースコード生成器</li>
+      <li>Makefile：ビルド用</li>
+    </ul>
+
+    <Codeblock lang="Rust">// dllsrcgen.rs
+use std::io::Write;
+fn main() {
+  let mut out = std::io::BufWriter::new(std::io::stdout().lock());
+  for i in 0..20000 {
+      write!(out, "int __stdcall f{0}() {{ return {0}; }} ", i).unwrap();
+  }
+}</Codeblock>
+
+    <Codeblock lang="Rust">// imsrcgen.rs
+use std::io::Write;
+const MAIN1: &amp;'static str = "
+#include &lt;stdio.h&gt;
+#include &lt;windows.h&gt;
+int main() {
+  int sum = 0;
+  LARGE_INTEGER freq;
+  LARGE_INTEGER before;
+  LARGE_INTEGER after;
+  QueryPerformanceFrequency(&amp;freq);
+  QueryPerformanceCounter(&amp;before);
+";
+const MAIN2: &amp;'static str = "
+  QueryPerformanceCounter(&amp;after);
+  printf(\"sum = %d, time = %lf\\n\", sum, (after.QuadPart - before.QuadPart) * 1000.0 / freq.QuadPart);
+  return 0;
+}
+";
+fn main() {
+  let mut out = std::io::BufWriter::new(std::io::stdout().lock());
+  for i in 0..20000 {
+      write!(out, "int f{}(); ", i).unwrap();
+  }
+  write!(out, "{}", MAIN1).unwrap();
+  for i in 0..20000 {
+      write!(out, "sum += f{}(); ", i).unwrap();
+  }
+  write!(out, "{}", MAIN2).unwrap();
+}</Codeblock>
+
+    <Codeblock lang="Rust">// exsrcgen.rs
+use std::io::Write;
+const MAIN1: &amp;'static str = "
+#include &lt;stdio.h&gt;
+#include &lt;windows.h&gt;
+int (*fs[20000])();
+int main() {
+  int sum = 0;
+  LARGE_INTEGER freq;
+  LARGE_INTEGER before;
+  LARGE_INTEGER after;
+  QueryPerformanceFrequency(&amp;freq);
+  QueryPerformanceCounter(&amp;before);
+  HMODULE module = LoadLibraryA(\"testdll.dll\");
+";
+const MAIN2: &amp;'static str = "
+  QueryPerformanceCounter(&amp;after);
+  printf(\"sum = %d, time = %lf\\n\", sum, (after.QuadPart - before.QuadPart) * 1000.0 / freq.QuadPart);
+  FreeLibrary(module);
+  return 0;
+}
+";
+fn main() {
+  let mut out = std::io::BufWriter::new(std::io::stdout().lock());
+  write!(out, "{}", MAIN1).unwrap();
+  for i in 0..20000 {
+      write!(out, "fs[{0}] = (int (*)())GetProcAddress(module, \"f{0}\"); ", i).unwrap();
+  }
+  for i in 0..20000 {
+      write!(out, "sum += (*fs[{}])(); ", i).unwrap();
+  }
+  write!(out, "{}", MAIN2).unwrap();
+}</Codeblock>
+
+    <Codeblock lang="Make">.PHONY: all
+all: testdll.dll imtest.exe extest.exe
+testdll.dll: dllsrcgen.rs
+  rustc dllsrcgen.rs
+  dllsrcgen &gt; dllsrc.c
+  gcc -shared -o testdll.dll dllsrc.c
+imtest.exe: imsrcgen.rs
+  rustc imsrcgen.rs
+  imsrcgen &gt; imsrc.c
+  gcc -o imtest.exe imsrc.c testdll.dll
+extest.exe: exsrcgen.rs
+  rustc exsrcgen.rs
+  exsrcgen &gt; exsrc.c
+  gcc -o extest.exe exsrc.c
+clean:
+  del /F \
+    testdll.dll dllsrc.c dllsrcgen.pdb dllsrcgen.exe \
+    imtest.exe imsrc.c imsrcgen.pdb imsrcgen.exe \
+    extest.exe exsrc.c exsrcgen.pdb exsrcgen.exe</Codeblock>
+
+    <p>
+      計測結果は以下のよう。ただし、小数点第二位四捨五入している。
+    </p>
+
+    <table>
+      <thead>
+          <tr><th></th><th>Static Link [ms]</th><th>Dynamic Link [ms]</th></tr>
+      </thead>
+      <tbody>
+          <tr><td>1</td><td>0.68</td><td>4.75</td></tr>
+          <tr><td>2</td><td>0.50</td><td>4.89</td></tr>
+          <tr><td>3</td><td>0.49</td><td>4.15</td></tr>
+          <tr><td>4</td><td>0.43</td><td>4.84</td></tr>
+          <tr><td>5</td><td>0.50</td><td>4.89</td></tr>
+          <tr><td>Ave</td><td>0.52</td><td>4.70</td></tr>
+      </tbody>
+    </table>
+
+
+    <p>
+      こちらは動的リンクが遅くなった。また、実行バイナリキャッシュがないときのReal時間も明らかに動的リンクの方が遅い。
+      矢張り暗黙的リンクの方が実行ファイルのサイズが大きい上に、ビルド時間が滅茶苦茶長くなるので、何か施しているのかもしれない。
+    </p>
+
+    <p>
+      「objdump -d」で逆アセンブルしてぼんやりと見ても、Import Name Tableの有無の違いがあるだけで、どちらも愚直に計算している。
+      for文で関数ポインタ配列を回して見かけ上の命令数を少なくしてみたが、速度改善はせず。
+    </p>
+
+    <p>
+      どうやらWindowsでは、動的リンクは遅いらしい。
+    </p>
+
+    <h2>結論</h2>
+
+    <p>
+      Linuxでは動的リンク、Windowsでは暗黙的リンクを用いるのが合理的である。
+      が、Linuxでは大した差がなかったので、どちらも暗黙的リンクを用いるのが良いだろう。
+    </p>
+  </main>
+</blob>

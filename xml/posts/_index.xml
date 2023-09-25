@@ -2,4 +2,10 @@
 <files>
   <file>ai-illustration</file>
   <file>allocate-descriptor-sets</file>
+  <file>solink-speed</file>
+  <file>com-in-rust</file>
+  <file>stdout-speed</file>
+  <file>enum-windows</file>
+  <file>windows-to-ubuntu</file>
+  <file>start</file>
 </files>

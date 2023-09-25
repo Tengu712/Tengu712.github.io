@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<blob>
+  <title>ブログ開設</title>
+  <date>2022/11/21</date>
+  <tags><tag>diary</tag></tags>
+  
+  <main>
+    <p>
+      天狗です。
+    </p>
+    
+    <p>
+      <s>Codeberg.pagesを利用して、</s><s>レンタルサーバーを借りて、</s>GitHub Pagesを利用して、個人ブログを開設しました。
+      当ブログの目的は、知識や記憶の整理と、文章を書く能力の向上です。
+    </p>
+  </main>
+</blob>
