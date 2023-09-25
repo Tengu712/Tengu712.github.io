@@ -6,7 +6,7 @@ public class About : ANormalPage
 {
     private readonly IComponent content;
 
-    public About() => this.content = new FromXml("./xml/about.xml");
+    public About() => this.content = new FromXml("./xml/about/about.xml");
 
     protected override string getPath() => "/about/";
 
@@ -16,9 +16,5 @@ public class About : ANormalPage
         sw.WriteLine("<title>About</title>");
     }
 
-    protected override void outputContent(StreamWriter sw)
-    {
-        this.content.Output(sw);
-        new Tombstone().Output(sw);
-    }
+    protected override void outputContent(StreamWriter sw) => this.content.Output(sw);
 }
