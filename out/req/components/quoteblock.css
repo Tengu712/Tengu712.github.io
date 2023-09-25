@@ -1,0 +1,15 @@
+.quoteblock-quoteblock {
+  position: relative;
+  color: #303030;
+  background-color: #fff3f3;
+  border-left: solid 0.35rem #b07a7a;
+  padding: 1rem;
+}
+
+.quoteblock-quoteblock cite {
+  display: block;
+  color: #808080;
+  font-size: 0.8rem;
+  text-align: right;
+  padding-right: 1rem;
+}

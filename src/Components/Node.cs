@@ -40,6 +40,15 @@ public class Node : IComponent
         return this;
     }
 
+    public Node AddChildren(IComponent[] children)
+    {
+        foreach (IComponent child in children)
+        {
+            this.children.Add(child);
+        }
+        return this;
+    }
+
     public void OutputRequirements(StreamWriter sw)
     {
         foreach (IComponent child in this.children)
