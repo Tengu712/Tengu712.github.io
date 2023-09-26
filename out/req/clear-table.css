@@ -1,0 +1,122 @@
+body {
+  background-color: black;
+  color: white;
+}
+
+a,
+a:visited {
+  color: red;
+  cursor: pointer;
+}
+
+table {
+  border: none;
+  border-collapse: collapse;
+  margin: 0;
+  padding: 0;
+}
+
+th,
+td {
+  border: 1px white solid;
+  padding: 0;
+}
+
+th {
+  font-size: 1.0rem;
+  height: 1.0rem;
+}
+
+td a,
+td a:visited {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* main table */
+
+.main-table {
+  margin: 0 auto;
+  width: 850px;
+  height: 600px;
+}
+
+/* work table */
+
+.th6,
+.th10,
+.th11,
+.th12,
+.th13,
+.th14,
+.th15,
+.th18 {
+  width: 100%;
+  height: 100%;
+  font-size: 1.0rem;
+}
+
+.th7,
+.th17 {
+  width: 100%;
+  height: 100%;
+  font-size: 0.7rem;
+}
+
+.th8,
+.th9,
+.th16 {
+  width: 100%;
+  height: 100%;
+  font-size: 0.7rem;
+}
+
+/* td */
+
+.diff {
+  width: 0;
+}
+
+.nmnbnr {
+  background-color: #e2041b;
+}
+
+.nmnb {
+  background-color: #ea5506;
+}
+
+.nmnr {
+  background-color: #864084;
+}
+
+.nm {
+  background-color: #cc5bc8;
+}
+
+.nbnr {
+  background-color: #1e50a2;
+}
+
+.nb {
+  background-color: #0c9ea8;
+}
+
+.c {
+  background-color: #2d7555;
+}
+
+/* popup */
+
+.popup {
+  background-color: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 16px;
+  position: absolute;
+  min-width: 300px;
+  min-height: 200px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+}
