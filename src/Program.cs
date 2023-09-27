@@ -4,6 +4,9 @@ public class Program
 {
     public static void Main()
     {
+        // top
+        new Pages.Root.Posts.Index().Generate();
+        // posts
         new Pages.Root.Posts.Post("ai-illustration").Generate();
         new Pages.Root.Posts.Post("allocate-descriptor-sets").Generate();
         new Pages.Root.Posts.Post("solink-speed").Generate();

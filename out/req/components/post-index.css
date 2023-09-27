@@ -1,0 +1,27 @@
+.post-index-all {
+  margin: 1.5rem 0;
+  width: 100%;
+}
+
+.post-index-all a {
+  text-decoration: none;
+}
+
+.post-index-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.post-index-tags {
+  color: gray;
+  display: flex;
+}
+
+.post-index-tags span {
+  margin-right: 0.5rem;
+}
+
+.post-index-tags span:last-child {
+  margin: 0;
+  margin-left: auto;
+}

@@ -9,7 +9,7 @@ public class PostsXmlFinder
 
     private static PostsXmlFinder? instance = null;
 
-    private readonly string[] fileNames;
+    private readonly string[] ids;
     private readonly PostData?[] postDatas;
 
     private PostsXmlFinder()
@@ -23,11 +23,11 @@ public class PostsXmlFinder
             throw new Exception($"[ error ] PostsXmlFinder(): <files> or <file> not found. : {PostsXmlFinder.INDEX_FILE_PATH}");
         }
 
-        this.fileNames = new string[fileNodes.Count];
+        this.ids = new string[fileNodes.Count];
         this.postDatas = new PostData[fileNodes.Count];
         for (int i = 0; i < fileNodes.Count; ++i)
         {
-            this.fileNames[i] = fileNodes[i]!.InnerText;
+            this.ids[i] = fileNodes[i]!.InnerText;
             this.postDatas[i] = null;
         }
     }
@@ -42,11 +42,13 @@ public class PostsXmlFinder
         return PostsXmlFinder.instance;
     }
 
+    public string[] GetIds() => this.ids;
+
     public PostData Get(string id)
     {
-        for (int i = 0; i < this.fileNames.Length; ++i)
+        for (int i = 0; i < this.ids.Length; ++i)
         {
-            if (this.fileNames[i].Equals(id))
+            if (this.ids[i].Equals(id))
             {
                 return this.get(i);
             }
@@ -57,15 +59,15 @@ public class PostsXmlFinder
     public PostData? GetNextOf(string id)
     {
         int next = -1;
-        for (int i = 0; i < this.fileNames.Length; ++i)
+        for (int i = 0; i < this.ids.Length; ++i)
         {
-            if (this.fileNames[i].Equals(id))
+            if (this.ids[i].Equals(id))
             {
                 break;
             }
             next = i;
         }
-        if (next == this.fileNames.Length - 1)
+        if (next == this.ids.Length - 1)
         {
             throw new Exception($"[ error ] PostsXmlFinder.GetNextOf(): invalid id passed. : {id}");
         }
@@ -74,11 +76,11 @@ public class PostsXmlFinder
 
     public PostData? GetPrevOf(string id)
     {
-        for (int i = 0; i < this.fileNames.Length; ++i)
+        for (int i = 0; i < this.ids.Length; ++i)
         {
-            if (this.fileNames[i].Equals(id))
+            if (this.ids[i].Equals(id))
             {
-                return i < this.fileNames.Length - 1 ? this.get(i + 1) : null;
+                return i < this.ids.Length - 1 ? this.get(i + 1) : null;
             }
         }
         throw new Exception($"[ error ] PostsXmlFinder.GetPrevOf(): invalid id passed. : {id}");
@@ -91,10 +93,10 @@ public class PostsXmlFinder
             return this.postDatas[idx]!;
         }
 
-        var xmlPath = $"./xml/posts/{this.fileNames[idx]}.xml";
+        var xmlPath = $"./xml/posts/{this.ids[idx]}.xml";
         var xmlDoc = new XmlDocument();
         xmlDoc.Load(xmlPath);
-        var id = this.fileNames[idx];
+        var id = this.ids[idx];
         var title = this.selectNodes(xmlDoc, xmlPath, "blob/title")[0]!.InnerText;
         var date = this.selectNodes(xmlDoc, xmlPath, "blob/date")[0]!.InnerText;
         var tagsNodes = this.selectNodes(xmlDoc, xmlPath, "blob/tags/tag");

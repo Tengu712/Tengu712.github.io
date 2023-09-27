@@ -29,13 +29,22 @@ public abstract class ANormalPage : APage
         sw.Write("</head>");
         sw.Write("<body class='normal-body'>");
         header.Output(cw);
+        sw.Write("<div class='normal-content-wrapper'>");
+        var image = this.getImage();
+        if (image.Length > 0)
+        {
+            sw.Write($"<img class='normal-catch-image' src='{image}' />");
+        }
         sw.Write("<div class='normal-content'>");
         this.outputContent(cw);
+        sw.Write("</div>");
         sw.Write("</div>");
         footer.Output(cw);
         sw.Write("</body>");
         sw.Write("</html>");
     }
+
+    protected virtual string getImage() => "";
 
     protected abstract void outputHead(IWriter writer);
     protected abstract void outputContent(IWriter writer);

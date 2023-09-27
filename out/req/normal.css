@@ -10,13 +10,18 @@
 	min-height: 100vh;
 }
 
-.normal-content {
+.normal-content-wrapper {
 	box-sizing: border-box;
 	background-color: white;
 	margin: 1rem auto;
-	padding: 1.5rem;
 	min-width: 900px;
 	max-width: 900px;
+}
+
+.normal-content {
+	box-sizing: border-box;
+	padding: 1.5rem;
+	width: 100%;
 }
 
 .normal-content a {
@@ -77,6 +82,10 @@
 	border-right: none;
 }
 
+.normal-catch-image {
+	width: 100%;
+}
+
 @media screen and (max-width: 900px) {
 	.normal-content {
 		min-width: 0;
@@ -90,4 +99,3 @@ div.xcontainer {
 	overflow-x: auto;
 	white-space: nowrap;
 }
-
