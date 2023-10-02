@@ -14,6 +14,7 @@ public class Index : ANormalPage
     protected override void outputHead(IWriter writer)
     {
         this.content.OutputRequirements(writer);
+        writer.Write("<link rel='stylesheet' type='text/css' href='/req/calendar.css'>");
         writer.Write("<title>Pages</title>");
     }
 
