@@ -20,7 +20,6 @@ C#なのでWindows推奨。SSG結果は`/out/`に生成される。
 
 1. `/xml/posts/`にxmlファイルを追加する
 1. `/xml/posts/_index.xml`ファイルにファイル名(拡張子なし)を追加する
-1. `Program.Main()`にファイル名(拡張子なし)を与えた`Post`インスタンスを追加して`Generate()`する
 
 ただし、xmlには以下の特殊なタグが必要。
 

@@ -1,4 +1,6 @@
-﻿namespace Ssg;
+﻿using Ssg.Utils;
+
+namespace Ssg;
 
 public class Program
 {
@@ -7,14 +9,9 @@ public class Program
         // top
         new Pages.Root.Posts.Index().Generate();
         // posts
-        new Pages.Root.Posts.Post("ai-illustration").Generate();
-        new Pages.Root.Posts.Post("allocate-descriptor-sets").Generate();
-        new Pages.Root.Posts.Post("solink-speed").Generate();
-        new Pages.Root.Posts.Post("com-in-rust").Generate();
-        new Pages.Root.Posts.Post("stdout-speed").Generate();
-        new Pages.Root.Posts.Post("enum-windows").Generate();
-        new Pages.Root.Posts.Post("windows-to-ubuntu").Generate();
-        new Pages.Root.Posts.Post("start").Generate();
+        foreach (var id in PostsXmlFinder.GetInstance().GetIds()) {
+          new Pages.Root.Posts.Post(id).Generate();
+        }
         // pages
         new Pages.Root.Pages.Index().Generate();
         new Pages.Root.Pages.Programming.License().Generate();
