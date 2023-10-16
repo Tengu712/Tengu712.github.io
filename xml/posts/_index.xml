@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <files>
+  <file>cppcli-invoke-deadlock</file>
   <file>2023-summer</file>
   <file>ai-illustration</file>
   <file>allocate-descriptor-sets</file>
