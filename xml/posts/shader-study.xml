@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<blob>
+  <title>シェーダの基礎を学習した</title>
+  <date>2023/12/15</date>
+  <tags><tag>cg</tag></tags>
+  
+  <main>
+    <h2>概要</h2>
+
+    <p>
+      2Dゲーム作成のためにしかグラフィックスAPIを使っていなかった都合上、3Dシェーディングの知識を欠いていた。
+    </p>
+
+    <p>
+      最近、諸事情あってPhong反射モデルを実装することになった。
+      そこで多くの曖昧な知識・知らない知識・勘違いしていた知識が発覚したため、学習した。
+    </p>
+
+    <p>
+      学習した内容を当記事にまとめる。
+      尚、グラフィックスAPIの仕様についてはOpenGL系のみを対象とする。
+    </p>
+
+    <div class="ta-center">
+      <a href="https://github.com/Tengu712/Sample-Phong-Reflection">ソースコードはこちら</a>
+    </div>
+
+    <h2>行列の列優先</h2>
+
+    <h2>ビュー変換行列の作成</h2>
+
+    <h2>法線ベクトルの変換</h2>
+
+    <h2>Phong反射モデル</h2>
+  </main>
+</blob>
