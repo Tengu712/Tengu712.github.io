@@ -25,7 +25,65 @@
       <a href="https://github.com/Tengu712/Sample-Phong-Reflection">ソースコードはこちら</a>
     </div>
 
+
     <h2>行列の列優先</h2>
+
+    <p>
+      OpenGL系では、列ベクトルを用いる。
+      従って、例えば平行移動は以下のように計算される。
+    </p>
+
+    <BlockMath>
+      \begin{pmatrix}
+        1 &amp; 0 &amp; 0 &amp; t_x\\
+        0 &amp; 1 &amp; 0 &amp; t_y\\
+        0 &amp; 0 &amp; 1 &amp; t_z\\
+        0 &amp; 0 &amp; 0 &amp; 1
+      \end{pmatrix}
+      \begin{pmatrix}
+        x\\
+        y\\
+        z\\
+        1
+      \end{pmatrix}
+      =
+      \begin{pmatrix}
+        x + t_x\\
+        y + t_y\\
+        z + t_z\\
+        1
+      \end{pmatrix}
+    </BlockMath>
+
+    <p>
+      しかし、OpenGL系では、行列は列優先でレイアウトされる。
+      GLSLのmat4はvec4[4]を意味し、vec4は前述の通り列ベクトルである。
+      つまり、行列の各要素にデータレイアウト上のインデックスを振ると次のようになる。
+    </p>
+
+    <BlockMath>
+      \begin{pmatrix}
+        1 &amp; &amp; 5 &amp; &amp; 9 &amp; &amp; 13\\
+        2 &amp; &amp; 6 &amp; &amp; 10 &amp; &amp; 14\\
+        3 &amp; &amp; 7 &amp; &amp; 11 &amp; &amp; 15\\
+        4 &amp; &amp; 8 &amp; &amp; 12 &amp; &amp; 16
+      \end{pmatrix}
+    </BlockMath>
+    
+    <p>
+      シェーダ転送時の転置がサポートされていない限りは、プログラム側も列優先でデータを作らなければならない。
+      要は、常に数学的な行列を転置した行列を使うことになるため、演算の実装を誤ると期待した結果が得られなくなる。
+      これを回避するために、数学的な行列のまま操作できる機構を作るべきだろう。
+      サンプルコードのmath.jsがそれである。
+    </p>
+
+    <p>
+      ただ、なぜ列優先なのかわからなかった。
+      行列の乗算について、もし行ベクトルを用いるのであれば複数回の内積計算になるが、列ベクトルを用いると飛び飛びの要素を掛け合わせなければならない。
+      つまり、キャッシュ効率が悪そうに見える。
+      所詮32x16bit程度のデータを飛び飛びに選んでレジスタへ入れるオーバヘッドは、考慮すべきほど大きくないということなのだろうか。
+    </p>
+
 
     <h2>ビュー変換行列の作成</h2>
 
