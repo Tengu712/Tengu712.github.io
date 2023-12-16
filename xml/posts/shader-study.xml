@@ -54,6 +54,11 @@
     </ol>
 
     <p>
+      上を実行し終わったときの<InlineMath>E</InlineMath>が求めたい逆行列となる。
+      また、<InlineMath>A</InlineMath>は単位行列となっている。
+    </p>
+
+    <p>
       上の実装では、対角成分<InlineMath>A_{ii}</InlineMath>に0があると正確に計算を終えられない。
       これを解決するために部分ピボット選択を行う。
       これは<InlineMath>i</InlineMath>行目以降のすべて行の<InlineMath>i</InlineMath>列目の要素で最も大きな要素を見つけ、それが<InlineMath>A_{ii}</InlineMath>となるように行をスワップする行為である。
