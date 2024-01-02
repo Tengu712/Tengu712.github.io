@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <files>
+  <file>oss-freeride</file>
   <file>shader-study</file>
   <file>bitmap-collision</file>
   <file>cppcli-invoke-deadlock</file>
