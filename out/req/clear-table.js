@@ -43,7 +43,23 @@ function openPopup(title, diff, chara, status, date, link) {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // 
+  //
+  function isReleasable(thn) {
+    switch (thn) {
+      case "th6":
+      case "th8":
+      case "th9":
+      case "th10":
+      case "th11":
+      case "th14":
+      case "th15":
+        return false;
+      default:
+        return true;
+    }
+  }
+  //
+
   function getClassName(achivement, releasable) {
     if (releasable) {
       if (achivement.includes('NMNBNR')) return "nmnbnr"
@@ -202,6 +218,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const response = await fetch('https://listrpys.genreihoutengu.workers.dev')
   if (!response.ok) {
     console.error('[ error ] failed to get list of replay files.')
+    alert("データの取得に失敗しました。通信環境の良い場所に移るか天狗に連絡してください。")
     return
   }
   const json = await response.json()
@@ -216,7 +233,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.warn('[ warning ] invalid name ' + name + ' found.')
       continue
     }
-    nodes[0].classList.add(getClassName(splitted[3]))
+    nodes[0].classList.add(getClassName(splitted[3], isReleasable(splitted[0])))
     const a = document.createElement("a")
     a.href = "javascript:openPopup('" + getTitle(splitted[0]) + "','" + splitted[1] + "','" + getChara(splitted[2]) + "','" + splitted[3] + "','" + getDate(splitted[4].substring(0, 8)) + "','" + n + "');"
     a.innerText = nodes[0].innerText

@@ -81,7 +81,7 @@ public class ClearTable : APlainPage
     // group
     private readonly PlayerData KEKKAI = new PlayerData { S = "結", E = "Kekkai" };
     private readonly PlayerData A_KEKKAI = new PlayerData { S = "A結", E = "AKekkai" };
-    private readonly PlayerData B_KEKKAI = new PlayerData { S = "B結", E = "AKekkai" };
+    private readonly PlayerData B_KEKKAI = new PlayerData { S = "B結", E = "BKekkai" };
     private readonly PlayerData EISHOU = new PlayerData { S = "詠", E = "Eishou" };
     private readonly PlayerData A_EISHOU = new PlayerData { S = "A詠", E = "AEishou" };
     private readonly PlayerData B_EISHOU = new PlayerData { S = "B詠", E = "BEishou" };
