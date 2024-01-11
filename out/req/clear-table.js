@@ -171,7 +171,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       // group
       case "Kekkai": return "結界組"
       case "AKekkai": return "√A 結界組"
-      case "AKekkai": return "√B 結界組"
+      case "BKekkai": return "√B 結界組"
       case "Eishou": return "詠唱組"
       case "AEishou": return "√A 詠唱組"
       case "BEishou": return "√B 詠唱組"
