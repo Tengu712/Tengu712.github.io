@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       case "th10": return "風神録"
       case "th11": return "地霊殿"
       case "th12": return "星蓮船"
-      case "th13": return "新霊廟"
+      case "th13": return "神霊廟"
       case "th14": return "輝針城"
       case "th15": return "紺珠伝"
       case "th16": return "天空璋"

@@ -122,7 +122,7 @@ public class ClearTable : APlainPage
         "風神録",
         "地霊殿",
         "星蓮船",
-        "新霊廟",
+        "神霊廟",
         "輝針城",
         "紺珠伝",
         "天空璋",
