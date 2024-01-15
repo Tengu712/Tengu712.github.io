@@ -275,19 +275,30 @@ public class ClearTable : APlainPage
         var upperTr = new Node("tr");
         for (int i = 0; i < 7; ++i)
         {
-            upperTr.AddChild(new Node("td").AddChild(this.createWorkTable(data[i], i + 6, TITLES[i])));
+            upperTr
+                .AddChild(new Node("td")
+                    .AddAttribute("class", "h-100")
+                    .AddChild(this.createWorkTable(data[i], i + 6, TITLES[i])));
         }
-        tableNode.AddChild(upperTr);
+        tableNode
+            .AddChild(new Node("tr")
+                .AddChild(new Node("td")
+                    .AddChild(new Node("table")
+                        .AddAttribute("class", "w-100 h-100")
+                        .AddChild(upperTr))));
         // th13,14,15,16,17,18
         var lowerTr = new Node("tr");
         for (int i = 7; i < data.Length; ++i)
         {
-            lowerTr.AddChild(new Node("td").AddChild(this.createWorkTable(data[i], i + 6, TITLES[i])));
+            lowerTr
+                .AddChild(new Node("td")
+                    .AddAttribute("class", "h-100")
+                    .AddChild(this.createWorkTable(data[i], i + 6, TITLES[i])));
         }
         lowerTr
             .AddChild(new Node("td")
                 .AddChild(new Node("table")
-                    .AddAttribute("class", "th6")
+                    .AddAttribute("class", "work-table th6")
                     .AddChild(new Node("tr").AddChild(new Node("th").SetInnerText("　")))
                     .AddChild(new Node("tr").AddChild(new Node("td").AddAttribute("class", "nmnbnr").SetInnerText("NMNBNR")))
                     .AddChild(new Node("tr").AddChild(new Node("td").AddAttribute("class", "nmnb").SetInnerText("NMNB")))
@@ -297,7 +308,12 @@ public class ClearTable : APlainPage
                     .AddChild(new Node("tr").AddChild(new Node("td").AddAttribute("class", "nb").SetInnerText("NB")))
                     .AddChild(new Node("tr").AddChild(new Node("td").AddAttribute("class", "c").SetInnerText("ALL")))
                     .AddChild(new Node("tr").AddChild(new Node("td").AddAttribute("class", "").SetInnerText("not-cleared")))));
-        tableNode.AddChild(lowerTr);
+        tableNode
+            .AddChild(new Node("tr")
+                .AddChild(new Node("td")
+                    .AddChild(new Node("table")
+                        .AddAttribute("class", "w-100 h-100")
+                        .AddChild(lowerTr))));
         tableNode.Output(writer);
 
         new Node("p")
@@ -309,7 +325,7 @@ public class ClearTable : APlainPage
     private IComponent createWorkTable(PlayerData[][][] work, int th, string title)
     {
         var workTable = new Node("table")
-            .AddAttribute("class", $"th{th}")
+            .AddAttribute("class", $"work-table th{th}")
             .AddChild(new Node("tr")
                 .AddChild(new Node("th")
                     .AddAttribute("colSpan", $"{work[0][0].Length + 1}")
@@ -318,6 +334,7 @@ public class ClearTable : APlainPage
         for (int diff = 0; diff < this.DIFFS.Length; ++diff)
         {
             var chars = work[0];
+            // for X whose chars are different from others
             if (diff == 4 && work.Length == 2)
             {
                 chars = work[1];
@@ -332,7 +349,15 @@ public class ClearTable : APlainPage
                 }
                 foreach (var chara in chars[k])
                 {
-                    trNode.AddChild(new Node("td").AddAttribute("class", $"th{th}_{this.DIFFS[diff].L}_{chara.E}").SetInnerText(chara.S));
+                    var td = new Node("td")
+                        .AddAttribute("class", $"th{th}_{this.DIFFS[diff].L}_{chara.E}")
+                        .SetInnerText(chara.S);
+                    // for th8 X
+                    if (th == 8 && diff == 4)
+                    {
+                        td.AddAttribute("colSpan", "2");
+                    }
+                    trNode.AddChild(td);
                 }
                 workTable.AddChild(trNode);
             }

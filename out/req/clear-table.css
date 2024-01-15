@@ -18,7 +18,7 @@ table {
 
 th,
 td {
-  border: 1px white solid;
+  border: none;
   padding: 0;
 }
 
@@ -43,6 +43,16 @@ td a:visited {
 
 /* work table */
 
+.work-table {
+  width: 100%;
+  height: 100%;
+}
+
+.work-table th,
+.work-table td {
+  border: 1px white solid;
+}
+
 .th6,
 .th10,
 .th11,
@@ -51,23 +61,17 @@ td a:visited {
 .th14,
 .th15,
 .th18 {
-  width: 100%;
-  height: 100%;
   font-size: 1.0rem;
 }
 
 .th7,
 .th17 {
-  width: 100%;
-  height: 100%;
   font-size: 0.7rem;
 }
 
 .th8,
 .th9,
 .th16 {
-  width: 100%;
-  height: 100%;
   font-size: 0.7rem;
 }
 
