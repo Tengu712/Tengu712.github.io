@@ -10,7 +10,7 @@ public class ClearTable : APlainPage
 
     protected override void outputHead(IWriter writer)
     {
-        writer.Write("<link rel='stylesheet' type='text/css' href='/req/clear-table.css'>");
+        writer.Write("<link rel='stylesheet' type='text/css' href='/req/clear-table.css?20240116'>");
         writer.Write("<script src='/req/clear-table.js'></script>");
         writer.Write("<title>クリア機体表</title>");
     }
