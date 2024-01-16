@@ -23,7 +23,6 @@ function openPopup(datum) {
   p_chara.innerText = "機体　：" + datum.chara
   p_status.innerText = "実績　：" + datum.achive
   p_date.innerText = "達成日：" + datum.date.toLocaleDateString("ja-JP", {year: "numeric",month: "2-digit", day: "2-digit"})
-  p_link.classList.add("link")
   a_link.href = "https://rpys.skdassoc.work/" + datum.fileName
   a_link.innerText = "リプレイをダウンロード"
   p_link.appendChild(a_link)

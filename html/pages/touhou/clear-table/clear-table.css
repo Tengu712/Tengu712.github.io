@@ -1,0 +1,294 @@
+/* ========================================================================================================================================================= */
+/*     general                                                                                                                                               */
+/* ========================================================================================================================================================= */
+
+body {
+  text-size-adjust: none;
+  background-color: black;
+  color: white;
+}
+
+tr,
+th,
+td {
+  border: none;
+  padding: 0;
+}
+
+/* ========================================================================================================================================================= */
+/*     outline                                                                                                                                               */
+/* ========================================================================================================================================================= */
+
+#outline {
+  text-align: center;
+}
+
+#outline a,
+#outline a:visited {
+  color: red;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+/* ========================================================================================================================================================= */
+/*     return                                                                                                                                                */
+/* ========================================================================================================================================================= */
+
+#return {
+  text-align: center;
+}
+
+#return a,
+#return a:visited {
+  color: red;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* ========================================================================================================================================================= */
+/*     all-diffs                                                                                                                                             */
+/* ========================================================================================================================================================= */
+
+#all-diffs {
+  width: 850px;
+  margin: 0 auto;
+  padding: 0;
+  border: none;
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+
+#all-diffs table {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+
+#all-diffs .work-table th {
+  font-size: 1.0rem;
+  height: 1.0rem;
+}
+
+#all-diffs .work-table th,
+#all-diffs .work-table td {
+  border: 1px white solid;
+}
+
+#all-diffs .work-table a,
+#all-diffs .work-table a:visited {
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+#all-difs .th6,
+#all-difs .th10,
+#all-difs .th11,
+#all-difs .th12,
+#all-difs .th13,
+#all-difs .th14,
+#all-difs .th15,
+#all-difs .th18 {
+  font-size: 1.0rem;
+}
+
+#all-diffs .th7,
+#all-diffs .th8,
+#all-diffs .th9,
+#all-diffs .th16,
+#all-diffs .th17 {
+  font-size: 0.7rem;
+}
+
+@media screen and (max-width: 850px) {
+  #all-diffs {
+    width: 100%;
+  }
+  
+  #all-diffs .work-table th {
+    font-size: clamp(0rem, 1.88vw, 1rem);
+    height: clamp(0rem, 1.88vw, 1rem);
+  }
+
+  #all-diffs .th6 td,
+  #all-diffs .th10 td,
+  #all-diffs .th11 td,
+  #all-diffs .th12 td,
+  #all-diffs .th13 td,
+  #all-diffs .th14 td,
+  #all-diffs .th15 td,
+  #all-diffs .th18 td {
+    font-size: clamp(0rem, 1.88vw, 1rem);
+  }
+  
+  #all-diffs .th7 td,
+  #all-diffs .th8 td,
+  #all-diffs .th9 td,
+  #all-diffs .th16 td,
+  #all-diffs .th17 td {
+    font-size: clamp(0rem, 1.32vw, 0.7rem);
+  }
+}
+
+/* ========================================================================================================================================================= */
+/*     lunatic-only                                                                                                                                          */
+/* ========================================================================================================================================================= */
+
+#lunatic-only {
+  display: none;
+  width: 500px;
+  margin: 0 auto;
+  padding: 0;
+  border: none;
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+
+#lunatic-only table {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+
+#lunatic-only td {
+  height: 100%;
+}
+
+#lunatic-only .lunatic-only-row {
+  border: 1px white solid;
+}
+
+#lunatic-only .lunatic-only-row>th {
+  border: 1px white solid;
+  padding: 0 0.2rem;
+}
+
+#lunatic-only .lunatic-only-row>td {
+  border: none;
+  padding: 0;
+}
+
+#lunatic-only .work-table {
+  table-layout: fixed;
+}
+
+#lunatic-only .work-table td {
+  border: 1px white solid;
+  padding: 0 0.2rem;
+}
+
+#lunatic-only .work-table a,
+#lunatic-only .work-table a:visited {
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+@media screen and (max-width: 500px) {
+  #lunatic-only {
+    width: 100%;
+    font-size: clamp(0rem, 3.2vw, 1rem);
+  }
+}
+
+/* ========================================================================================================================================================= */
+/*     timeline                                                                                                                                              */
+/* ========================================================================================================================================================= */
+
+#timeline {
+  display: none;
+  margin: 0 auto;
+  padding: 0;
+  border: none;
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+
+#timeline th,
+#timeline td {
+  border: 1px white solid;
+  padding: 0 0.4rem;
+}
+
+#timeline td a,
+#timeline td a:visited {
+  color: red;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+@media screen and (max-width: 500px) {
+  #timeline {
+    width: 100%;
+    font-size: clamp(0rem, 3.2vw, 1rem);
+  }
+}
+
+/* ========================================================================================================================================================= */
+/*     td                                                                                                                                                    */
+/* ========================================================================================================================================================= */
+
+.diff {
+  width: 0;
+}
+
+.nmnbnr {
+  background-color: #e2041b;
+}
+
+.nmnb {
+  background-color: #ea5506;
+}
+
+.nmnr {
+  background-color: #864084;
+}
+
+.nm {
+  background-color: #cc5bc8;
+}
+
+.nbnr {
+  background-color: #1e50a2;
+}
+
+.nb {
+  background-color: #0c9ea8;
+}
+
+.c {
+  background-color: #2d7555;
+}
+
+/* ========================================================================================================================================================= */
+/*     popup                                                                                                                                                 */
+/* ========================================================================================================================================================= */
+
+.popup {
+  background-color: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 16px;
+  position: absolute;
+  min-width: 300px;
+  min-height: 200px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+}
+
+.popup a,
+.popup a:visited {
+  color: red;
+  cursor: pointer;
+  text-decoration: underline;
+}

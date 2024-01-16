@@ -15,7 +15,6 @@ public class Program
         // pages
         new Pages.Root.Pages.Index().Generate();
         new Pages.Root.Pages.Programming.License().Generate();
-        new Pages.Root.Pages.Touhou.ClearTable().Generate();
         new Pages.Root.Pages.Touhou.FanbooksIHave().Generate();
         new Pages.Root.Pages.Touhou.GensouNoYukue().Generate();
         new Pages.Root.Pages.Touhou.NamerakaNaUchuuToSonoTeki().Generate();
