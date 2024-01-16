@@ -1,4 +1,5 @@
 body {
+  text-size-adjust: none;
   background-color: black;
   color: white;
 }
@@ -14,6 +15,7 @@ table {
   border-collapse: collapse;
   margin: 0;
   padding: 0;
+  white-space: nowrap;
 }
 
 th,
@@ -33,49 +35,109 @@ td a:visited {
   text-decoration: none;
 }
 
-/* main table */
+/* ========================================================================================================================================================= */
+/*     all-diffs                                                                                                                                             */
+/* ========================================================================================================================================================= */
 
-.main-table {
+#all-diffs {
   margin: 0 auto;
   width: 850px;
   height: 600px;
 }
 
-/* work table */
+#all-difs table.th6,
+#all-difs table.th10,
+#all-difs table.th11,
+#all-difs table.th12,
+#all-difs table.th13,
+#all-difs table.th14,
+#all-difs table.th15,
+#all-difs table.th18 {
+  font-size: 1.0rem;
+}
 
-.work-table {
+#all-diffs table.th7,
+#all-diffs table.th8,
+#all-diffs table.th9,
+#all-diffs table.th16,
+#all-diffs table.th17 {
+  font-size: 0.7rem;
+}
+
+#all-diffs table.work-table {
   width: 100%;
   height: 100%;
 }
 
-.work-table th,
-.work-table td {
+#all-diffs table.work-table th,
+#all-diffs table.work-table td {
   border: 1px white solid;
 }
 
-.th6,
-.th10,
-.th11,
-.th12,
-.th13,
-.th14,
-.th15,
-.th18 {
-  font-size: 1.0rem;
+/* ========================================================================================================================================================= */
+/*     lunatic-only                                                                                                                                          */
+/* ========================================================================================================================================================= */
+
+#lunatic-only {
+  display: none;
+  margin: 0 auto;
+  width: 500px;
 }
 
-.th7,
-.th17 {
-  font-size: 0.7rem;
+#lunatic-only td {
+  height: 100%;
 }
 
-.th8,
-.th9,
-.th16 {
-  font-size: 0.7rem;
+#lunatic-only tr.lunatic-only-row {
+  border: 1px white solid;
 }
 
-/* td */
+#lunatic-only tr.lunatic-only-row>th {
+  border: 1px white solid;
+  padding: 0 0.2rem;
+}
+
+#lunatic-only tr.lunatic-only-row>td {
+  border: none;
+  padding: 0;
+}
+
+#lunatic-only table.work-table {
+  table-layout: fixed;
+  width: 100%;
+  height: 100%;
+}
+
+#lunatic-only table.work-table td {
+  border: 1px white solid;
+  padding: 0 0.2rem;
+}
+
+/* ========================================================================================================================================================= */
+/*     timeline                                                                                                                                              */
+/* ========================================================================================================================================================= */
+
+#timeline {
+  display: none;
+  margin: 0 auto;
+  width: 500px;
+}
+
+#timeline th,
+#timeline td {
+  border: 1px white solid;
+  padding: 0 0.4rem;
+}
+
+#timeline td a,
+#timeline td a:visited {
+  text-decoration: underline;
+  color: red;
+}
+
+/* ========================================================================================================================================================= */
+/*     td                                                                                                                                                    */
+/* ========================================================================================================================================================= */
 
 .diff {
   width: 0;
@@ -109,7 +171,9 @@ td a:visited {
   background-color: #2d7555;
 }
 
-/* popup */
+/* ========================================================================================================================================================= */
+/*     popup                                                                                                                                                 */
+/* ========================================================================================================================================================= */
 
 .popup {
   background-color: rgba(0, 0, 0, 0.9);
