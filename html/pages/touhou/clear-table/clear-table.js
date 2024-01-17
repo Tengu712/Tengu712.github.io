@@ -1,41 +1,3 @@
-let popup = null
-document.addEventListener("click", () => {
-  if (popup !== null) {
-    document.body.removeChild(popup);
-    popup = null;
-  }
-})
-function openPopup(datum) {
-  if (popup !== null) {
-    document.body.removeChild(popup)
-  }
-  popup = document.createElement("div")
-  popup.classList.add("popup")
-  const p_title = document.createElement("p")
-  const p_diff = document.createElement("p")
-  const p_chara = document.createElement("p")
-  const p_status = document.createElement("p")
-  const p_date = document.createElement("p")
-  const p_link = document.createElement("p")
-  const a_link = document.createElement("A", false)
-  p_title.innerText = "作品　：" + datum.title
-  p_diff.innerText = "難易度：" + datum.diff
-  p_chara.innerText = "機体　：" + datum.chara
-  p_status.innerText = "実績　：" + datum.achive
-  p_date.innerText = "達成日：" + datum.date.toLocaleDateString("ja-JP", {year: "numeric",month: "2-digit", day: "2-digit"})
-  a_link.href = "https://rpys.skdassoc.work/" + datum.fileName
-  a_link.innerText = "リプレイをダウンロード"
-  p_link.appendChild(a_link)
-  popup.appendChild(p_title)
-  popup.appendChild(p_diff)
-  popup.appendChild(p_chara)
-  popup.appendChild(p_status)
-  popup.appendChild(p_date)
-  popup.appendChild(p_link)
-  document.body.appendChild(popup)
-  popup.onclick = (e) => e.stopPropagation()
-}
-
 document.addEventListener("DOMContentLoaded", async () => {
   function isReleasable(thn) {
     switch (thn) {
@@ -203,13 +165,51 @@ document.addEventListener("DOMContentLoaded", async () => {
     return new Date(year, month, day)
   }
 
-  const clickEventName = (window.ontouchstart === undefined)? 'click' : 'touchstart'
+  const clickEventName = (window.ontouchstart === undefined) ? 'click' : 'touchstart'
+
+  let popup = null
+  document.addEventListener(clickEventName, (e) => {
+    if (popup !== null) {
+      document.body.removeChild(popup)
+      popup = null
+      e.stopPropagation()
+    }
+  })
+  function openPopup(datum) {
+    if (popup !== null) {
+      document.body.removeChild(popup)
+    }
+    popup = document.createElement("div")
+    popup.classList.add("popup")
+    const p_title = document.createElement("p")
+    const p_diff = document.createElement("p")
+    const p_chara = document.createElement("p")
+    const p_status = document.createElement("p")
+    const p_date = document.createElement("p")
+    const p_link = document.createElement("p")
+    const a_link = document.createElement("A", false)
+    p_title.innerText = "作品　：" + datum.title
+    p_diff.innerText = "難易度：" + datum.diff
+    p_chara.innerText = "機体　：" + datum.chara
+    p_status.innerText = "実績　：" + datum.achive
+    p_date.innerText = "達成日：" + datum.date.toLocaleDateString("ja-JP", { year: "numeric", month: "2-digit", day: "2-digit" })
+    a_link.href = "https://rpys.skdassoc.work/" + datum.fileName
+    a_link.innerText = "リプレイをダウンロード"
+    p_link.appendChild(a_link)
+    popup.appendChild(p_title)
+    popup.appendChild(p_diff)
+    popup.appendChild(p_chara)
+    popup.appendChild(p_status)
+    popup.appendChild(p_date)
+    popup.appendChild(p_link)
+    document.body.appendChild(popup)
+    popup.addEventListener(clickEventName, (e) => e.stopPropagation())
+  }
 
   // ======================================================================================================================================================= //
 
   const response = await fetch('https://listrpys.genreihoutengu.workers.dev')
   if (!response.ok) {
-    console.error('[ error ] failed to get list of replay files.')
     alert("データの取得に失敗しました。通信環境の良い場所に移るか天狗に連絡してください。")
     return
   }
@@ -238,7 +238,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   for (const n of data) {
     const nodes = document.getElementsByClassName(n.elemName)
     if (!nodes) {
-      alert('不正なデータ ' + n.fileName + ' を発見。天狗に連絡してくれると助かります。')
+      alert('不正なデータ ' + n.fileName + ' を発見。天狗に連絡していただけると助かります。')
       continue
     }
     for (const node of nodes) {
@@ -278,7 +278,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     tableAllDiffs.style.display = "none"
     tableLunaticOnly.style.display = "none"
     tableTimeline.style.display = "table"
-    tableTimeline.innerHTML = "<tr><th>作品</th><th>難易度</th><th>機体</th><th>実績詳細</th><th>達成日</th></tr>"
+    tableTimeline.innerHTML = "<tr><th>作品</th><th>難易度</th><th>機体</th><th>実績</th><th>達成日</th></tr>"
     for (const n of data) {
       const tr = document.createElement("tr")
       const tdTitle = document.createElement("td")
@@ -292,7 +292,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       tdChara.innerText = n.chara
       tdAchive.innerHTML = n.achive
       tdAchive.classList.add(getClassName(n.achive, n.releasable))
-      aLink.innerText = n.date.toLocaleDateString("ja-JP", {year: "numeric",month: "2-digit", day: "2-digit"})
+      aLink.innerText = n.date.toLocaleDateString("ja-JP", { year: "numeric", month: "2-digit", day: "2-digit" })
       aLink.href = "https://rpys.skdassoc.work/" + n.fileName
       tdDate.classList.add("link")
       tdDate.appendChild(aLink)
