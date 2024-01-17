@@ -1,0 +1,29 @@
+body {
+  text-size-adjust: none;
+  background-color: black;
+  color: white;
+}
+
+#outline {
+  text-align: center;
+}
+
+#list {
+  width: fit-content;
+  margin: auto;
+}
+
+#list>li {
+  margin-bottom: 1rem;
+}
+
+#return {
+  text-align: center;
+}
+
+#return a,
+#return a:visited {
+  color: red;
+  cursor: pointer;
+  text-decoration: underline;
+}
