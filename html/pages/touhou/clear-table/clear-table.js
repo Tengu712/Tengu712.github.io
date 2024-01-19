@@ -159,10 +159,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function getDate(date) {
-    var year = date.substring(0, 4)
-    var month = date.substring(4, 6)
-    var day = date.substring(6, 8)
-    return new Date(year, month, day)
+    var year = Number(date.substring(0, 4))
+    var month = Number(date.substring(4, 6))
+    var day = Number(date.substring(6, 8))
+    return new Date(year, month - 1, day)
   }
 
   const clickEventName = (window.ontouchstart === undefined) ? 'click' : 'touchstart'
