@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <files>
+  <file>mirror-pc-to-android</file>
   <file>oss-freeride</file>
   <file>shader-study</file>
   <file>bitmap-collision</file>

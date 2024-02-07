@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<blob>
+  <title>ウィンドウをAndroidにミラーリングする</title>
+  <date>2024/2/7</date>
+  <tags>
+    <tag>android</tag>
+    <tag>windowsapi</tag>
+  </tags>
+  
+  <main>
+    <h2>概要</h2>
+
+    <p>
+      PCゲームを寝ながらやりたいと思った。
+      しかし、単にミラーリングするだけの安価なHMDはなく、Android端末に高速でミラーリングするアプリもない。
+      そこで、後者である「PCゲームのウィンドウをAndroid端末にUSB通信でミラーリングするアプリ」を作成した。
+    </p>
+
+    <p>
+      どのように実装したかはソースコードを見れば明らかであるため、開発する上で困ったことや「事の顛末」を当記事にまとめる。
+    </p>
+
+    <div class="ta-center">
+      <a href="https://github.com/Tengu712/mirror-pc-to-android">ソースコードはこちら</a>
+    </div>
+
+    <h2>通信内容読取</h2>
+
+    <p>
+      Javaでのソケット通信のサンプルプログラムは、その殆どすべてがBufferedReaderを使っている。
+      しかし、<b>BufferedReaderはストリームをString型で読み取る</b>。
+      今回のアプリではピクセルデータを転送するため、いちいちString型からint[]型にパースするのは無駄に感ぜられる。
+    </p>
+
+    <p>
+      <b>解決策として、DataInputStreamを用いる</b>。
+      次のように、byte[]型で通信内容を読み取ることができる。
+    </p>
+
+    <Codeblock lang="Java">try (DataInputStream stream = new DataInputStream(socket.getInputStream())) {
+    byte[] buffer = new byte[BUFFER_SIZE];
+    if (stream.read(buffer, 0, buffer.length) &lt;= 0) {
+        // failed to read
+    }
+} catch (IOException e) {
+    // failed to create a data input stream or read data from buffer
+}</Codeblock>
+
+    <p>
+      なお、InputStreamを上手く使えば実装できるのだろうが、如何せん資料が不十分であり、挙動も意味不明であったため、諦めた。
+    </p>
+
+    <h2>横画面強制</h2>
+
+    <p>
+      アプリの画面を横画面に強制するには、setScreenOrientation(ScreenOrientation.LANDSCAPE)を呼べばいい。
+      しかし、この方法では、<b>何故かonCreateが二度呼ばれてしまう</b>。
+      一回目のonCreateの内容は破棄されるため、色々工夫しなければ期待通りに動かない可能性がある。
+    </p>
+
+    <p>
+      <b>解決策として、AndroidManifest.xmlに指定する</b>。
+      どうせ動的に画面の向きを強制する必要はないだろうためできる解決策である。
+    </p>
+
+    <Codeblock>&lt;application
+    ...
+    &lt;activity
+        android:screenOrientation="landscape"
+        ...</Codeblock>
+
+    <h2>ウィンドウのキャプチャ</h2>
+
+    <p>
+      基本的にウィンドウのキャプチャ手順は次の通りである。
+    </p>
+
+    <ol>
+      <li>キャプチャしたいウィンドウのハンドルを取得</li>
+      <li>キャプチャしたいウィンドウのDevice Context (DC)を取得</li>
+      <li>キャプチャしたいウィンドウのサイズを取得</li>
+      <li>ステージバッファのDCとして、キャプチャしたいウィンドウのDCと互換性のあるDCを作成</li>
+      <li>ステージバッファとして、キャプチャしたいウィンドウのDCと互換性のあるビットマップを作成</li>
+      <li>ステージバッファのDCとビットマップを関連付け</li>
+      <li>ステージバッファにキャプチャしたいウィンドウのビットマップをコピー</li>
+      <li>ステージバッファのビットマップをプログラム側の配列にマップ・コピー</li>
+    </ol>
+
+    <p>
+      しかし、キャプチャしたいウィンドウからコピーを行うと、ARGBのピクセルデータが取得できるものの、<b>Alphaチャンネルが壊れている</b>。
+      Alpha値を255に修正してやれば期待通りのピクセルデータが得られるが、処理が重い。
+    </p>
+
+    <p>
+      <b>解決策として、プライマリスクリーンのDCからトリミング領域を指定してコピーを行う</b>。
+      この解決策を取る場合は、次のことに注意しなければならない。
+    </p>
+
+    <ul>
+      <li>GetClientRectによって得られる左上座標はローカル座標であるため常に(0,0)になる。そのため、別途ClientToScreenによって左上座標を取得しなければならない。</li>
+      <li>プライマリスクリーン上では「見たまま」のピクセルデータが得られる。つまり、ウィンドウが重なっていると、重なっているウィンドウのピクセルデータも含まれる。</li>
+    </ul>
+
+    <h2>実機評価</h2>
+
+    <p>
+      リリースビルドで生成されたapkにより、実機(Oppo Reno 5 A)にインストール・実行した。
+    </p>
+
+    <p>
+      まず、PCとAndroid端末との接続には、Android端末のUSBデバッグをONにしなければならない。
+      ColorOS V12では、「ビルド番号」を十回ほどタップすることで開発者モードをONにできる。
+      <s>なんて仕様だ。</s>
+    </p>
+
+    <p>
+      残念なことに、Oppo Reno 5 AのUSB規格はUSB 2.0である。
+      つまり、通信速度は480Mbps(理論値)である。
+      一方、640x480pxのウィンドウのARGBピクセルデータを60fpsで送るときの通信量は589Mbpsである。
+      つまり、<b>理論上60fpsでのミラーリングは不可能</b>である。
+    </p>
+
+    <p>
+      60fpsを諦めて30fpsで実行したところ、CPUの処理能力不足か、遅延が広がるばかりだった。
+      更に30fpsを諦めて20fpsで実行したところ、まともに実行できた。
+    </p>
+
+    <p>
+      とはいえ、20fpsではゲームをプレイしている感覚がないため、<b>このアプリの実用化に価値は無い</b>。
+    </p>
+  </main>
+</blob>
