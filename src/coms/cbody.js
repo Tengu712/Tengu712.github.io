@@ -12,7 +12,7 @@ const HEAD_TOP = `<body id="cbody">
   </div>
   <div id="cbody-header-spacer"></div>
   <div id="cbody-content-wrapper">
-    <img src="https://img.skdassoc.work/top.png">
+    <img src="https://img.skdassoc.work/top.png" width="100%">
     <div id="cbody-content">
 `
 
