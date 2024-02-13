@@ -1,0 +1,27 @@
+.post-index {
+  margin: 1.5rem 0;
+  width: 100%;
+}
+
+.post-index a {
+  text-decoration: none;
+}
+
+.post-index>div:first-child {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.post-index>div:last-child {
+  color: gray;
+  display: flex;
+}
+
+.post-index span {
+  margin-right: 0.5rem;
+}
+
+.post-index span:last-child {
+  margin: 0;
+  margin-left: auto;
+}

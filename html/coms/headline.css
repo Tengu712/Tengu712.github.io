@@ -1,0 +1,13 @@
+.headline>div {
+  color: gray;
+  display: flex;
+}
+
+.headline>div span {
+  margin-right: 0.5rem;
+}
+
+.headline>div span:last-child {
+  margin: 0;
+  margin-left: auto;
+}

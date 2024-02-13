@@ -1,40 +1,61 @@
 # homepage
 
+## What is this?
+
+天狗のホームページのリポジトリ。
+
 ## SSG
 
-どうせ簡単なホームページなんて簡単なHTML文書でしかないので、わざわざSSRとかCSRとかする必要ないよな、ということでSSGするプログラムを組んだ。
+拡張子が`.xd`であるファイル中のカスタムタグが一般タグに変換される。
 
-使用言語はC#だが、Rustで書くよりは書きやすいかな、と思っただけで深い理由はない。
+SSGには`src/index.js`をNode.jsで実行する。
+結果は`out`ディレクトリに生成される。
 
-## Build
+```
+node src/index.js
+```
 
-C#なのでWindows推奨。SSG結果は`/out/`に生成される。
+一般的なホームページのレイアウトでは、次のテンプレートを用いる。
 
-1. [.NET SDKをインストール](https://dotnet.microsoft.com/ja-jp/download/dotnet)
-1. リポジトリをclone
-1. リポジトリルートで`dotnet run`
+```html
+<!DOCTYPE html>
+<html lang="ja">
 
-## New Post
+<head>
+  <CHeader />
+  <title></title>
+</head>
 
-新しい記事を投稿するには、
+<CBody>
+</CBody>
 
-1. `/xml/posts/`にxmlファイルを追加する
-1. `/xml/posts/_index.xml`ファイルにファイル名(拡張子なし)を追加する
+</html>
+```
 
-ただし、xmlには以下の特殊なタグが必要。
+記事では、次のテンプレートを用いる。
 
-- `<blob>`: 一番上の要素
-- `<title>`: ページ・記事のタイトル
-- `<date>`: 記事の執筆日
-- `<tags>`: 記事のタグのコンテナ
-- `<tag>`: 記事のタグ
-- `<main>`: 記事の内容
+```html
+<!DOCTYPE html>
+<html lang="ja">
 
-## Coding Convention
+<head>
+  <CHeader />
+  <PostTitle key="" />
+</head>
 
-パラダイムはOOPを、コーディング規則はC#っぽいのに則る。が、意見が分かれそうなのは以下。
+<CBody>
+  <Headline key="" />
 
-- プロパティは基本的に無いものとする
-- staticメンバの参照にはクラス名を付ける
-- フィールドの参照には`this`を付ける
-- privateフィールドはcamelCaseに従う
+  <hr>
+
+  <!-- content -->
+
+  <Tombstone />
+
+  <hr>
+
+  <Deadline key="" />
+</CBody>
+
+</html>
+```

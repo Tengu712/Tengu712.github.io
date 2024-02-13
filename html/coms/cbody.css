@@ -1,0 +1,148 @@
+#cbody {
+	-webkit-text-size-adjust: 100%;
+	font-family: 'Noto Sans JP', sans-serif;
+	background-color: rgb(35, 35, 35);
+	display: flex;
+	flex-flow: column;
+	font-size: 16px;
+	margin: 0;
+	min-height: 100vh;
+}
+
+/* header */
+
+#cbody-header {
+  background-color: rgb(35, 35, 35);
+  color: white;
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+  max-width: 100%;
+  min-width: 100%;
+  padding: 0.5rem 0;
+  z-index: 1;
+}
+
+#cbody-header a {
+  color: white;
+  text-decoration: none;
+}
+
+#cbody-header a:hover {
+  color: red;
+  text-decoration: none;
+}
+
+#cbody-header * {
+  margin: 0 0.5rem;
+}
+
+#cbody-header *:first-child {
+  margin-left: 1rem;
+  margin-right: auto;
+}
+
+#cbody-header-spacer {
+  max-width: 100%;
+  min-width: 100%;
+  height: 2.5rem;
+}
+
+/* content */
+
+#cbody-content-wrapper {
+	box-sizing: border-box;
+	background-color: white;
+  margin: 0 auto;
+	margin-bottom: 1rem;
+	min-width: 900px;
+	max-width: 900px;
+}
+
+#cbody-content {
+	box-sizing: border-box;
+	padding: 1.5rem;
+	width: 100%;
+}
+
+#cbody-content a {
+	color: black;
+}
+
+#cbody-content a:hover {
+	color: red;
+}
+
+#cbody-content b {
+	color: red;
+}
+
+#cbody-content h2 {
+	margin-top: 5rem;
+	padding: 0.25rem 0.8rem;
+	background: transparent;
+	border-left: solid 0.5rem black;
+}
+
+#cbody-content h3 {
+	margin-top: 2rem;
+}
+
+#cbody-content p {
+	line-height: 2rem;
+	margin: 2rem 0;
+}
+
+/* footer */
+
+#cbody-footer {
+  color: white;
+  margin-top: auto;
+  margin-bottom: 1rem;
+  padding-top: 1rem;
+  text-align: center;
+}
+
+/* table */
+/* TODO: separate as a component */
+
+#cbody-content table {
+	border-collapse: collapse;
+	margin: auto auto;
+}
+
+#cbody-content table td,
+#cbody-content table th {
+	border-left: solid 1px black;
+	border-right: solid 1px black;
+	padding: 0 10px;
+}
+
+#cbody-content table td:first-child,
+#cbody-content table th:first-child {
+	border-left: none;
+}
+
+#cbody-content table td:last-child,
+#cbody-content table th:last-child {
+	border-right: none;
+}
+
+#cbody-content table th {
+	border-top: solid 1px black;
+	border-bottom: solid 1px black;
+}
+
+#cbody-content table tr:last-child td {
+	border-bottom: solid 1px black;
+}
+
+/* responsive */
+
+@media screen and (max-width: 900px) {
+	#cbody-content-wrapper {
+		min-width: 0;
+		width: 100%;
+	}
+}

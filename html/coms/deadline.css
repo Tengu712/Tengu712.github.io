@@ -1,0 +1,15 @@
+.deadline {
+  width: 100%;
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.deadline a {
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.deadline div:last-child {
+  margin: 0;
+  margin-left: auto;
+}
