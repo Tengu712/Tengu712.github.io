@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <CHeader />
+  <title>天狗会議録</title>
+</head>
+
+<CTopBody>
+  <PostIndex />
+</CTopBody>
+
+</html>
