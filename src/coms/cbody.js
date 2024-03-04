@@ -1,7 +1,7 @@
 const CSS = `<link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="/coms/cbody.css?20240210">`
+  <link rel="stylesheet" type="text/css" href="/coms/cbody.css?20240304">`
 
 const HEAD_TOP = `<body id="cbody">
   <div id="cbody-header">
