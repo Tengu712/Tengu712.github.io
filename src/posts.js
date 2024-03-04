@@ -1,4 +1,5 @@
 const POST_DATA = [
+  { key: "rust-wasm", title: "Rust WASMを試す", date: "2024/3/4", tags: ["rust", "wasm", "web"] },
   { key: "mirror-pc-to-android", title: "ウィンドウをAndroidにミラーリングする", date: "2024/2/7", tags: ["android", "windowsapi"] },
   { key: "oss-freeride", title: "OSSのフリーライドについて", date: "2024/1/2", tags: ["essay", "oss"] },
   { key: "shader-study", title: "シェーダの基礎を学習した", date: "2023/12/15", tags: ["cg"] },
