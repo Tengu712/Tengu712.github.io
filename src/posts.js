@@ -1,4 +1,5 @@
 const POST_DATA = [
+  { key: "iam-mml-release", title: "FM音源MMLコンパイラ「IAM.mml」", date: "2024/5/27", tags: ["diary", "mml", "music", "web"] },
   { key: "rust-wasm", title: "Rust WASMを試す", date: "2024/3/4", tags: ["rust", "wasm", "web"] },
   { key: "mirror-pc-to-android", title: "ウィンドウをAndroidにミラーリングする", date: "2024/2/7", tags: ["android", "windowsapi"] },
   { key: "oss-freeride", title: "OSSのフリーライドについて", date: "2024/1/2", tags: ["essay", "oss"] },
