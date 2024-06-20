@@ -45,7 +45,7 @@
 
   <p>
     仮想化する以上、主要OSすべてで動いて欲しい。
-    そのため、敢えてWindowsで検証を行った。
+    そのため、敢えてWindowsでも検証を行った。
   </p>
 
   <ul>
@@ -77,7 +77,13 @@
           target: /tmp/.X11-unix</Codeblock>
 
   <p>
-    また、VcXsrvを用いる場合は次の設定が必要である。
+    Linuxでは上に加え、次の設定が必要である。
+  </p>
+
+  <Codeblock lang="Yaml">    user: $DOCKER_USER</Codeblock>
+
+  <p>
+    一方、VcXsrvを用いる場合は次の設定が必要である。
   </p>
 
   <Codeblock lang="Yaml">    environment:
@@ -138,14 +144,35 @@
             - capabilities: [gpu]</Codeblock>
 
   <p>
+    Linuxでは、<Code>--gpus all</Code>フラグが必要であるためか、Composeによる実行ができなかった。
+    そのため、次のシェルスクリプトによって実行した。
+  </p>
+
+  <Codeblock lang="Yaml">#!/bin/bash
+
+if [ -z $(docker image ls -q Tengu712/docker-gui-experiment/glxgears) ]; then
+    docker build -t Tengu712/docker-gui-experiment/glxgears .
+fi
+
+docker run \
+    --gpus all \
+    --user $DOCKER_USER \
+    --env DISPLAY=$DISPLAY \
+    --env NVIDIA_VISIBLE_DEVICES=all \
+    --env NVIDIA_DRIVER_CAPABILITIES=all \
+    --mount type=bind,source=/tmp/.X11-unix,target=/tmp/.X11-unix \
+    Tengu712/docker-gui-experiment/glxgears</Codeblock>
+
+  <p>
     これにより、ベンダー名「Microsoft Corporation」、デバイス名「D3D12 (NVIDIA GeForce GTX 1650)」としてGPUが認識された。
     ただし、NVIDIA以外のGPUでは検証していない。
   </p>
 
   <p>
-    まず、OpenGLのパフォーマンスに関して、垂直同期が効かない。
+    まず、OpenGLのパフォーマンスに関して、ホストOSがWindowsであると垂直同期が効かなかった。
     そのため、glxgearsもopenglも700FPS (WSLg)や90FPS (VcXsrv)で回転する。
     リフレッシュレート60 FPSを決め打ちしてロジックを動かすアプリケーションは、想定外の動作をすることになる。
+    尚、ホストOSがLinuxであると垂直同期が取られた。
   </p>
 
   <p>
