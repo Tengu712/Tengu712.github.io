@@ -49,3 +49,27 @@ img {
   max-width: 46rem;
   margin: 2rem auto;
 }
+
+.note {
+  font-size: 0.8em;
+  color: gray;
+}
+
+.one-image-container {
+  width: 75%;
+  margin: 0 auto;
+}
+  
+.two-images-container {
+  display: flex;
+  width: 100%;
+}
+
+.two-images-container>div {
+  width: 50%;
+  padding: 0.5%;
+}
+
+.two-images-container>div>img {
+  width: 100%;
+}
