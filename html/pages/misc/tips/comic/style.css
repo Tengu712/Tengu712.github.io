@@ -1,0 +1,75 @@
+html {
+  background-color: black;
+  color: white;
+}
+
+body {
+  max-width: 50rem;
+  margin: 0 auto;
+}
+
+a {
+  color: red;
+}
+
+h2 {
+  margin-top: 5rem;
+  padding: 0 1rem;
+  border-left: 0.5rem solid white;
+}
+
+table {
+  max-width: 46rem;
+  margin: 2rem auto;
+  border-collapse: collapse;
+}
+
+th {
+  white-space: nowrap;
+}
+
+td, th {
+  padding: 0.2rem 1rem;
+  border: 1px solid white;
+}
+
+td:first-child,
+th:first-child {
+  border-left: none;
+  white-space: nowrap;
+}
+
+td:last-child,
+th:last-child {
+  border-right: none;
+}
+
+img {
+  display: block;
+  max-width: 46rem;
+  margin: 2rem auto;
+}
+
+.note {
+  font-size: 0.8em;
+  color: gray;
+}
+
+.one-image-container {
+  width: 75%;
+  margin: 0 auto;
+}
+  
+.two-images-container {
+  display: flex;
+  width: 100%;
+}
+
+.two-images-container>div {
+  width: 50%;
+  padding: 0.5%;
+}
+
+.two-images-container>div>img {
+  width: 100%;
+}
