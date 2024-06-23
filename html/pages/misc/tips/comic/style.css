@@ -59,6 +59,10 @@ img {
   width: 75%;
   margin: 0 auto;
 }
+
+.one-image-container>img {
+  max-width: 100%;
+}
   
 .two-images-container {
   display: flex;
