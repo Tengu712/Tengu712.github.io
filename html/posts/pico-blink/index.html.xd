@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <CHeader />
+  <PostTitle key="pico-blink" />
+</head>
+
+<CBody>
+  <Headline key="pico-blink" />
+
+  <hr>
+
+  <h2>概要</h2>
+
+  <p>
+    ついに、ファームウェア開発まで興味のレベルが下がった。
+    そのため、アケコン自作を目標に置いて、ファームウェア開発に取り組むことにした。
+  </p>
+
+  <p>
+    当記事執筆現在の進捗は、Rasberry Pi Picoとアケコンのボタンを接続し、ボタンを押してボード上のLEDを光らせる、という段階である。
+    つまり、まだUSB通信について全く触れていない。
+    とはいえ、このレベルの開発はド素人であるため、今後とも気長に学習することにする。
+  </p>
+
+  <p>
+    なお、開発環境はUbuntu 24.04である。
+  </p>
+
+
+
+  <h2>部品</h2>
+
+  <ul>
+    <li>Rasberry Pi Pico H</li>
+    <li>アケコンのボタン</li>
+    <li>ブレッドボード</li>
+    <li>ジャンプワイヤ</li>
+    <li>ミノムシクリップ</li>
+    <li>Micro USB</li>
+  </ul>
+
+
+
+  <h2>回路</h2>
+
+  <p>
+    わざわざ書くまでもないが、回路は次のようである。
+  </p>
+
+  <CImage src="https://img.skdassoc.work/posts/pico-blink/circuit.png" caption="回路図" width="75%" />
+
+  <p>
+    私のような電子系ド素人にとっては、<b>電源→ボタン→インプットピン</b>、という回路の方が直感的である。
+    しかし、これはボタンが上がっているときに、インプットピンが回路から外れてしまう。
+    これを解決するために、多くのマイコンボードはプルアップ抵抗を用いている。
+    次のような原理で、ボタンが上がっているときにHIGH・下がっているときにLOWとなる。
+    ただし、インプットピンの原理はその電圧を計測することであり、電圧計の内部抵抗は原理的にプルアップ抵抗より大きく、ボタンの抵抗は常識的に考えて極めて小さい。
+  </p>
+
+  <CImage src="https://img.skdassoc.work/posts/pico-blink/pull-up.png" caption="プルアップ抵抗" width="75%" />
+
+
+
+  <h2>MicroPython</h2>
+
+  <p>
+    MicroPythonを用いることで、簡単にプログラムを実行できる。
+    実行までの手順は次の通りである。
+  </p>
+
+  <ol>
+    <li>Thonnyをインストールする</li>
+    <li>BOOTSELボタンを押しながらRasberry Pi Picoをマシンに接続する</li>
+    <li>Rasberry Pi Pico内のINDEX.HTMLを頼りにMicroPythonのUF2ファイルをダウンロードする</li>
+    <li>UF2ファイルをRasberry Pi PicoにD&Dする</li>
+    <li>Thonnyを起動する</li>
+    <li>MicroPythonを書いて実行ボタンを押す</li>
+  </ol>
+
+  <p>
+    Lチカのコードは次のようである。
+  </p>
+
+  <Codeblock lang="Python">import machine
+import utime
+led = machine.Pin(25, machine.Pin.OUT)
+while True:
+    led.value(1)
+    utime.sleep(0.5)
+    led.value(0)
+    utime.sleep(0.5)</Codeblock>
+
+  <p>
+    ボタンを押したときにLEDを光らせるコードは次のようである。
+  </p>
+
+  <Codeblock lang="Python">import machine
+import utime
+led = machine.Pin(25, machine.Pin.OUT)
+button = machine.Pin(14, machine.Pin.IN, machine.Pin.PULL_UP)
+while True:
+    if button.value() == 1:
+        led.value(0)
+    else:
+        led.value(1)</Codeblock>
+
+
+
+  <h2>rp-pico</h2>
+
+  <p>
+    私の性格上MicroPythonで開発するのは気分が良くないので、Rustにリファクタリングすることにした。
+    rp-picoというクレートを用いると、比較的簡単に開発できるようである。
+    近いうちにembedded-halまで落ちたいものだ。
+  </p>
+
+  <p>
+    thumbv6m-none-eabiターゲットを追加する必要がある。
+    また、elf2uf2-rsとflip-linkをインストールする。
+    なお、そのためにはlibudev-devのインストールが必要だった。
+  </p>
+
+  <Codeblock>$ sudo apt install libudev-dev
+$ rustup target add thumbv6m-none-eabi
+$ cargo install elf2uf2-rs flip-link</Codeblock>
+
+  <p>
+    Cargo.tomlは次のようである。
+  </p>
+
+  <Codeblock lang="Toml">[package]
+name = "led"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rp-pico = "0.9.0"
+cortex-m = "0.7.7"
+cortex-m-rt = "0.7.3"
+embedded-hal = "1.0.0"</Codeblock>
+
+  <p>
+    DXのためにも、次の.cargo/config.tomlを作る。
+  </p>
+
+  <Codeblock lang="Toml">[build]
+target = "thumbv6m-none-eabi"
+
+[target.thumbv6m-none-eabi]
+runner = "elf2uf2-rs -d"
+rustflags = [
+  "-C", "linker=flip-link",
+  "-C", "link-arg=--nmagic",
+  "-C", "link-arg=-Tlink.x",
+]</Codeblock>
+
+  <p>
+    ルートディレクトリに次のmemory.xを作る。
+  </p>
+
+  <Codeblock>MEMORY {
+    BOOT2 : ORIGIN = 0x10000000, LENGTH = 0x100
+    FLASH : ORIGIN = 0x10000100, LENGTH = 2048K - 0x100
+    RAM   : ORIGIN = 0x20000000, LENGTH = 256K
+}
+
+EXTERN(BOOT2_FIRMWARE)
+
+SECTIONS {
+    .boot2 ORIGIN(BOOT2) :
+    {
+        KEEP(*(.boot2));
+    } &gt; BOOT2
+} INSERT BEFORE .text;</Codeblock>
+
+  <p>
+    以上で環境構築終了である。
+    以降、次の手順で実行できる。
+  </p>
+
+  <ol>
+    <li>BOOTSELボタンを押しながらRasberry Pi Picoをマシンに接続する</li>
+    <li>cargo runを実行する</li>
+  </ol>
+
+  <p>
+    Lチカのコードは次のようである。
+  </p>
+
+  <Codeblock lang="Rust">#![no_std]
+#![no_main]
+
+use core::panic::PanicInfo;
+use cortex_m::delay::Delay;
+use embedded_hal::digital::OutputPin;
+use rp_pico::{
+    entry,
+    hal::{
+        clocks::{self, Clock},
+        pac::{CorePeripherals, Peripherals},
+        watchdog::Watchdog,
+        Sio,
+    },
+    Pins,
+};
+
+const XOSC_CRYSTAL_FREQ: u32 = 12_000_000;
+const DELAY_TIME: u32 = 500;
+
+#[panic_handler]
+fn panic(_: &PanicInfo) -&gt; ! {
+    loop {}
+}
+
+#[entry]
+fn main() -&gt; ! {
+    let core = CorePeripherals::take().unwrap();
+    let mut pac = Peripherals::take().unwrap();
+
+    // get pins
+    let pins = Pins::new(
+        pac.IO_BANK0,
+        pac.PADS_BANK0,
+        Sio::new(pac.SIO).gpio_bank0,
+        &mut pac.RESETS,
+    );
+
+    // get an LED pin
+    let mut led = pins.led.into_push_pull_output();
+
+    // create Delay to wait
+    let clocks = clocks::init_clocks_and_plls(
+        XOSC_CRYSTAL_FREQ,
+        pac.XOSC,
+        pac.CLOCKS,
+        pac.PLL_SYS,
+        pac.PLL_USB,
+        &mut pac.RESETS,
+        &mut Watchdog::new(pac.WATCHDOG),
+    )
+    .ok()
+    .unwrap();
+    let mut delay = Delay::new(core.SYST, clocks.system_clock.freq().to_Hz());
+
+    loop {
+        led.set_low().unwrap();
+        delay.delay_ms(DELAY_TIME);
+        led.set_high().unwrap();
+        delay.delay_ms(DELAY_TIME);
+    }
+}</Codeblock>
+
+  <p>
+    ボタンを押したときにLEDを光らせるコードは次のようである。
+  </p>
+
+  <Codeblock lang="Rust">#![no_std]
+#![no_main]
+
+use core::panic::PanicInfo;
+use embedded_hal::digital::{InputPin, OutputPin};
+use rp_pico::{
+    entry,
+    hal::{pac::Peripherals, Sio},
+    Pins,
+};
+
+#[panic_handler]
+fn panic(_: &PanicInfo) -&gt; ! {
+    loop {}
+}
+
+#[entry]
+fn main() -&gt; ! {
+    let mut pac = Peripherals::take().unwrap();
+
+    // get pins
+    let pins = Pins::new(
+        pac.IO_BANK0,
+        pac.PADS_BANK0,
+        Sio::new(pac.SIO).gpio_bank0,
+        &mut pac.RESETS,
+    );
+
+    // get an LED pin and a button pin
+    let mut led = pins.led.into_push_pull_output();
+    let mut button = pins.gpio14.into_pull_up_input();
+
+    loop {
+        if button.is_high().ok().unwrap() {
+            led.set_low().unwrap();
+        } else {
+            led.set_high().unwrap();
+        }
+    }
+}</Codeblock>
+
+
+
+  <h2>参考文献</h2>
+
+  <ul>
+    <li><a href="https://qiita.com/simoyama2323/items/6b47b823e0b2a9ca9736">ジャンクで買ったアケコンをRaspberryPi Picoで使えるようにしてみた</a></li>
+    <li><a href="https://himco.jp/2023/07/04/フィジカルコンピューティング-with-raspberry-pi-pico-6-押しボタン/">フィジカルコンピューティング with Raspberry PI Pico 6 押しボタンでLEDを点けたり消したりする</a></li>
+    <li><a href="https://mixi.jp/view_diary.pl?id=1947127978&owner_id=272676">ボタン入力の仕組みと連射・同時押し</a></li>
+    <li><a href="https://qiita.com/nishiwakki/items/e921d44a00a37c72979c">【電子工作】プルアップ回路とプルダウン回路とは？（危険回路についても）</a></li>
+    <li><a href="https://kita127.hatenablog.com/entry/2021/07/25/145508">電気素人のプルアップ回路解説</a></li>
+    <li><a href="https://nkon.github.io/RasPico-Rust/">Raspberry Pi PicoとRustで組み込みプログラム環境を整える</a></li>
+    <li><a href="https://zenn.dev/isofurabon/articles/e5cb6949603706">Raspberry Pi Pico で薄型レバーレスコントローラーの自作</a></li>
+  </ul>
+
+
+
+  <Tombstone />
+
+  <hr>
+
+  <Deadline key="pico-blink" />
+</CBody>
+
+</html>
