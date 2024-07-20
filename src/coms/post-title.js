@@ -18,6 +18,7 @@ exports.run = function(text, eohs) {
     return text
   }
 
+  text = text.replace(matched.entire, "")
   eohs.push(`<title>${data.title}</title>`)
   return text
 }
