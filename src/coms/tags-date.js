@@ -1,4 +1,6 @@
-const CSS = `<link rel="stylesheet" type="text/css" href="/coms/tags-date.css?20240721">`
+const cssq = require("../cssq")
+
+const CSS = `<link rel="stylesheet" type="text/css" href="/coms/tags-date.css?${cssq.CSSQ}">`
 
 exports.run = function(data, eohs) {
   eohs.push(CSS)

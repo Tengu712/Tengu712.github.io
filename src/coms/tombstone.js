@@ -1,4 +1,6 @@
-const CSS = `<link rel="stylesheet" type="text/css" href="/coms/tombstone.css?20240210">`
+const cssq = require("../cssq")
+
+const CSS = `<link rel="stylesheet" type="text/css" href="/coms/tombstone.css?${cssq.CSSQ}">`
 
 const NODE = `<p class="tombstone">■</p>`
 

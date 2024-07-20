@@ -1,7 +1,8 @@
+const cssq = require("../cssq")
 const posts = require("../posts")
 const tagsDate = require("./tags-date")
 
-const CSS = `<link rel="stylesheet" type="text/css" href="/coms/post-index.css?20240721">`
+const CSS = `<link rel="stylesheet" type="text/css" href="/coms/post-index.css?${cssq.CSSQ}">`
 
 exports.run = function(text, eohs) {
   if (!text.includes("<PostIndex />")) {

@@ -1,7 +1,8 @@
+const cssq = require("../cssq")
 const parser = require("../parser")
 const posts = require("../posts")
 
-const CSS = `<link rel="stylesheet" type="text/css" href="/coms/deadline.css?20240212">`
+const CSS = `<link rel="stylesheet" type="text/css" href="/coms/deadline.css?${cssq.CSSQ}">`
 
 exports.run = function(text, eohs) {
   const matcheds = parser.parseSelfClosingTag(text, "Deadline")

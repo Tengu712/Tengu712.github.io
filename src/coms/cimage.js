@@ -1,6 +1,7 @@
+const cssq = require("../cssq")
 const parser = require("../parser")
 
-const CSS = `<link rel="stylesheet" type="text/css" href="/coms/cimage.css?20240212">`
+const CSS = `<link rel="stylesheet" type="text/css" href="/coms/cimage.css?${cssq.CSSQ}">`
 
 exports.run = function(text, eohs) {
   const matcheds = parser.parseSelfClosingTag(text, "CImage")

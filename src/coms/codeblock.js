@@ -1,9 +1,10 @@
+const cssq = require("../cssq")
 const parser = require("../parser")
 
 const CSS = `<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
   <script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
-  <link rel="stylesheet" type="text/css" href="/coms/codeblock.css?20240305">`
+  <link rel="stylesheet" type="text/css" href="/coms/codeblock.css?${cssq.CSSQ}">`
 
 exports.run = function(text, eohs) {
   const matcheds = parser.parseTag(text, "Codeblock")
