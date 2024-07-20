@@ -149,4 +149,12 @@
   #cbody-content {
     padding: 0.75rem;
   }
+
+  #cbody-content h1 {
+    font-size: 1.25rem;
+  }
+
+  #cbody-content h2 {
+    font-size: 1.25rem;
+  }
 }
