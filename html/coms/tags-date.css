@@ -1,0 +1,29 @@
+.tag-date {
+  display: flex;
+  max-width: 100%;
+  min-width: 100%;
+  margin: 0;
+  padding: 0;
+  color: gray;
+}
+
+.tag-date-tags {
+  white-space: nowrap;
+  overflow-x: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.tag-date-tags::-webkit-scrollbar {
+  display: none;
+}
+
+.tag-date-date {
+  margin-left: auto;
+}
+
+@media screen and (max-width: 800px) {
+  .tag-date {
+    font-size: 0.8rem;
+  }
+}

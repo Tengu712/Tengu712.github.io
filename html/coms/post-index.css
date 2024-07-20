@@ -8,20 +8,12 @@
 }
 
 .post-index>div:first-child {
-  font-size: 1.25rem;
+  font-size: 1.75rem;
   font-weight: bold;
 }
 
-.post-index>div:last-child {
-  color: gray;
-  display: flex;
-}
-
-.post-index span {
-  margin-right: 0.5rem;
-}
-
-.post-index span:last-child {
-  margin: 0;
-  margin-left: auto;
+@media screen and (max-width: 800px) {
+  .post-index>div:first-child {
+    font-size: 1.25rem;
+  }
 }

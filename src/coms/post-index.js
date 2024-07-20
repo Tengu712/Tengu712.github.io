@@ -1,6 +1,7 @@
 const posts = require("../posts")
+const tagsDate = require("./tags-date")
 
-const CSS = `<link rel="stylesheet" type="text/css" href="/coms/post-index.css?20240212">`
+const CSS = `<link rel="stylesheet" type="text/css" href="/coms/post-index.css?20240721">`
 
 exports.run = function(text, eohs) {
   if (!text.includes("<PostIndex />")) {
@@ -9,13 +10,8 @@ exports.run = function(text, eohs) {
 
   let node = ""
   for (const data of posts.getDataAll()) {
-    let spans = "";
-    for (const tag of data.tags) {
-      spans += "<span>#" + tag + "</span>";
-    }
-    spans += "<span>" + data.date + "</span>"
-
-    node += `<div class="post-index"><div><a href="/posts/${data.key}">${data.title}</a></div><div>${spans}</div></div>`
+    const td = tagsDate.run(data, eohs)
+    node += `<div class="post-index"><div><a href="/posts/${data.key}">${data.title}</a></div>${td}</div>`
   }
 
   eohs.push(CSS)
