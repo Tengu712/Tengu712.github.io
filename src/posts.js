@@ -1,4 +1,5 @@
 const POST_DATA = [
+  { key: "wgpu-simple-fps", title: "wgpuでFPSゲームを作る", date: "2024/8/8", tags: ["cg", "game", "webgpu", "rust"] },
   { key: "pico-blink", title: "Rasberry Pi PicoでLチカ", date: "2024/7/17", tags: ["embedded", "python", "rasberrypipico", "rust"] },
   { key: "docker-gui-experiment", title: "Docker GUIアプリ実行検証", date: "2024/6/20", tags: ["docker", "experiment", "wsl"] },
   { key: "iam-mml-release", title: "FM音源MMLコンパイラ「IAM.mml」", date: "2024/5/27", tags: ["diary", "mml", "music", "web"] },
