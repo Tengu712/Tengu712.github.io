@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <CHeader />
+  <PostTitle key="swiftui-study" />
+</head>
+
+<CBody>
+  <Headline key="swiftui-study" />
+
+  <hr>
+
+  <h2>概要</h2>
+
+  <p>
+    9月4日から始まるインターンでSwiftを用いる。
+    それにもかかわらず、1ミリとしてSwiftに触れたことがなかった。
+    そのため、予習として、macOS及びiOS向けの日誌記録アプリ開発を通してSwift(というよりはSwiftUI)を学習した。
+    学習した内容やSwift及びSwiftUIに対する所感を本記事にまとめる。
+  </p>
+
+  <div style="text-align: center;">
+    <a href="https://github.com/Tengu712/task-recorder">ソースコードはこちら</a>
+  </div>
+
+  
+
+  <h2>開発環境</h2>
+
+  <p>
+    M2 MacBook Air (macOS Sonoma 14)+Visual Studio Codeで開発した。
+    曰く、AppleはXcodeでの開発を推奨しているようであるが、私はCLI信者であるため、これを拒否した。
+    残念ながら(あるいは当然ながら)、CLIでのビルド方法に関する文献は少ない。
+    まともにビルドできるようになるまで苦労を要した。
+  </p>
+
+  <p>
+    まず、Homebrewをインストールした時点で次のような状態であった。
+    幾つかエラーが見える。
+    このエラーのために、Swiftをビルドできない。
+  </p>
+
+  <Codeblock lang="Shell">$ swift --version
+swift-driver version: 1.90.11.1 Apple Swift version 5.10 (swiftlang-5.10.0.13 clang-1500.3.9.4)
+Target: arm64-apple-macosx14.0
+
+$ xcode-select -p
+/Library/Developer/CommandLineTools
+
+$ xcrun --show-sdk-path
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
+
+$ xcrun --show-sdk-platform-version
+xcrun: error: unable to lookup item 'PlatformVersion' from command line tools installation
+xcrun: error: unable to lookup item 'PlatformVersion' in SDK '/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk'
+
+$ ls -la /Library/Developer/CommandLineTools/SDKs
+total 0
+drwxr-xr-x  7 root  wheel  224  7 21 18:46 .
+drwxr-xr-x  5 root  wheel  160  7 21 18:46 ..
+lrwxr-xr-x  1 root  wheel   14  7 21 18:46 MacOSX.sdk -> MacOSX14.4.sdk
+drwxr-xr-x  7 root  wheel  224  5 12  2023 MacOSX13.3.sdk
+lrwxr-xr-x  1 root  wheel   14  7 21 18:46 MacOSX13.sdk -> MacOSX13.3.sdk
+drwxr-xr-x  7 root  wheel  224  2 20 09:28 MacOSX14.4.sdk
+lrwxr-xr-x  1 root  wheel   14  7 21 18:46 MacOSX14.sdk -> MacOSX14.4.sdk
+
+$ ls -la /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk
+total 40
+drwxr-xr-x  7 root  wheel   224  2 20 09:28 .
+drwxr-xr-x  7 root  wheel   224  7 21 18:46 ..
+-rw-r--r--  1 root  wheel   127  2 10  2024 Entitlements.plist
+-rw-r--r--  1 root  wheel  6564  2 10  2024 SDKSettings.json
+-rw-r--r--  1 root  wheel  4871  2 10  2024 SDKSettings.plist
+drwxr-xr-x  5 root  wheel   160  2 20 09:25 System
+drwxr-xr-x  7 root  wheel   224  2 20 09:25 usr
+
+$ sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+xcode-select: error: invalid developer directory '/Applications/Xcode.app/Contents/Developer'
+
+$ ls /Applications/X*
+zsh: no matches found: /Applications/X*</Codeblock>
+
+  <p>
+    Homebrewインストール時にXcode Command Line for Toolsが自動でインストールされる。
+    しかし、どうやらこのCLTでは不十分であり、Xcodeをインストールしなければならないらしい。
+    さて、私はCLI信者であるため、xcodesというXcodeのバージョン管理アプリを用いてXcodeをインストールした。
+    ただし、どうやらXcodeを運用するにはApple Developerに登録する必要があるらしく、登録済みのAppleアカウントへのログインが要求された。
+  </p>
+
+  <Codeblock lang="Shell">$ brew install xcodesorg/made/xcodes
+$ brew install aria2
+$ xcodes install 15.4
+$ cd /Applications
+$ ln -s Xcode-15.4.0.app Xcode.app
+$ sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+$ xcrun --show-sdk-platform-version
+14.5</Codeblock>
+
+  <p>
+    以上でswiftコマンドが利用できるようになった。
+    しかし、SwiftUIを用いる場合、swiftコマンドでは不十分であり、xcodebuildコマンドを用いてビルドする必要がある。
+    xcodebuildを用いるにはXcodeプロジェクトが必要である。
+    幸いにもxcodegenというCLI操作でYAMLからそれを作成できるアプリがあるため、これを用いる。
+    簡単なYAMLファイルは次のようである。
+  </p>
+
+  <Codeblock lang="Yaml">name: ProjectName
+
+settings:
+  base:
+    MARKETING_VERSION: 1.0.0
+    CURRENT_PROJECT_VERSION: 1
+
+targets:
+  TaskRecorder:
+    type: application
+    platform: [macOS, iOS]
+    sources:
+      - Sources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: product.bundle.identifier</Codeblock>
+
+  <p>
+    次のようにxcodegenを用いる。
+    尚、2個あるxcodebuildについて、1個目がmacOS向け、2個目がiOS向けである。
+    ただし、$TEAM_IDはデベロッパーチームのIDのことであるが、無料のApple Developerにおいてはそれを取得する正規の手段が提供されていない。
+    そのため、Xcodeでプロジェクトを作成し、その.xcodeprojectディレクトリから発見するしかない。
+    また、$SDKは後述する方法でインストールし、「xcodebuild -sdk -version」を実行して確認できる。
+    xcodebuildの結果、build/(macOS|iOS)/Build/Products/(Debug|Release)/ProjectName.appが生成される。
+  </p>
+
+  <Codeblock lang="Shell">$ brew install xcodegen
+$ xcodegen
+$ xcodebuild \
+    -project ProjectName.xcodeproj \
+    -scheme ProjectName_macOS \
+    -derivedDataPath ./build/macOS \
+    -configuration (Debug | Release) \
+    GENERATE_INFOPLIST_FILE=YES \
+    build
+$ xcodebuild \
+    -project ProjectName.xcodeproj \
+    -scheme ProjectName_iOS \
+    -sdk $SDK \
+    -derivedDataPath ./build/iOS \
+    -configuration (Debug | Release) \
+    GENERATE_INFOPLIST_FILE=YES \
+    DEVELOPMENT_TEAM=$TEAM_ID \
+    build</Codeblock>
+
+  <p>
+    iPhoneやiPad等のシミュレーションを行うためには、次のように実行する。
+    ただし、予め<a href="https://developer.apple.com/download/all/?q=Xcode">Apple Developer website</a>からランタイムをダウンロードし、「xcrun simctl runtime add "/path/to/runtime-file.dmg"」によってインストールしておく必要がある。
+    伴ってSDKとシミュレータがインストールされる。
+    また、$DEVICE_TYPEと$SIMULATORは「xcrun simctl list」を実行して確認できる。
+  </p>
+
+  <Codeblock lang="Shell">$ xcrun simctl create $DEVICE_NAME $DEVICE_TYPE $SIMULATOR
+$ xcrun simctl boot $DEVICE_NAME
+$ xcrun simctl install iPad8 $PATH_TO_APPLICATION
+$ open -a /Applications/Xcode.app/Contents/Developer/Applications/Simulator.app/Contents/MacOS/Simulator</Codeblock>
+
+  <p>
+    以上で開発環境を構築できた。
+    尚、この開発環境は<s>マゾ</s>CLI信者向けである。
+    こんな不毛な環境構築作業をしないために、また特にプレビューの恩恵を受けるために、素直にXcodeを用いるのが良い。
+  </p>
+
+
+
+  <h2>Swiftについて</h2>
+
+  <p>
+    初見の印象は「Rustみたいだなあ」だった。
+    実際、Swiftのパラダイムはオブジェクト指向ではなくプロトコル指向なるものらしく、このプロトコルがRustのトレイトのようなものなので、ある程度の馴染みがあった。
+    しかし、主要パラダイムではないとしながらオブジェクト指向をサポートしていることや・下記の要素から、Rustのような言語だと言うのは少々過言かと思う。
+  </p>
+
+  <p>
+    nilの可能性があることを表すオプショナル型には、TypeScriptや新しいC#等のモダンな言語の雰囲気を感ぜられる。
+    nilや例外の除去のためのguard文もまた、そのシンタックス自体が独立しているながら、矢張りTypeScriptのif文による型推論のような機能である。
+  </p>
+
+  <p>
+    一方で、1モジュール内において名前空間の概念がなく、トップレベルに宣言を連ねる点には、CやJavaScriptのような古い言語を想起させる。
+    グローバル変数を定義できる点も、これに拍車を掛けている。
+    スクリプト言語のように書ける開発用言語といった印象である。
+  </p>
+
+  <p>
+    個人的に面白いと思ったのは、名前付き引数とクロージャのシンタックスである。
+    まず、名前付き引数を半ば強要するような言語は珍しいと思った。
+    これまで扱ったことのある言語の中ではPythonにも名前付き引数があったが、強制ではなかったと記憶している。
+    この機能のおかげか、構造体の初期化を関数呼出しのように書ける。
+    エレガントである。
+    また、クロージャのシンタックスは次のようであり、なんか、こう……、なんというか、不気味で面白いなと思った。
+  </p>
+
+  <Codeblock lang="Swift">["foo", "bar"].forEach({ print($0) })
+["foo", "bar"].forEach({ n in print(n) })
+["foo", "bar"].forEach { n in print(n) }</Codeblock>
+
+
+
+  <h2>SwiftUI</h2>
+
+  <p>
+    まず、宣言的UIである点が好印象である。
+    私は必要最小限の依存で開発する・所謂フルスクラッチ厨であり、そのためReactもVueも業務でもない限りはまず使わない。
+    しかし、だからこそ、DOMをJavaScriptで操作したり・.NETのUIを直書きすることの面倒臭さを理解している。
+    そこで、宣言的にUIを記述できるというのはありがたい仕様であった。
+  </p>
+
+  <p>
+    と、言ったものの。
+    UI再描画の発火条件に非常に悩まされた。
+    とにかく、配列が悪さをする。
+    例えば、次のコードである。
+    Observableなクラスの要素である配列について、メソッドを介して取得すると変更が反映されない。
+  </p>
+
+  <Codeblock lang="Swift">struct Element: Identifiable {
+    var text: String = "foo"
+}
+class Elements: Observable {
+    private var privateElements: [Element] = []
+    var elements: [Element] = []
+    func get() -> [Element] {
+        return self.privateElements
+    }
+    func append() {
+        self.privateElements.append(Element())
+        self.elements.append(Element())
+    }
+}
+
+/* ... */
+
+List(elements.get(), id: \.self) { element in
+    Text(element.text) // 追加が反映されない
+}
+List(elements.elements, id: \.self) { element in
+    Text(element.text) // 追加が反映される
+}
+Button("Add") {
+    elements.append()
+}</Codeblock>
+
+  <p>
+    また、Listの中のNavigationLinkによって遷移した別画面での配列の要素の変更は反映されない。
+  </p>
+
+  <Codeblock lang="Swift">import SwiftUI
+
+struct ModelData {
+    var array = [false]
+}
+
+struct MyButton: View {
+    @Binding var value: Bool
+    var body: some View {
+        Button(value ? "1" : "0") {
+            value.toggle()
+        }
+    }
+}
+
+@main
+struct MainApp: App {
+    @State var modelData: ModelData = ModelData()
+    var body: some Scene {
+        WindowGroup {
+            NavigationStack {
+                Text("Array")
+                NavigationLink {
+                    // 再描画されて変更が反映される
+                    MyButton(value: self.$modelData.array[0])
+                } label: {
+                    MyButton(value: self.$modelData.array[0])
+                }
+                
+                List {
+                    Text("Array")
+                    NavigationLink {
+                        // 再描画されず、変更が反映されない
+                        MyButton(value: self.$modelData.array[0])
+                    } label: {
+                        MyButton(value: self.$modelData.array[0])
+                    }
+                }
+            }
+        }
+    }
+}</Codeblock>
+
+  <p>
+    他にも、次の例がある。
+    真理値を持つモデルの配列から、真偽判定によるフィルタリングによって2個の配列を出し分けるプログラムである。
+    しかし、各モデルの真理値は変更され、その外見も再描画されるが、フィルタリングの結果が変わらない。
+    そして、配列に要素を追加することでフィルタリングの結果が正常になる。
+  </p>
+
+  <Codeblock lang="Swift">import SwiftUI
+
+class Model: ObservableObject {
+    @Published var value: Bool = false
+}
+@Observable
+class ModelData {
+    var models = [Model()]
+}
+
+struct MyButton: View {
+    @ObservedObject var value: Model
+    var body: some View {
+        Button(value.value ? "1" : "0") {
+            value.value.toggle()
+        }
+    }
+}
+
+struct ContentView: View {
+    @Environment(ModelData.self) var modelData
+    var falses: [Model] {
+        return modelData.models.filter({ n in !n.value })
+    }
+    var trues: [Model] {
+        return modelData.models.filter({ n in n.value })
+    }
+    var body: some View {
+        // 配列に要素を追加すると下のForEachの内容が変わる。
+        Button("add") {
+            modelData.models.append(Model())
+        }
+        Text("Falses")
+        ForEach(falses.indices, id: \.self) { i in
+            // 反映されない！
+            MyButton(value: falses[i])
+        }
+        Text("Trues")
+        ForEach(trues.indices, id: \.self) { i in
+            // 反映されない！
+            MyButton(value: trues[i])
+        }
+    }
+}
+
+@main
+struct MainApp: App {
+    @State var modelData = ModelData()
+    var body: some Scene {
+        WindowGroup {
+            ContentView().environment(modelData)
+        }
+    }
+}</Codeblock>
+
+  <p>
+    SwiftUIに対する不可解な挙動は再描画だけではない。
+    まず、macOS向けのビルドにおいては、.editMode()を使うことができない。
+    そのため、同様の機能を持たせるには.onMove()や.onDelete()を使うことになる。
+    しかし、まず、List＞ForEach(.onMove())＞TextFieldとしたとき、TextFieldのフォーカスが著しく遅くなる。
+    これは<a href="https://qiita.com/suesz98d/items/6cea4cb8b72cc3d5bdcb">Qiitaにも報告が上がっている</a>。
+    また、その.onDelete()はmacOS向けのビルドに利用できない。
+    そのため、.onDeleteCommand()を用いてキーバインドするか、削除UIを別途追加する必要がある。
+  </p>
+
+  <p>
+    細かいところでは、次のようなものがある。
+  </p>
+
+  <ul>
+    <li>ScrollViewにListを配置できない</li>
+    <li>Listの最初の要素としてSectionが置かれると見た目がおかしくなる</li>
+    <li>中身のないときのSectionの見た目がおかしい</li>
+    <li>Formのデフォルトスタイルがハチャメチャ</li>
+    <li>.groupedスタイルのFormにおいて1個しか要素のないForEachの見た目が少しおかしい</li>
+  </ul>
+
+  <p>
+    これまでの人生で何度も仕様に殺されたことはあったが、SwiftUIは中でもトップクラスの殺意を感じた。
+  </p>
+
+  <p>
+    とはいえ、慣れてしまえば簡単にそれっぽいものが作れるので、悪い体系とも言い難い。
+    インターンで経験を積んで、もっと理解を深めたい。
+  </p>
+
+
+
+  <h2>参考文献</h2>
+
+  <ul>
+    <li><a href="https://developer.apple.com/tutorials/swiftui/">Introducing SwiftUI</a></li>
+    <li><a href="https://qiita.com/eytyet/items/205b09e9fa69810e83db">WWDC 2015「Swiftでプロトコル指向プログラミング」</a></li>
+    <li><a href="https://qiita.com/uhooi/items/16a870eaae24b46103fb">Xcodeプロジェクトの生成ツール「XcodeGen」のセットアップ&操作方法</a></li>
+    <li><a href="https://qiita.com/tamaki/items/02eb43253193b950b08f">simctlコマンドを使ってみる</a></li>
+    <li><a href="https://zenn.dev/samekard_dev/articles/d4b45b36cd777e">SwiftUIでView間受け渡しの @State @Binding @StateObject @ObservedObject 組合せ観測隊</a></li>
+  </ul>
+
+
+
+  <Tombstone />
+
+  <hr>
+
+  <Deadline key="swiftui-study" />
+</CBody>
+
+</html>
