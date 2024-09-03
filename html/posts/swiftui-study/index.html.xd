@@ -200,7 +200,9 @@ $ open -a /Applications/Xcode.app/Contents/Developer/Applications/Simulator.app/
 
   <Codeblock lang="Swift">["foo", "bar"].forEach({ print($0) })
 ["foo", "bar"].forEach({ n in print(n) })
-["foo", "bar"].forEach { n in print(n) }</Codeblock>
+["foo", "bar"].forEach { n in print(n) }
+["foo", "bar"].forEach { (n: String) in print(n) }
+["foo", "bar"].forEach { (n: String) -> Void in print(n) }</Codeblock>
 
 
 
@@ -214,7 +216,19 @@ $ open -a /Applications/Xcode.app/Contents/Developer/Applications/Simulator.app/
   </p>
 
   <p>
-    と、言ったものの。
+    次は発展的な知識である。
+  </p>
+
+  <ul>
+    <li>設計方針にはMVVMだとかTCAだとかがある。</li>
+    <li>Binding&lt;T&gt;を引数に取り、@Bindingなメンバ変数に代入する場合は、変数名が「v」であっても「self._v = v」のようにする。</li>
+    <li>ビューをメンバ変数として持つ場合は、その型をViewを実装する総称型とする。また引数は@ViewBuilderとして受け取る。</li>
+    <li>Formにはスクロール機能がある。「設定」アプリはFormに統一されていそう。</li>
+    <li>ShareLinkのURLはローカルファイルパスでも良い。</li>
+  </ul>
+
+  <p>
+    宣言的UIはありがたい、と言ったものの。
     UI再描画の発火条件に非常に悩まされた。
     とにかく、配列が悪さをする。
     例えば、次のコードである。
@@ -368,10 +382,38 @@ struct MainApp: App {
   </p>
 
   <p>
+    macOSにおいてウィンドウを閉じたときにプロセスを終了するには、次のようにしなければならない。
+  </p>
+
+  <Codeblock lang="Swift">import SwiftUI
+
+#if os(macOS)
+class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+        return true
+    }
+}
+#endif
+
+@main
+struct MainApp: App {
+#if os(macOS)
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+#endif
+
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+    }
+}</Codeblock>
+
+  <p>
     細かいところでは、次のようなものがある。
   </p>
 
   <ul>
+    <li>main.swiftにAppな構造体を記述できない</li>
     <li>ScrollViewにListを配置できない</li>
     <li>Listの最初の要素としてSectionが置かれると見た目がおかしくなる</li>
     <li>中身のないときのSectionの見た目がおかしい</li>

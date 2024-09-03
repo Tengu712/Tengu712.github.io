@@ -1,5 +1,5 @@
 const POST_DATA = [
-  { key: "swiftui-study", title: "日誌記録アプリを開発してSwiftUIを学習した", date: "2024/9/2", tags: ["swift", "swiftui"] },
+  { key: "swiftui-study", title: "SwiftUIを学習した", date: "2024/9/2", tags: ["swift", "swiftui"] },
   { key: "wgpu-simple-fps", title: "wgpuでFPSゲームを作る", date: "2024/8/8", tags: ["cg", "game", "webgpu", "rust"] },
   { key: "pico-blink", title: "Rasberry Pi PicoでLチカ", date: "2024/7/17", tags: ["embedded", "python", "rasberrypipico", "rust"] },
   { key: "docker-gui-experiment", title: "Docker GUIアプリ実行検証", date: "2024/6/20", tags: ["docker", "experiment", "wsl"] },
