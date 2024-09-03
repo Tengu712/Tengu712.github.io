@@ -64,6 +64,8 @@
   box-sizing: border-box;
   padding: 3rem;
   width: 100%;
+  word-wrap : break-word;
+  overflow-wrap : break-word;
 }
 
 #cbody-content a {
