@@ -1,4 +1,6 @@
 ---
+import Content from '../components/Content.astro';
+
 interface Props {
 	title: string;
 }
@@ -7,44 +9,40 @@ const { title } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="description" content="Astro description" />
 		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 	</head>
 	<body>
-		<slot />
+		<div id="content-wrapper">
+			<Content>
+				<slot />
+			</Content>
+		</div>
 	</body>
 </html>
+
 <style is:global>
-	:root {
-		--accent: 136, 58, 234;
-		--accent-light: 224, 204, 250;
-		--accent-dark: 49, 10, 101;
-		--accent-gradient: linear-gradient(
-			45deg,
-			rgb(var(--accent)),
-			rgb(var(--accent-light)) 30%,
-			white 60%
-		);
+	html,
+	body {
+		-webkit-text-size-adjust: 100%;
+		font-family: 'Noto Sans JP', sans-serif;
+		background-color: rgb(35, 35, 35);
+		display: flex;
+		flex-flow: column;
+		font-size: 16px;
+		margin: 0;
+		min-height: 100vh;
 	}
-	html {
-		font-family: system-ui, sans-serif;
-		background: #13151a;
-	}
-	code {
-		font-family:
-			Menlo,
-			Monaco,
-			Lucida Console,
-			Liberation Mono,
-			DejaVu Sans Mono,
-			Bitstream Vera Sans Mono,
-			Courier New,
-			monospace;
+	#content-wrapper {
+		box-sizing: border-box;
+		background-color: white;
+		margin: 0 auto;
+		max-width: 800px;
+		flex-grow: 1;
 	}
 </style>
