@@ -1,6 +1,8 @@
 ---
 layout: ../../layouts/PostLayout.astro
 title: "ブログ開設"
+tags: ["information"]
+date: "2022/11/21"
 ---
 
 天狗です。
