@@ -2,43 +2,76 @@
 ---
 
 <div class="content">
-    <slot />
+	<slot />
 </div>
 <style is:global>
-    .content {
-        display: flex;
-        flex-flow: column;
-        flex-grow: 1;
+	.content {
+		display: flex;
+		flex-flow: column;
+		flex-grow: 1;
 		box-sizing: border-box;
-        /* 600px:0.75 800px:3 */
+		/* 600px:0.75 800px:3 */
 		padding: clamp(0.75rem, -6rem + 18vw, 3rem);
 		width: 100%;
-        height: 100%;
+		height: 100%;
 		word-wrap : break-word;
 		overflow-wrap : break-word;
 	}
 	.content a {
 		color: black;
 	}
-    .content a:hover {
-        color: red;
-    }
-    .content b {
-        color: red;
-    }
-    .content h2 {
-        margin-top: 5rem;
-        padding: 0.25rem 0.8rem;
-        background: transparent;
-        border-left: solid 0.5rem black;
-        /* 600px:1.25 800px:1.5 */
-        font-size: clamp(1.25rem, 0.5rem + 2vw, 1.5rem);
-    }
-    .content h3 {
-        margin-top: 2rem;
-    }
-    .content .astro-code {
-        padding: 1.5rem;
-        border-radius: 5px;
-    }
+	.content a:hover {
+		color: red;
+	}
+	.content b {
+		color: red;
+	}
+	.content h2 {
+		margin-top: 5rem;
+		padding: 0.25rem 0.8rem;
+		background: transparent;
+		border-left: solid 0.5rem black;
+		/* 600px:1.25 800px:1.5 */
+		font-size: clamp(1.25rem, 0.5rem + 2vw, 1.5rem);
+	}
+	.content h3 {
+		margin-top: 2rem;
+	}
+	.content .astro-code {
+		padding: 1.5rem;
+		border-radius: 5px;
+		font-family:
+			'Noto Sans Mono CJK JP',
+			'Source Han Code JP',
+			SFMono-Regular,
+			Consolas,
+			'Roboto Mono',
+			'Courier New',
+			Meiryo,
+			monospace;
+	}
+	.content table {
+		border-collapse: collapse;
+	}
+	.content thead tr {
+		border-top: 1px solid black;
+		border-bottom: 1px solid black;
+	}
+	.content tbody tr:last-child {
+		border-bottom: 1px solid black;
+	}
+	.content td,
+	.content th {
+		border: 1px solid black;
+		border-top: none;
+		border-bottom: none;
+	}
+	.content td:first-child,
+	.content th:first-child {
+		border-left: none;
+	}
+	.content td:last-child,
+	.content th:last-child {
+		border-right: none;
+	}
 </style>

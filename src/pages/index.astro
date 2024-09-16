@@ -11,12 +11,14 @@ function getId(file: string): string {
 ---
 
 <Layout title="天狗会議録" topImage="https://img.skdassoc.work/top.png">
-	{posts.map(post => (<PostLink
-		id={getId(post.file)}
-		title={post.frontmatter.title}
-		tags={post.frontmatter.tags}
-		date={post.frontmatter.date}
-	/>))}
+	{posts
+		.sort((a, b) => new Date(a.frontmatter.date).getTime() - new Date(b.frontmatter.date).getTime())
+		.map(post => (<PostLink
+			id={getId(post.file)}
+			title={post.frontmatter.title}
+			tags={post.frontmatter.tags}
+			date={post.frontmatter.date}
+		/>))}
 </Layout>
 <style>
 </style>
