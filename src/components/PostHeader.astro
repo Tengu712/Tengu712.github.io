@@ -1,47 +1,46 @@
 ---
 interface Props {
-    title: string;
-    tags: string[];
-    date: string;
+	title: string;
+	tags: string[];
+	date: string;
 }
-
 const {title, tags, date} = Astro.props;
 ---
 
 <div class="post-header">
-    <div class="title">{title}</div>
-    <div class="tags-date">
-        <div class="tags">
-            {tags.map(tag => (<span>#{tag} </span>))}
-        </div>
-        <div class="date">{date}</div>
-    </div>
-    <hr>
+	<div class="title">{title}</div>
+	<div class="tags-date">
+		<div class="tags">
+			{tags.map(tag => (<span>#{tag} </span>))}
+		</div>
+		<div class="date">{date}</div>
+	</div>
+	<hr>
 </div>
-<style is:global>
-	.post-header .title {
-        /* 600px:1.25 800px:2 */
-        font-size: clamp(1.25rem, -1rem + 6vw, 2rem);
-        font-weight: bold;
-    }
-    .post-header .title {
-        padding-top: 1.5rem;
-        padding-bottom: 1rem;
-    }
-    .post-header .tags-date {
-        display: flex;
-        color: gray;
-        /* 600px:0.8 800px:1 */
-        font-size: clamp(0.8rem, 0.2rem + 1.6vw, 1rem);
-        white-space: nowrap;
-        overflow-x: scroll;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-    }
-    .post-header::-webkit-scrollbar {
-        display: none;
-    }
-    .post-header .date {
-        margin-left: auto;
-    }
+<style>
+	.post-header {
+		.title {
+			/* 600px:1.25 800px:2 */
+			font-size: clamp(1.25rem, -1rem + 6vw, 2rem);
+			font-weight: bold;
+			padding-top: 1.5rem;
+			padding-bottom: 1rem;
+		}
+		.tags-date {
+			display: flex;
+			color: gray;
+			/* 600px:0.8 800px:1 */
+			font-size: clamp(0.8rem, 0.2rem + 1.6vw, 1rem);
+			white-space: nowrap;
+			overflow-x: scroll;
+			scrollbar-width: none;
+			-ms-overflow-style: none;
+			.date {
+				margin-left: auto;
+			}
+		}
+	}
+	.post-header::-webkit-scrollbar {
+		display: none;
+	}
 </style>

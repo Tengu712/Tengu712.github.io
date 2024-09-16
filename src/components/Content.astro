@@ -4,7 +4,7 @@
 <div class="content">
 	<slot />
 </div>
-<style is:global>
+<style>
 	.content {
 		display: flex;
 		flex-flow: column;
@@ -16,62 +16,65 @@
 		height: 100%;
 		word-wrap : break-word;
 		overflow-wrap : break-word;
-	}
-	.content a {
-		color: black;
-	}
-	.content a:hover {
-		color: red;
-	}
-	.content b {
-		color: red;
-	}
-	.content h2 {
-		margin-top: 5rem;
-		padding: 0.25rem 0.8rem;
-		background: transparent;
-		border-left: solid 0.5rem black;
-		/* 600px:1.25 800px:1.5 */
-		font-size: clamp(1.25rem, 0.5rem + 2vw, 1.5rem);
-	}
-	.content h3 {
-		margin-top: 2rem;
-	}
-	.content .astro-code {
-		padding: 1.5rem;
-		border-radius: 5px;
-		font-family:
-			'Noto Sans Mono CJK JP',
-			'Source Han Code JP',
-			SFMono-Regular,
-			Consolas,
-			'Roboto Mono',
-			'Courier New',
-			Meiryo,
-			monospace;
-	}
-	.content table {
-		border-collapse: collapse;
-	}
-	.content thead tr {
-		border-top: 1px solid black;
-		border-bottom: 1px solid black;
-	}
-	.content tbody tr:last-child {
-		border-bottom: 1px solid black;
-	}
-	.content td,
-	.content th {
-		border: 1px solid black;
-		border-top: none;
-		border-bottom: none;
-	}
-	.content td:first-child,
-	.content th:first-child {
-		border-left: none;
-	}
-	.content td:last-child,
-	.content th:last-child {
-		border-right: none;
+		a {
+			color: black;
+		}
+		a:hover {
+			color: red;
+		}
+		b {
+			color: red;
+		}
+		h2 {
+			margin-top: 5rem;
+			padding: 0.25rem 0.8rem;
+			background: transparent;
+			border-left: solid 0.5rem black;
+			/* 600px:1.25 800px:1.5 */
+			font-size: clamp(1.25rem, 0.5rem + 2vw, 1.5rem);
+		}
+		h3 {
+			margin-top: 2rem;
+		}
+		.astro-code {
+			min-width:0;
+			padding: 1.5rem;
+			border-radius: 5px;
+			font-family:
+				'Noto Sans Mono CJK JP',
+				'Source Han Code JP',
+				SFMono-Regular,
+				Consolas,
+				'Roboto Mono',
+				'Courier New',
+				Meiryo,
+				monospace;
+		}
+		/* REVIEW: コンポーネントに別けても良いかもしれない */
+		table {
+			border-collapse: collapse;
+		}
+		thead tr {
+			border-top: 1px solid black;
+			border-bottom: 1px solid black;
+		}
+		tbody tr:last-child {
+			border-bottom: 1px solid black;
+		}
+		td,
+		th {
+			border: 1px solid black;
+			border-top: none;
+			border-bottom: none;
+			padding: 0 0.5rem;
+		}
+		td:first-child,
+		th:first-child {
+			border-left: none;
+		}
+		td:last-child,
+		th:last-child {
+			border-right: none;
+		}
 	}
 </style>

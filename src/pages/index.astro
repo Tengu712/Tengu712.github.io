@@ -1,18 +1,14 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import PostLink from "../components/PostLink.astro";
+import { getId } from "../utils";
 
 const posts = await Astro.glob('./posts/*.mdx');
-
-function getId(file: string): string {
-	const filename = file.split("/").slice(-1)[0]
-	return filename.substring(0, filename.indexOf("."))
-}
 ---
 
 <Layout title="天狗会議録" topImage="https://img.skdassoc.work/top.png">
 	{posts
-		.sort((a, b) => new Date(a.frontmatter.date).getTime() - new Date(b.frontmatter.date).getTime())
+		.sort((a, b) => new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime())
 		.map(post => (<PostLink
 			id={getId(post.file)}
 			title={post.frontmatter.title}

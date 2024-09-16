@@ -4,10 +4,14 @@ import PostHeader from "../components/PostHeader.astro";
 import PostFooter from "../components/PostFooter.astro";
 
 const { frontmatter } = Astro.props;
+
+function getId(pathname: string): string {
+	return pathname.split("/").slice(-2)[0];
+}
 ---
 
 <Layout title={frontmatter.title}>
 	<PostHeader title={frontmatter.title} tags={frontmatter.tags} date={frontmatter.date} />
 	<slot />
-	<PostFooter />
+	<PostFooter id={getId(Astro.url.pathname)} />
 </Layout>

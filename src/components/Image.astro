@@ -1,26 +1,25 @@
 ---
 interface Props {
-    src: string;
-    caption: string;
+	src: string;
+	caption: string;
 }
-
 const {src, caption} = Astro.props;
 ---
 
 <div class="image">
-    <img src={src}>
-    <br>
-    <label>{caption}</label>
+	<img src={src}>
+	<br>
+	<label>{caption}</label>
 </div>
-<style is:global>
-    .image {
-        margin: 0 auto;
-        text-align: center;
-    }
-    .image img {
-        max-width: 80%;
-    }
-    .image label {
-        font-style: italic;
-    }
+<style>
+	.image {
+		margin: 0 auto;
+		text-align: center;
+		img {
+			max-width: 80%;
+		}
+		label {
+			font-style: italic;
+		}
+	}
 </style>

@@ -1,15 +1,66 @@
 ---
+import A from "./A.astro";
+import {getId} from "../utils";
+
+interface Props {
+	id: string;
+}
+const {id} = Astro.props;
+
+const posts = await Astro.glob('../pages/posts/*.mdx');
+const sortedPosts = posts.sort((a, b) => new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime());
+const index = sortedPosts.findIndex(post => getId(post.file) === id);
+const next = index > 0 ? sortedPosts[index - 1] : undefined;
+const prev = index + 1 < posts.length ? sortedPosts[index + 1] : undefined;
 ---
 
 <p class="tombstone">■</p>
 <div class="post-footer">
-    <hr>
+	<hr>
+	<div class="links">
+		{next &&
+			<div class="next">
+				<div>Next Article</div>
+				<div>
+					<A href={`./${getId(next!.file)}`}>{next!.frontmatter.title}</a>
+				</div>
+			</div>
+		}
+		{prev &&
+			<div class="prev">
+				<div>Prev Article</div>
+				<div>
+					<A href={`./${getId(prev!.file)}`}>{prev!.frontmatter.title}</a>
+				</div>
+			</div>
+		}
+	</div>
 </div>
-<style is:global>
-    .tombstone {
-        text-align: right;
-    }
-    .post-footer {
-        margin-top: auto;
-    }
+<style>
+	.tombstone {
+		text-align: right;
+	}
+	.post-footer {
+		margin-top: auto;
+		.links {
+			display: flex;
+			flex-flow: row;
+			a {
+				font-weight: bold;
+			}
+			.prev {
+				margin-left: auto;
+			}
+		}
+	}
+	@media screen and (max-width: 600px) {
+		.post-footer {
+			.links {
+				flex-flow: column;
+				.prev {
+					text-align: right;
+				}
+			}
+		}
+	}
 </style>

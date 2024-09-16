@@ -9,7 +9,7 @@
 	<a href="/about">About</a>
 </div>
 <div class="header-spacer"></div>
-<style is:global>
+<style>
 	.header {
 		background-color: rgb(35, 35, 35);
 		color: white;
@@ -21,26 +21,24 @@
 		min-width: 100%;
 		padding: 0.5rem 0;
 		z-index: 1;
-	}
-	.header .horizontal-spacer {
-		flex-grow: 1;
-	}
-	.header a {
-		color: white;
-		text-decoration: none;
-	}
-	.header a:hover {
-		color: red;
-		text-decoration: none;
-	}
-	.header * {
-		padding: 0 0.5rem;
-	}
-	.header *:first-child {
-		padding-left: 1rem;
-	}
-	.header *:last-child {
-		padding-right: 1rem;
+		.horizontal-spacer {
+			flex-grow: 1;
+		}
+		a {
+			padding: 0 0.5rem;
+			color: white;
+			text-decoration: none;
+		}
+		a:hover {
+			color: red;
+			text-decoration: none;
+		}
+		a:first-child {
+			padding-left: 1rem;
+		}
+		a:last-child {
+			padding-right: 1rem;
+		}
 	}
 	.header-spacer {
 		height: 2.5rem;
