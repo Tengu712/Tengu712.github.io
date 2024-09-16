@@ -12,7 +12,7 @@ const {title, tags, date} = Astro.props;
     <div class="title">{title}</div>
     <div class="tags-date">
         <div class="tags">
-            {tags.map(tag => (<span>#{tag}</span>))}
+            {tags.map(tag => (<span>#{tag} </span>))}
         </div>
         <div class="date">{date}</div>
     </div>

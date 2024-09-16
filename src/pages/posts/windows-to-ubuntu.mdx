@@ -1,0 +1,145 @@
+---
+layout: ../../layouts/PostLayout.astro
+title: "WindowsからUbuntuへ"
+tags: ["diary", "os", "ubuntu"]
+date: "2022/11/22"
+---
+import Image from "../../components/Image.astro";
+
+## 背景
+
+WindowsやAdobe InDesignのようなプロプライエタリ・ソフトウェアが嫌いである。
+と言うと、聞こえが悪いかもしれない。
+しかしそれを承知で、嫌いであることを明言したい。
+
+さて、私のラップトップPCには、既にArchLinuxが入っていた。
+一方で、デスクトップPCはWindowsのままであった。
+これは、ゲームができなくなることや、Windowsマシンを失うことの「恐れ」のためであった。
+
+現状Windowsのシェアが大きいことは事実である。
+また、特にゲームのような「楽しんでもらうこと」が優先されるアプリケーションは、実行の容易化が大前提となる。
+これらのことから、ゲーム制作の趣味もある私は、世界中の人々がLinuxを使うようになるまで、Windowsを持ち続けなければならない。
+
+ある日、度重なるWindows11の広告に嫌気が差し、Ubuntuとのデュアルブートを検討した。
+その手段を調べていたところ、「デュアルブートは危険であるから、ドライブを分けるべきだ」 という文言を見かけた。
+同学の先輩がXubuntuマシンをUSBメモリに再現していたことを思い出し、自分もやってみようと思い立った。 
+
+
+
+## Windows To Go
+
+デスクトップPCのマザーボードのSSDスロットに空きがないことを確認し、256GBの外付けSSDを購入した。
+一応、SSDの品名を次に示す：[Buffalo SSD-PUT250U3-B/N](https://www.buffalo.jp/product/detail/ssd-put250u3-b_n.html)。
+
+Windowsを別マシンへインストールするには、ディスクイメージが必要となる。
+これは、Windowsマシンがあれば簡単に・かつ無料で行える。
+[Microsoftの公式サイト](https://www.microsoft.com/ja-jp/software-download/windows10)からツールをダウンロードし、.isoファイルを作成すればいい。
+
+通常、WindowsはUSBメモリや外付けSSDにインストールできないという。
+かつて、これをサポートする「Windows To Go」があったが、
+[Microsoft公式](https://learn.microsoft.com/ja-jp/windows/deployment/planning/windows-to-go-overview)によれば近年のWindowsでは廃止されたようである。
+この問題を解決するために、「[Rufus](https://rufus.ie/ja/)」というアプリケーションを用いて、SSDへWindowsをインストールした。
+
+UEFIからブート優先順位を変更し、外付けSSDからWindowsを起動した。
+完全にセットアップされるまで、以下の数だけ再起動を行った。
+再起動の度に、内蔵SSDが最優先されるようブート優先順位が上書きされていたため、都度、変更し直した。
+
+1. ブラックスクリーンから自動で再起動
+1. 簡単なセットアップ
+1. 完全なセットアップ
+
+以上で、外付けSSDからWindowsを起動できるようになった。
+デュアルブート特有の危険性を排除した他に、
+ラップトップPCからもWindowsを起動できるようになったのは、嬉しいことである。
+
+
+
+## Ubuntu 22.04.1
+
+タスクの多いArchLinuxのインストールに比べ、親切なUbuntuのインストールは、書くことがない。
+そう思っていた。
+
+Ubuntu22.04.1をインストールした。
+インストール自体は難なく終了し、gitやgccやrustupやをインストールし、
+普段遣いできるまでに環境構築をした。
+二枚目のモニターと接続し、デュアルモニタリングができることを確認した。
+一安心して再起動すると、一枚目のモニターが紫色に染まっていた。
+
+<Image
+  src="https://img.skdassoc.work/posts/windows-to-ubuntu/01.png"
+  caption="紫色に染まったboot画面"
+/>
+
+この異常性は、ブート時にも発生することから知れるだろう。
+当然ながら、Graphicalなデスクトップ画面でも、この状態は継続する。
+以下に環境・状況を示す。
+
+- OS: Ubuntu 22.04.1
+- CPU: AMD Ryzen 5 3600
+- GPU: Nvidia GeForce GTX 1650
+- 問題のあるディスプレイ
+  - IODATA LCD-MF244X
+  - GPUにDVIで接続
+  - 2番
+  - プライマリモニターとして設定
+- 問題のないディスプレイ
+  - IODATA EX-LDH221D
+  - GPUにHDMIで接続
+  - 1番
+  - セカンダリモニターとして設定
+- LCD-MF244Xのみ、あるいはEX-LDH221Dのみで正常に動作する
+- LCD-MF244Xのみで起動後、EX-LDH221Dを接続して正常に動作する
+
+以下のことをしたが、解決しなかった。
+
+- 起動時にlinuxへnomodesetを渡すようgrubを編集->LCD-MF244Xが無信号に
+- 起動時にlinuxへnvidia-drm.modeset=1を渡すようgrubを編集
+- ubuntu-drivers autoinstall->installerがクラッシュ
+- apt install nvidia*
+- 推奨されるドライバを決め打ちでインストール
+- デバイスのカラープロファイルを変更
+- Windowsが生成したカラープロファイルを適応
+- nvidia color settings->色の項目がない
+
+とはいえ、シングルモニターは、多少不便である程度である。
+従って、泣き寝入りにはなるが、暫くはシングルモニターで生活しようと思う。
+
+仮にGPUがNVIDIA製であるがために起きている問題であるならば、
+Linus Torvalds氏が _"NVIDIA Fuck You!"_ と言っていたのも、
+なにかわかるような気がする。
+
+
+
+## Resolved problem (2022/11/24)
+
+上の問題が解決した。推奨されるドライバの決め打ちインストールが正解であった。
+Secure Bootを無効化しなければならなかったが、無効化画面をそれと知らずにスキップしていたのが問題であった。
+以下に解決手順を示す。
+
+1. アクセシビリティから「driver」と検索し「追加のドライバー」を起動
+1. 「検証済み」のドライバーを選択し「変更の適用」(私の場合nvidia-driver-520-open)
+1. Secure Bootを無効化するための一時パスワードを設定
+1. 再起動
+1. 普段と違う画面が起動する
+1. 「Enroll MOK」を選択
+1. 「Continue」を選択
+1. 「Yes」を選択
+1. 一時パスワードを入力
+1. 「Reboot」を選択
+
+nvidia-driver-520-openはプロプライエタリ・ソフトウェアである。
+つまり、Linux開発者が辛酸を舐めながら開発した代替ドライバは、十全ではなかったということである。
+せめて、プロプライエタリを突き通すならば、Secure Bootが有効でも利用可能であって欲しいところだ。
+
+
+
+## Progress Report (2023/9/25)
+
+Windowsを入れたSSDは、酷使ゆえかパフォーマンスが劇的に低迷し、もはや使い物にならなくなった。
+SSDを使っても急場しのぎにしかならないらしい。
+
+
+
+## 参考文献
+
+- [オッサンLABO『外付けSSD にWindows10をインストールしてみた結果』](https://ossan-labo.site/pc/ssd-windows/)
