@@ -1,0 +1,83 @@
+---
+layout: ../../layouts/PostLayout.astro
+title: "ウィンドウアプリケーションの列挙"
+tags: ["windowsapi"]
+date: "2023/2/14"
+---
+
+## 概要
+
+バイト先で、アプリケーションごとにロジックを切り替えるシステムを作ることになった。
+どうもネットで調べてすぐに分かるようなAPIだけでは、十分なウィンドウ選別ができないようで、三時間程度を試行錯誤だけで過ごしてしまった。
+先輩に相談したところ、先輩はOBSのソースコードを辿り、あっという間に問題を解決した。
+
+Windows10は、「電卓」や「設定」など幾つかのUWPアプリを待機させている。
+このような待機中・バックグラウンドアプリを排除するために、ウィンドウがCloaked（隠されている）であるかを確認する必要があったようである。
+
+尚、「電卓」や「設定」は、UWPアプリなるもので、元来のアプリとは異なる体系のアプリであるらしい。
+流石は混沌のWindowsである。
+WindowsやC言語に限らず、何事にも言える話であるが、後方互換性を気にするがあまりに混沌を極めるのは、非難されて然るべき状態である。
+統括的な万能の道具は愚かである。
+真に必要なのは、可用的な最小限の道具群である。
+
+
+
+## 解法
+
+次の流れで実現できる。
+
+1. EnumWindows()関数及びパラメータとして渡すコールバック関数を用いて、ウィンドウハンドルを取得する
+1. 取得したウィンドウハンドルに対し、以下の条件で選別を行う
+    - 可視状態である
+    - 無名ウィンドウでない
+    - 子ウィンドウでない
+    - Cloakedなウィンドウでない
+    - Program Managerでない
+
+ウィンドウアプリケーションのウィンドウタイトルを列挙するプログラムのソースコードを以下に示す。
+言語はC言語であり、一応GNU C Compilerを想定している。
+
+```c
+#include <windows.h>
+#include <dwmapi.h>
+#include <stdio.h>
+#include <string.h>
+
+BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM lp) {
+    // skip invisible window
+    if (!IsWindowVisible(hWnd)) {
+        return TRUE;
+    }
+    // skip nameless window
+    CHAR title[256] = {};
+    int res_gwt = GetWindowTextA(hWnd, (LPSTR)title, 256);
+    if (!res_gwt || strlen(title) == 0) {
+        return TRUE;
+    }
+    // skip child window
+    DWORD styles = (DWORD)GetWindowLongPtrA(hWnd, GWL_STYLE);
+    if (styles &amp; WS_CHILD) {
+        return TRUE;
+    }
+    // skip cloaked window
+    DWORD cloaked;
+    HRESULT res_dgwa = DwmGetWindowAttribute(hWnd, DWMWA_CLOAKED, &amp;cloaked, sizeof(DWORD));
+    if (res_dgwa != S_OK || cloaked) {
+        return TRUE;
+    }
+    // skip Program Manager
+    CHAR classname[256] = {};
+    int res_gcn = GetClassName(hWnd, (LPSTR)classname, 256);
+    if (!res_gcn || strcmp(classname, "Progman") == 0) {
+        return TRUE;
+    }
+    // finish
+    printf("%s\n", title);
+    return TRUE;
+}
+
+int main() {
+    EnumWindows(EnumWindowsProc, (LPARAM)NULL);
+    return 0;
+}
+```
