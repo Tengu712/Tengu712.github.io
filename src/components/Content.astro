@@ -10,6 +10,7 @@
         flex-flow: column;
         flex-grow: 1;
 		box-sizing: border-box;
+        /* 600px:0.75 800px:3 */
 		padding: clamp(0.75rem, -6rem + 18vw, 3rem);
 		width: 100%;
         height: 100%;
@@ -25,15 +26,13 @@
     .content b {
         color: red;
     }
-    .content h1 {
-        font-size: clamp(1.25rem, -1rem + 6vw, 2rem);
-    }
     .content h2 {
         margin-top: 5rem;
         padding: 0.25rem 0.8rem;
         background: transparent;
         border-left: solid 0.5rem black;
-        font-size: clamp(1.25rem, -0.25rem + 4vw, 1.75rem);
+        /* 600px:1.25 800px:1.5 */
+        font-size: clamp(1.25rem, 0.5rem + 2vw, 1.5rem);
     }
     .content h3 {
         margin-top: 2rem;

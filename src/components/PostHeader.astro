@@ -20,6 +20,7 @@ const {title, tags, date} = Astro.props;
 </div>
 <style is:global>
 	.post-header .title {
+        /* 600px:1.25 800px:2 */
         font-size: clamp(1.25rem, -1rem + 6vw, 2rem);
         font-weight: bold;
     }
@@ -30,6 +31,7 @@ const {title, tags, date} = Astro.props;
     .post-header .tags-date {
         display: flex;
         color: gray;
+        /* 600px:0.8 800px:1 */
         font-size: clamp(0.8rem, 0.2rem + 1.6vw, 1rem);
         white-space: nowrap;
         overflow-x: scroll;
