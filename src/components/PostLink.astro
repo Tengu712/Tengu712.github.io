@@ -1,0 +1,56 @@
+---
+interface Props {
+    id: string;
+    title: string;
+    tags: string[];
+    date: string;
+}
+
+const {id, title, tags, date} = Astro.props;
+---
+
+<div class="post-link">
+    <div class="title">
+        <a href={`/posts/${id}`}>{title}</a>
+    </div>
+    <div class="tags-date">
+        <div class="tags">
+            {tags.map(tag => (<span>#{tag} </span>))}
+        </div>
+        <div class="date">{date}</div>
+    </div>
+</div>
+<style is:global>
+    .post-link {
+        margin-bottom: 1rem;
+    }
+	.post-link .title {
+        /* 600px:1.25 800px:1.5 */
+        font-size: clamp(1.25rem, 0.5rem + 2vw, 1.5rem);
+        font-weight: bold;
+    }
+    .post-link .title a {
+        color: black;
+        text-decoration: none;
+    }
+    .post-link .title a:hover {
+        color: red;
+        text-decoration: none;
+    }
+    .post-link .tags-date {
+        display: flex;
+        color: gray;
+        /* 600px:0.8 800px:1 */
+        font-size: clamp(0.8rem, 0.2rem + 1.6vw, 1rem);
+        white-space: nowrap;
+        overflow-x: scroll;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    .post-link::-webkit-scrollbar {
+        display: none;
+    }
+    .post-link .date {
+        margin-left: auto;
+    }
+</style>
