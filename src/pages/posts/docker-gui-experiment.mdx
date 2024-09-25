@@ -1,0 +1,174 @@
+---
+layout: ../../layouts/PostLayout.astro
+title: "Docker GUIアプリ実行検証"
+tags: ["docker", "experiment", "wsl"]
+date: "2024/06/20"
+---
+
+## 概要
+
+ソフトウェア開発をしていると、開発・実行に必要な依存ソフトウェアをインストールする必要が生じる。
+それがそのプロジェクトのみに対して有効であるならば良い。
+しかし、特にランタイムに関して、そうであるとは限らない。
+そのため、「あるプロジェクトを進行していたために、偶然にも他のプロジェクトを上手く進行できていた」という不都合が発生するのである。
+このような不都合のうち、ソフトウェアの実行環境について解決する技術こそが、Dockerである。
+――と、私は理解している。
+
+さて、DockerはGUIアプリケーションの実行に弱いという問題点を持つ。
+Dockerコンテナの需要あるいはまたGUIアプリケーションの需要を見るに、GUIアプリケーションをコンテナ化したところで、とりわけメリットがあるわけでもない。
+この問題が解決するのは遠い未来だろうと思わざるを得ない。
+しかし、GUIアプリケーションもコンテナ化できるのであれば、できるに越したことはない。
+Vulkanを試用するためにvulkan-toolsをインストールする必要も、ゲームを起動するためにlibglfw3をインストールする必要もなくなるのだから。
+
+以上、Docker(と言うより仮想化技術)への期待を込めて、DockerコンテナによるGUIアプリケーション実行のパフォーマンス検証を行った。
+その結果を本記事に記す。
+
+<div style="text-align: center;">
+[ソースコードはこちら](https://github.com/Tengu712/docker-gui-experiment)
+</div>
+
+
+
+## Windowsにおける検証
+
+仮想化する以上、主要OSすべてで動いて欲しい。
+そのため、敢えてWindowsでも検証を行った。
+
+- Windows 10 Home
+- AMD Ryzen 5 3600
+- NVIDIA GeForce GTX 1650
+
+ホストOSがWindowsである場合、GUIアプリケーションの実行には、WSLgを用いる方法とVcXsrvを用いる方法の二つがある。
+しかし、前者を採用するのが良いだろうと考えられる。
+これは、両者のできること・できないことは同じであり、後者はパフォーマンスが下がるかつVcXsrvを入れる都合上ホストの環境が汚れるためである。
+
+
+
+## ソフトウェアレンダリング
+
+X Serverを用いる。
+この都合上、WSLgを用いる場合は次の設定が必要である。
+
+```yaml
+    environment:
+      - DISPLAY=$DISPLAY
+    volumes:
+        - type: bind
+          source: /tmp/.X11-unix
+          target: /tmp/.X11-unix
+```
+
+Linuxでは上に加え、次の設定が必要である。
+
+```yaml
+    user: $DOCKER_USER
+```
+
+一方、VcXsrvを用いる場合は次の設定が必要である。
+
+```yaml
+    environment:
+      - DISPLAY=host.docker.internal:0.0
+```
+
+描画のパフォーマンスは許容範囲であった。
+しかし、特にVcXsrvを用いる場合、入力のパフォーマンスは悪いように感ぜられた。
+  
+
+
+## ハードウェアレンダリング
+
+GPUを用いるには厄介な設定が必要である。
+WSLgを用いる場合、NVIDIA Container Toolkitをインストールした上で、次の設定が必要である。
+
+```yaml
+    environment:
+      - DISPLAY=$DISPLAY
+      - LD_LIBRARY_PATH=/usr/lib/wsl/lib
+    volumes:
+      - type: bind
+        source: /tmp/.X11-unix
+        target: /tmp/.X11-unix
+      - type: bind
+        source: /mnt/wslg
+        target: /mnt/wslg
+      - type: bind
+        source: /usr/lib/wsl
+        target: /usr/lib/wsl
+    devices:
+      - /dev/dxg:/dev/dxg
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+```
+
+VcXsrvを用いる場合、次の設定が必要である。
+
+```yaml
+    environment:
+      - DISPLAY=host.docker.internal:0.0
+      - LD_LIBRARY_PATH=/usr/lib/wsl/lib
+    volumes:
+      - type: bind
+        source: /usr/lib/wsl
+        target: /usr/lib/wsl
+    devices:
+      - /dev/dxg:/dev/dxg
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+```
+
+Linuxでは、 `--gpus all` フラグが必要であるためか、Composeによる実行ができなかった。
+そのため、次のシェルスクリプトによって実行した。
+
+```yaml
+#!/bin/bash
+
+if [ -z $(docker image ls -q Tengu712/docker-gui-experiment/glxgears) ]; then
+    docker build -t Tengu712/docker-gui-experiment/glxgears .
+fi
+
+docker run \
+    --gpus all \
+    --user $DOCKER_USER \
+    --env DISPLAY=$DISPLAY \
+    --env NVIDIA_VISIBLE_DEVICES=all \
+    --env NVIDIA_DRIVER_CAPABILITIES=all \
+    --mount type=bind,source=/tmp/.X11-unix,target=/tmp/.X11-unix \
+    Tengu712/docker-gui-experiment/glxgears
+```
+
+これにより、ベンダー名「Microsoft Corporation」、デバイス名「D3D12 (NVIDIA GeForce GTX 1650)」としてGPUが認識された。
+ただし、NVIDIA以外のGPUでは検証していない。
+
+まず、OpenGLのパフォーマンスに関して、ホストOSがWindowsであると垂直同期が効かなかった。
+そのため、glxgearsもopenglも700FPS (WSLg)や90FPS (VcXsrv)で回転する。
+リフレッシュレート60 FPSを決め打ちしてロジックを動かすアプリケーションは、想定外の動作をすることになる。
+尚、ホストOSがLinuxであると垂直同期が取られた。
+
+また、Vulkanのローダが動作しない。
+vkcubeもvulkaninfoもvkCreateInstance()時点で失敗し起動すらしない。
+nvidia/vulkanイメージを使っても、ベースイメージをArchlinuxにしてvulkan-icd-loaderとnvidiaをインストールしても、結果は変わらなかった。
+mesa-vulkan-driversをインストールすればllvmpipeというデバイスにより実行できるようになるが、llvmpipeはCPUであり、矢張り垂直同期が取られない。
+
+
+
+## 結論
+
+学習目的には使えるが、実用には向かない。
+また、Vulkanには使えない。
+GUIアプリケーションがコンテナ化されるのは、まだ遠い未来のことだろう。
+
+
+
+## 参考文献
+
+- [Ubuntu on WSL2でのDocker Engineの最短インストール手順](https://qiita.com/nujust/items/d7cd395baa0c5dc94fc5)
+- [Dockerの初歩と詰まったことへの備忘録](https://qiita.com/Yuya-Shimizu/items/f0ace02062cc13e9d54b)
+- [Installing the NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
+- [WSLg を使って Docker 上で GUI アプリを動かす（GPUサポート付き）](https://blog.mohyo.net/2022/02/11591/)
