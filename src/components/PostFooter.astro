@@ -22,7 +22,7 @@ const prev = index + 1 < posts.length ? sortedPosts[index + 1] : undefined;
 			<div class="next">
 				<div>Next Article</div>
 				<div>
-					<A href={`./${getId(next!.file)}`}>{next!.frontmatter.title}</a>
+					<A href={`/posts/${getId(next!.file)}`}>{next!.frontmatter.title}</a>
 				</div>
 			</div>
 		}
@@ -30,7 +30,7 @@ const prev = index + 1 < posts.length ? sortedPosts[index + 1] : undefined;
 			<div class="prev">
 				<div>Prev Article</div>
 				<div>
-					<A href={`./${getId(prev!.file)}`}>{prev!.frontmatter.title}</a>
+					<A href={`/posts/${getId(prev!.file)}`}>{prev!.frontmatter.title}</a>
 				</div>
 			</div>
 		}
