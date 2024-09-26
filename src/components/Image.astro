@@ -8,8 +8,10 @@ const {src, caption} = Astro.props;
 
 <div class="image">
 	<img src={src}>
-	<br>
-	<label>{caption}</label>
+	{caption &&
+		<br>
+		<label>{caption}</label>
+	}
 </div>
 <style>
 	.image {

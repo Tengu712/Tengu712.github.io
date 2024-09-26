@@ -1,0 +1,118 @@
+---
+const { frontmatter } = Astro.props;
+---
+
+<!doctype html>
+<html lang="ja">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{frontmatter.title}</title>
+	</head>
+	<body>
+		<div id="content-wrapper">
+			<slot />
+		</div>
+	</body>
+</html>
+<style is:global>
+	html,
+	body {
+		-webkit-text-size-adjust: 100%;
+		font-family: 'Noto Sans JP', sans-serif;
+		background-color: black;
+		color: white;
+		font-size: 16px;
+		margin: 0;
+		height: 100vh;
+		#content-wrapper {
+			margin: 0 auto;
+			/* 600px:0.75 800px:3 */
+			padding: clamp(0.75rem, -6rem + 18vw, 3rem);
+			max-width: 800px;
+			word-wrap : break-word;
+			overflow-wrap : break-word;
+		}
+	}
+
+	a {
+		color: red;
+	}
+	b,
+	strong {
+		color: red;
+	}
+	h1 {
+		/* 600px:1.25 800px:2 */
+		font-size: clamp(1.25rem, -1rem + 6vw, 2rem);
+	}
+	h2 {
+		margin-top: 5rem;
+		padding: 0.25rem 0.8rem;
+		background: transparent;
+		border-left: solid 0.5rem white;
+		/* 600px:1.25 800px:1.5 */
+		font-size: clamp(1.25rem, 0.5rem + 2vw, 1.5rem);
+	}
+	h3 {
+		margin-top: 2rem;
+	}
+	hr {
+		width: 100%;
+	}
+	table {
+		max-width: 90%;
+		margin: 0 auto;
+		border-collapse: collapse;
+		thead tr {
+			border-top: 1px solid white;
+			border-bottom: 1px solid white;
+		}
+		tbody tr {
+			border-bottom: 1px solid white;
+		}
+		td,
+		th {
+			border: 1px solid white;
+			border-top: none;
+			border-bottom: none;
+			padding: 0 0.5rem;
+			white-space: nowrap; 
+		}
+		td:first-child,
+		th:first-child {
+			border-left: none;
+		}
+		td:last-child,
+		th:last-child {
+			border-right: none;
+			white-space: normal;
+		}
+	}
+	/* max-widthをclampで指定できなかったので */
+	@media (max-width: 600px) {
+		table {
+			max-width: 100%;
+		}
+	}
+	.sc {
+		overflow: scroll;
+	}
+	small {
+		font-size: 0.8em;
+		color: gray;
+	}
+	.two-images-container {
+		display: flex;
+		width: 100%;
+		div {
+			width: 50%;
+			padding: 0.5%;
+			img {
+				width: 100%;
+			}
+		}
+	}
+</style>
