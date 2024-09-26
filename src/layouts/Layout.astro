@@ -9,11 +9,14 @@ interface Props {
 }
 
 const { title, topImage } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogpImageURL = new URL('/ogp.png', canonicalURL);
 ---
 
 <!doctype html>
 <html lang="ja">
-	<head>
+	<head prefix="og: https://ogp.me/ns#">
+		<meta property="og:image" content={ogpImageURL} />
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" href="/favicon.ico" />
