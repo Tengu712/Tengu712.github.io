@@ -9,7 +9,7 @@ interface Props {
 }
 
 const { title, topImage } = Astro.props;
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const canonicalURL = new URL(Astro.url.pathname, 'https://skdassoc.com/');
 const ogpImageURL = new URL('/ogp.png', canonicalURL);
 ---
 
