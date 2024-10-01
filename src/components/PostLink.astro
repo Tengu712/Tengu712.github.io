@@ -1,5 +1,6 @@
 ---
 import A from './A.astro';
+import TagsDate from './TagsDate.astro';
 
 interface Props {
 	id: string;
@@ -15,13 +16,7 @@ const {id, title, genre, tags, date} = Astro.props;
 	<div class="title">
 		<A href={`/posts/${id}`}>{title}</a>
 	</div>
-	<div class="tags-date">
-		<div class="tags">
-			<span>${genre} </span>
-			{tags.map(tag => (<span>#{tag} </span>))}
-		</div>
-		<div class="date">{date}</div>
-	</div>
+	<TagsDate genre={genre} tags={tags} date={date} />
 </div>
 <style>
 	.post-link {
@@ -30,19 +25,6 @@ const {id, title, genre, tags, date} = Astro.props;
 			/* 600px:1.25 800px:1.5 */
 			font-size: clamp(1.25rem, 0.5rem + 2vw, 1.5rem);
 			font-weight: bold;
-		}
-		.tags-date {
-			display: flex;
-			color: gray;
-			/* 600px:0.8 800px:1 */
-			font-size: clamp(0.8rem, 0.2rem + 1.6vw, 1rem);
-			white-space: nowrap;
-			overflow-x: scroll;
-			scrollbar-width: none;
-			-ms-overflow-style: none;
-			.date {
-				margin-left: auto;
-			}
 		}
 	}
 	.post-link::-webkit-scrollbar {

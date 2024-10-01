@@ -1,0 +1,41 @@
+---
+interface Props {
+	genre: string;
+	tags: string[];
+	date: string;
+}
+const {genre, tags, date} = Astro.props;
+---
+
+<div class="tags-date">
+	<div class="tags">
+		<span>
+			<a href={`/?filter=${genre}`}>${genre} </a>
+		</span>
+		{tags.map(tag => (
+			<span>
+				<a href={`/?filter=${tag}`}>#{tag} </a>
+			</span>
+		))}
+	</div>
+	<div class="date">{date}</div>
+</div>
+<style>
+	.tags-date {
+		display: flex;
+		color: gray;
+		/* 600px:0.8 800px:1 */
+		font-size: clamp(0.8rem, 0.2rem + 1.6vw, 1rem);
+		white-space: nowrap;
+		overflow-x: scroll;
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+		.tags a {
+			color: gray;
+			text-decoration: none;
+		}
+		.date {
+			margin-left: auto;
+		}
+	}
+</style>

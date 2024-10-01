@@ -11,7 +11,7 @@ function getId(pathname: string): string {
 ---
 
 <Layout title={frontmatter.title}>
-	<PostHeader title={frontmatter.title} tags={frontmatter.tags} date={frontmatter.date} />
+	<PostHeader title={frontmatter.title} genre={frontmatter.genre} tags={frontmatter.tags} date={frontmatter.date} />
 	<slot />
 	<PostFooter id={getId(Astro.url.pathname)} />
 </Layout>
