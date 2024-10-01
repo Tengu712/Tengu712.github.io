@@ -4,10 +4,11 @@ import A from './A.astro';
 interface Props {
 	id: string;
 	title: string;
+	genre: string;
 	tags: string[];
 	date: string;
 }
-const {id, title, tags, date} = Astro.props;
+const {id, title, genre, tags, date} = Astro.props;
 ---
 
 <div class="post-link">
@@ -16,6 +17,7 @@ const {id, title, tags, date} = Astro.props;
 	</div>
 	<div class="tags-date">
 		<div class="tags">
+			<span>${genre} </span>
 			{tags.map(tag => (<span>#{tag} </span>))}
 		</div>
 		<div class="date">{date}</div>

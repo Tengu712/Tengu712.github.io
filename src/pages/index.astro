@@ -12,6 +12,7 @@ const posts = await Astro.glob('./posts/*.mdx');
 		.map(post => (<PostLink
 			id={getId(post.file)}
 			title={post.frontmatter.title}
+			genre={post.frontmatter.genre}
 			tags={post.frontmatter.tags}
 			date={post.frontmatter.date}
 		/>))}
