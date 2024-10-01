@@ -18,7 +18,7 @@ VulkanのAPIは主に、オブジェクトのハンドルと関数だけであ�
 Fenceを作成するには、vkCreateFence関数の第一引数に論理デバイスVkDeviceを渡す。
 
 ```c
-vkCreateFence(device, &amp;fence_create_info, NULL, &amp;fence);
+vkCreateFence(device, &fence_create_info, NULL, &fence);
 ```
 
 一方で、COMのAPIは、オブジェクト指向なインターフェースである。
@@ -40,7 +40,7 @@ device->lpVtbl->CreateFence(
     0,
     D3D12_FENCE_FLAG_NONE,
     __uuidof(ID3D12Fence),
-    (void **)&amp;fence
+    (void **)&fence
 );
 ```
 
@@ -176,5 +176,5 @@ struct ID3D12Device {
   
 ```rust
 let mut fence = std::ptr::null();
-((*(*device).lpVtbl).CreateFence)(device, 0, D3D12_FENCE_FLAG_NONE, &amp;iid, &amp;mut fence);
+((*(*device).lpVtbl).CreateFence)(device, 0, D3D12_FENCE_FLAG_NONE, &iid, &mut fence);
 ```
