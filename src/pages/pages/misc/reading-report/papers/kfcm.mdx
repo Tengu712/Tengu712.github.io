@@ -1,0 +1,82 @@
+---
+layout: ../../../../../layouts/MdxLayout.astro
+---
+
+# Automated Kernel Fusion for GPU Based on Code
+
+_2024年10月22日読了_
+
+
+
+## Credit
+
+Junji Fukuhara and Munehiro Takimoto. 2022. Automated Kernel Fusion for GPU Based on Code Motion. In Proceedings of the 23rd ACM SIGPLAN/SIGBED International Conference on Languages, Compilers, and Tools for Embedded Systems (LCTES ’22), June 14, 2022, San Diego, CA, USA. ACM, New York, NY, USA,11 pages. https://doi.org/10.1145/3519941.3535078
+
+This work is licensed under a Creative Commons Attribution 4.0 International License.
+
+
+
+## Summary
+
+コードを移動することで従来より多くのカーネル融合を行う手法(KFCM)を提唱する。
+
+GPUプログラムにおいて、メモリアクセスはボトルネックとなる。これはカーネル融合によって改善される。しかし、カーネル呼出しが隣り合っていなければならないというのは、融合の機会が少ない。そのため、コード移動を行い、積極的に融合の機会を作る。
+
+
+
+## Note
+
+カーネル融合によってカーネル数が減り、起動オーバーヘッドが減る。
+カーネル融合によってデータの共有がしやすくなり、つまりメモリ読書が減る。
+
+### Backward Kernel Fusion
+
+まずBackward Kernel Fusionを行う。データフロー方程式(割愛)を解いて次の述語を求める。
+
+- $Launch(n)_{kls_K}$ ： `n` は $kls_K$ を持つ
+- $Transp(n)_{kls_K}$ ： `n` は $kls_K$ に対する変更ステートメントを持っていないかつ $kls_K$ 以外のいかなるカーネル起動ステートメントを持っていない
+- $NdSafe(n)_{kls_K}$ ： `n` の入口は $kls_K$ に関して下方向安全
+- $XdSafe(n)_{kls_K}$ ： `n` の出口は $kls_K$ に関して下方向安全
+- $XFusible(n, kls_K, kls_{K2})$ ： $K$ が `n` の出口において融合可能。つまり $kls_{K2}$ を持つ `n` が $XdSafe(n)_{kls_K}$ である
+- $NDnEarliest(n)_{kls_K}$ ： `n` の入口は $kls_K$ に関して下方向安全であり、それ以降のいかなるノードにも $kls_K$ を移動できない
+- $XDnEarliest(n)_{kls_K}$ ： `n` の出口は $kls_K$ に関して下方向安全であり、 `n` で $kls_K$ はkillされる
+- $NDelayed(n)_{kls_K}$ : `n` の入口まで $kls_K$ をdelay可能
+- $XDelayed(n)_{kls_K}$ : `n` の出口まで $kls_K$ をdelay可能
+- $NLatest(n)_{kls_K}$ ： $kls_K$ は `n` の入口にdelay可能であり、それ以上delayできない
+- $XLatest(n)_{kls_K}$ ： $kls_K$ は `n` の出口にdelay可能であり、それ以上delayできない
+
+計算が終わったら、
+
+1. $NLatest(n)_{kls_K}$ である `n` の入口と $XLatest(n)_{kls_K}$ である `n` の出口に $kls_K$ を挿入
+2. $XFusible(n, kls_K, kls_{K2})$ である `n` で $K$ と $K2$ を融合
+
+### Forward Kernel Fusion
+
+次にForward Kernel Fusionを行う。データフロー方程式(割愛)を解いて次の述語を求める。
+
+- $NSinkable(n)_{kls_K}$ : `n` の入口において $kls_K$ がsink可能
+- $XSinkable(n)_{kls_K}$ : `n` の出口において $kls_K$ がsink可能
+- $XFusible(n, kls_K, kls_{K2})$ ： $K$ が `n` の入口において融合可能。つまり $kls_{K2}$ を持つ `n` が $NSinkable(n)_{kls_K}$ である
+- $NInsert(n)_{kls_K}$ : $kls_K$ は `n` の入口にsink可能であり、それ以上sinkできない
+- $XInsert(n)_{kls_K}$ : $kls_K$ は `n` の出口にsink可能であり、それ以上sinkできない
+
+計算が終わったら、
+
+1. $NInsert(n)_{kls_K}$ である `n` の入口と $XInsert(n)_{kls_K}$ である `n` の出口に $kls_K$ を挿入
+2. $XFusible(n, kls_K, kls_{K2})$ である `n` で $K$ と $K2$ を融合
+
+
+
+## Impression
+
+お世話になった助教の博論。ACMのあのサイトから他の論文と同様にアクセスできるというのは、それだけで凄い権威を感じる。
+
+非常に読みやすい。多くの論文が「わざわざ言わなくても察してくれるだろう」と略記や省略をしがちであるのに対して、この論文ではせいぜい図示するときに略記がある程度である。
+
+カーネル融合すべきものだけを融合すべきという課題が残っているらしい。どうやら私はこの課題の一部に取り組むらしい。
+
+
+
+<div style="text-align: center">
+    [戻る](../../)
+</div>
