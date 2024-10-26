@@ -153,6 +153,8 @@ vim.api.nvim_create_autocmd("BufEnter", {
       vim.opt_local.autoindent = false
       vim.opt_local.smartindent = false
       vim.opt_local.smarttab = false
+      vim.opt_local.indentexpr = ""
+      vim.opt_local.indentkeys = ""
 
       local ftplugin_file = vim.env.LUNARVIM_CONFIG_DIR .. "/ftplugin/" .. vim.bo.filetype .. ".lua"
       if vim.fn.filereadable(ftplugin_file) == 1 then
@@ -164,7 +166,6 @@ vim.api.nvim_create_autocmd("BufEnter", {
 
 -- 便利なキーバインド
 lvim.keys.insert_mode["jj"] = "<ESC>"
-lvim.keys.normal_mode["<Leader>nt"] = ":Neotree<CR>"
 lvim.keys.normal_mode["<Leader><Leader>"] = ":HopWord<CR>"
 -- 分割画面の移動
 lvim.keys.normal_mode["<C-h>"] = "<C-w>h"
@@ -279,7 +280,7 @@ vim.cmd("filetype off")
 
 ## 未解決問題
 
-listcharsを"tab:->,trail:~"のように設定しているが、" >>>"や" ~~~"のようにshiftwidthの境界で一文字目が消える。
+listcharsを`tab:->,trail:~`のように設定しているが、` >>>`や` ~~~`のようにshiftwidthの境界で一文字目が消える。
 macOS+iTerm2でもWindows10+PowerShell7でも起こる。
 HackGen Console NFでもMS ゴシックでも起こる。
 純粋なneovimでは起こらない。
