@@ -1,0 +1,162 @@
+---
+layout: ../../layouts/PostLayout.astro
+title: "フォントレンダリング with ab_glyph"
+genre: "tech"
+tags: ["cg", "rust"]
+date: "2024/12/16"
+---
+
+_本記事は東京理科大学プログラミングサークル Advent Calendar 2024の16日目です。_
+
+# フォントレンダリング
+
+ゲームにおいて、フォント内の文字を画面に表示することをフォントレンダリングと言う。
+このフォントレンダリングのためには、予め文字をテクスチャアトラスにラスタライズしておく必要がある。
+また、このラスタライズはある程度コストがかかるものであるため、一度ラスタライズしたものをなるべく使い回したい。
+
+本記事ではフォントレンダリングを行う手法を解説する。
+尚、Rustを用いるものとする。
+
+## ラスタライズ
+
+ラスタライザとして[ab_glyph](https://crates.io/crates/ab_glyph)を用いて愚直に行う。
+
+ラスタライズ結果として以下のデータを取得するものとする。
+
+```rust
+struct RasterizeResult {
+    /// ビットマップ (RGBA)
+    texture: Vec<u8>,
+    /// ビットマップの幅
+    width: u32,
+    /// ビットマップの高さ
+    height: u32,
+    /// 左上原点で描画した際のX座標のオフセット
+    x_offset: f32,
+    /// 左上原点で描画した際のY座標のオフセット
+    y_offset: f32,
+    /// 文字の送り幅
+    advance: f32,
+}
+```
+
+まず、フォントを読み込む。このとき、フォントをスケールしておく。
+
+```rust
+let character_height = 24;
+
+let mut file = File::open(format!("/path/to/font.otf"))?;
+let mut buf = Vec::new();
+file.read_to_end(&mut buf)?;
+
+let font = FontVec::try_from_vec(buf)?;
+let font = font.as_scaled(PxScale::from(character_height));
+```
+
+グリフを取得する。
+このとき、空白文字はグリフがNoneとなる可能性がある。
+その場合は適当に結果を返す。
+次の例ではグリフが取得できないすべての文字に対して、1文字分の空白を返す。
+
+```rust
+let character = 'c';
+
+let Some(outlined_glyph) = font.outline_glyph(font.scaled_glyph(character)) else {
+    let width = font.h_advance(font.glyph_id(character)).ceil() as usize;
+    let height = 2;
+    let texture: Vec<u8> = vec![0x00; 4 * width * height];
+    return Ok(RasterizeResult {
+        texture,
+        width: width as u32,
+        height: height as u32,
+        x_offset: 0.0,
+        y_offset: 0.0,
+        advance: width as f32,
+    });
+};
+```
+
+ビットマップを作成する。
+次の例では文字がぴったり収まる大きさの真っ白のテクスチャを作成し、そのすべてのテクセルに対し透過度を設定する。
+
+```rust
+let width = outlined_glyph.px_bounds().width().ceil() as usize;
+let height = outlined_glyph.px_bounds().height().ceil() as usize;
+let mut texture = vec![0xff; 4 * width * height];
+
+outlined_glyph
+    .draw(|x, y, c| texture[4 * width * y as usize + 4 * x as usize + 3] = (c * 255.0) as u8);
+
+Ok(RasterizeResult {
+    texture,
+    width: width as u32,
+    height: height as u32,
+    x_offset: outlined_glyph.px_bounds().min.x,
+    y_offset: font.ascent() + outlined_glyph.px_bounds().min.y,
+    advance: font.h_advance(outlined_glyph.glyph().id),
+})
+```
+
+## テクスチャアトラスの管理
+
+前章で取得したビットマップをテクスチャアトラスのどこに描画するかを管理する必要がある。
+
+色々な方法が考えられるが、最も簡単なのは二次元グリッドで管理することだろう。
+この方法のデメリットは、ビットマップのサイズは文字によってバラバラであるため、大部分のテクセルが無駄になるという点である。
+また、異なるフォントサイズのビットマップに対応できない点も挙げられる。
+
+もう少し効率的に管理するには、可変長二次元配列で管理することだろう。
+つまり、各行の高さはその列の文字で最大のものを取り、各行の各列は左詰めに詰めていく。
+この方法のデメリットは、1個あるいは少数だけ高さのあるビットマップがあると、大部分のテクセルが無駄になるという点である。
+
+より効率的な手法は、良い感じにパッキングして管理することだろう。
+この方法のデメリットは、そもそも実装の難しさだろう。
+なるべく多くの文字が描画できるように適切な場所に描画する、というのは愚直な実装では返って効率が悪かろう。
+
+また、テクスチャアトラスが充足されたとき、新たなビットマップを描画するには上書きを行う必要がある。
+二次元グリッドまたは二次元配列で管理している場合は一文字ずつあるいは一行ずつクリアすれば良いだろう。
+パッキングして管理している場合は最も使われていないものを選択して上書きするのが良いだろう。
+
+この上書きが実はRustにおいて厄介者である。
+Rustでは可変参照を分配できないという性質がある都合上、クライアントのオブジェクトが常に正しい文字情報を参照できるようにするのが難しいのである。
+つまり、文字列コンポーネントのようなものを作って、しかし、文字情報のクリアが行われる可能性があるために、その時点での文字情報でキャッシュすることができないのである。
+そのためか、どうやら商用ゲームエンジンでは、実際に描画される文字列のテクスチャをさらに生成してキャッシュしておくのだそう。
+当然ながらそれもテクスチャアトラスに管理するのならばクリアが発生する可能性があるし、単体のテクスチャで管理するならばその分ドローコールが発生することになる。
+あるいは、愚直に解決するならば、少なくともラスタライズが発生するフレームにおいては、そのフレームで描画される文字がすべて絶対にテクスチャアトラス上に存在するようにリロードする。
+
+## 描画
+
+前々章で取得したビットマップの情報および前章で管理したテクスチャアトラス上のUV座標をもとに描画を行う。
+ビットマップのサイズが文字に依って変わることに注意する。
+
+```rust
+// 実際に描画したい座標を指定
+// 本例ではこの座標を左上原点に描画される
+let mut pos = Vec3::ZERO;
+// 実際に描画したい文章の高さとラスタライズ時の高さの比率
+let r = 32.0 / character_height;
+
+// すべての文字のスプライトを生成
+// bmp_uv_infosはVec<(RasterizeResult, UV)>とする
+for (rr, uv) in bmp_uv_infos {
+    // 実際に描画したい文章の高さに合わせてスケール
+    let w = rr.width * r;
+    let h = rr.height * r;
+    let ox = rr.x_offset * r;
+    let oy = rr.y_offset * r;
+    let ad = rr.advance * r;
+    // スプライトを決定
+    let scl = Vec3::new(w, h, 1.0);
+    let pos = Vec3::new(pos.x + w / 2.0 + ox, pos.y - h / 2.0 - oy, pos.z);
+    let uv = uv;
+    sprites.push(Sprite { scl, pos, uv });
+    // 文字送り
+    pos.x += ad;
+}
+```
+
+## さいごに
+
+やっぱフォントレンダリングって面倒だなあ。
+え、wgpu_textを使え？
+……存在を忘れていました。
