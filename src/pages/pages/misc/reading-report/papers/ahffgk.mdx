@@ -1,0 +1,30 @@
+---
+layout: ../../../../../layouts/MdxLayout.astro
+title: "Automatic Horizontal Fusion for GPU Kernels"
+---
+
+# Automatic Horizontal Fusion for GPU Kernels
+
+_2024年12月18日読了_
+
+## Credit
+
+Ao Li, Bojian Zheng, Gennady Pekhimenko, and Fan Long. 2022. Automatic horizontal fusion for GPU kernels. In Proceedings of the 20th IEEE/ACM International Symposium on Code Generation and Optimization (CGO '22). IEEE Press, 14–27. https://doi.org/10.1109/CGO53902.2022.9741270
+
+## Summary
+
+GPUカーネルの水平方向の融合手法の提案。垂直方向の融合が同じスレッドで複数カーネルを連続実行することでカーネル間のデータの受け渡しのためのグローバルメモリアクセスを減らすことが目的であるのに対し、水平方向の融合は同じブロックで複数カーネルを並列実行することで一方のカーネルが命令待ちをしている間に一方のカーネルを実行して効率を高めることが目的である。特に競合が起きないように異なるハードウェアリソースを利用するカーネル同士を融合すると効果覿面。ここでは、さらに、自動的にプロファイリングすることでより良い融合構成を設定する。
+
+## Note
+
+本論文のライセンス表記が見当たらないため、読書ノートは非公開。
+
+## Impression
+
+結構あっさりしているな、という印象を受けた。というのも、融合アルゴリズム自体が異様に簡単で、しかもどのカーネルを融合すべきかに関して触れられていないから（私が読み飛ばしている可能性は大いにあるが）。垂直方向の融合が隣接するカーネルしか融合できないのに比べ、所構わず融合を試みて良いと言っているのだろうか。それとも論文の範囲外なのだろうか。
+
+<p style="text-align: right">■</p>
+
+<div style="text-align: center">
+    [戻る](../../)
+</div>
