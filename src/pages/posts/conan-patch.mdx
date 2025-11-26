@@ -2,7 +2,7 @@
 layout: ../../layouts/PostLayout.astro
 title: "Conan2のパッケージにパッチを当てる"
 genre: "tech"
-tags: ["c++", "cmake", "conan", "package"]
+tags: ["c++", "build"]
 date: "2025/04/17"
 ---
 
@@ -30,7 +30,7 @@ date: "2025/04/17"
 2. パッケージの次のファイルを拝借：
     - conanfile.py
     - conandata.yml
-    - conan_deps.cmake
+    - 他あればファイル
 3. conanfile.pyを変更：
     - 名前を変更
     - バージョンを指定
@@ -331,7 +331,7 @@ class LibjxlConan(ConanFile):
 必要な次のファイルを同じ階層に拝借します：
 
 - conandata.yml: conanfile.pyと同じディレクトリにあるはず？　これがないと`self.conan_data`が`None`になる。
-- conan_deps.cmake: conanfile.pyに近いどこかにあるはず？　これがないとCMakeのコンフィグに失敗する。
+- conan_deps.cmake: conanfile.pyに近いどこかにあるはず？　これがないとCMakeのコンフィグに失敗する。( *他あればファイル* と書いたもの)
 
 新しく定義したパッケージをビルドします。
 
