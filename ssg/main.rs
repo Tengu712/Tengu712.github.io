@@ -19,7 +19,7 @@ fn replace_root_with_dist(path: &Path) -> PathBuf {
 
 fn ensure_dir(path: &Path) {
     if let Some(parent) = path.parent() {
-        fs::create_dir(parent).unwrap();
+        fs::create_dir_all(parent).unwrap();
     }
 }
 
