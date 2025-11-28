@@ -4,6 +4,7 @@ use markdown::{
     Constructs, ParseOptions,
     mdast::{Node, Yaml},
 };
+use serde::Deserialize;
 use std::{
     fs,
     path::{Path, PathBuf},
@@ -17,6 +18,17 @@ fn extract_frontmetter_yaml(mdast: &mut Node) -> Yaml {
         panic!("frontmatterが書かれてないやん: {:?}", mdast.position());
     };
     yaml
+}
+
+#[derive(Deserialize)]
+struct LayoutInFrontMatter {
+    layout: String,
+}
+
+fn get_layout_from(frontmatter_yaml: &Yaml) -> String {
+    serde_yaml::from_str::<LayoutInFrontMatter>(&frontmatter_yaml.value)
+        .unwrap()
+        .layout
 }
 
 fn mdast_to_html(node: &Node) -> String {
@@ -74,9 +86,9 @@ pub fn run(file_path: &Path) {
     };
     let mut mdast = markdown::to_mdast(&content, &options).unwrap();
 
-    // TODO: layout行き
-    let frontmatter = extract_frontmetter_yaml(&mut mdast);
-    println!("{:?}", frontmatter);
+    let frontmatter_yaml = extract_frontmetter_yaml(&mut mdast);
+    let layout = get_layout_from(&frontmatter_yaml);
+    println!("{}", layout);
 
     // TODO: layout
     let content = mdast_to_html(&mdast);
