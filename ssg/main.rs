@@ -1,4 +1,3 @@
-use glob::glob;
 use std::{
     fs,
     path::{Path, PathBuf},
@@ -37,7 +36,7 @@ fn write_file(content: &str, dst_path: &Path) {
 fn main() {
     clear_dist();
 
-    let file_paths = glob("./pages/**/*")
+    let file_paths = glob::glob("./pages/**/*")
         .unwrap()
         .map(|n| n.unwrap())
         .collect::<Vec<_>>();

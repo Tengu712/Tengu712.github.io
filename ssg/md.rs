@@ -1,6 +1,6 @@
 use super::{replace_root_with_dist, write_file};
 
-use markdown::{Constructs, ParseOptions, to_mdast};
+use markdown::{Constructs, ParseOptions};
 use std::{fs, path::Path};
 
 pub fn run(file_path: &Path) {
@@ -20,7 +20,7 @@ pub fn run(file_path: &Path) {
         },
         ..Default::default()
     };
-    let _ = to_mdast(&content, &options).unwrap();
+    let _ = markdown::to_mdast(&content, &options).unwrap();
 
     write_file(content.as_str(), &replace_root_with_dist(file_path));
 }
