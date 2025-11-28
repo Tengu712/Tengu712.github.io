@@ -1,3 +1,3 @@
 fn main() {
-    println!("Hello, world!");
+    println!("{}", markdown::to_html("## Hi, *Saturn*! 🪐"));
 }

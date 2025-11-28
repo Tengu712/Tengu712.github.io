@@ -8,3 +8,4 @@ name = "ssg"
 path = "ssg/main.rs"
 
 [dependencies]
+markdown = "1.0.0"
