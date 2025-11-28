@@ -1,3 +1,4 @@
+use markdown::{to_mdast, Constructs, ParseOptions};
 use std::fs;
 
 struct Page {
@@ -13,5 +14,22 @@ impl Page {
 }
 
 fn main() {
-    println!("{}", markdown::to_html(&Page::from("pages/index.md").body));
+    let options = ParseOptions {
+        constructs: Constructs {
+            code_indented: false,
+            frontmatter: true,
+            html_flow: false,
+            html_text: false,
+            math_flow: true,
+            math_text: true,
+            mdx_jsx_flow: true,
+            mdx_jsx_text: true,
+            ..Default::default()
+        },
+        ..Default::default()
+    };
+    println!(
+        "{:?}",
+        to_mdast(&Page::from("pages/index.md").body, &options).unwrap()
+    );
 }
