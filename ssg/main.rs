@@ -1,35 +1,57 @@
-use markdown::{to_mdast, Constructs, ParseOptions};
-use std::fs;
+use glob::glob;
+use std::{
+    fs,
+    path::{Path, PathBuf},
+};
 
-struct Page {
-    body: String,
-}
+mod md;
 
-impl Page {
-    fn from(path: &str) -> Self {
-        Self {
-            body: fs::read_to_string(path).unwrap(),
-        }
+fn clear_dist() {
+    if Path::new("./dist").exists() {
+        fs::remove_dir_all("./dist").unwrap();
     }
 }
 
+fn replace_root_with_dist(path: &Path) -> PathBuf {
+    let mut new_path = PathBuf::from("dist");
+    new_path.extend(path.components().skip(1));
+    new_path
+}
+
+fn ensure_dir(path: &Path) {
+    if let Some(parent) = path.parent() {
+        fs::create_dir(parent).unwrap();
+    }
+}
+
+fn copy_file(src_path: &PathBuf, dst_path: &Path) {
+    ensure_dir(dst_path);
+    fs::copy(src_path, dst_path).unwrap();
+}
+
+fn write_file(content: &str, dst_path: &Path) {
+    ensure_dir(dst_path);
+    fs::write(dst_path, content).unwrap();
+}
+
 fn main() {
-    let options = ParseOptions {
-        constructs: Constructs {
-            code_indented: false,
-            frontmatter: true,
-            html_flow: false,
-            html_text: false,
-            math_flow: true,
-            math_text: true,
-            mdx_jsx_flow: true,
-            mdx_jsx_text: true,
-            ..Default::default()
-        },
-        ..Default::default()
-    };
-    println!(
-        "{:?}",
-        to_mdast(&Page::from("pages/index.md").body, &options).unwrap()
-    );
+    clear_dist();
+
+    let file_paths = glob("./pages/**/*")
+        .unwrap()
+        .map(|n| n.unwrap())
+        .collect::<Vec<_>>();
+
+    for file_path in file_paths {
+        if !file_path.is_file() {
+            continue;
+        }
+        if let Some(ext) = file_path.extension()
+            && ext == "md"
+        {
+            md::run(&file_path);
+        } else {
+            copy_file(&file_path, &replace_root_with_dist(&file_path));
+        }
+    }
 }
