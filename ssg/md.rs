@@ -1,10 +1,23 @@
 use super::{replace_root_with_dist, write_file};
 
-use markdown::{Constructs, ParseOptions, mdast::Node};
+use markdown::{
+    Constructs, ParseOptions,
+    mdast::{Node, Yaml},
+};
 use std::{
     fs,
     path::{Path, PathBuf},
 };
+
+fn extract_frontmetter_yaml(mdast: &mut Node) -> Yaml {
+    let Node::Root(root) = mdast else {
+        panic!("Rootじゃないやん: {:?}", mdast.position());
+    };
+    let Node::Yaml(yaml) = root.children.swap_remove(0) else {
+        panic!("frontmatterが書かれてないやん: {:?}", mdast.position());
+    };
+    yaml
+}
 
 fn mdast_to_html(node: &Node) -> String {
     match node {
@@ -59,7 +72,11 @@ pub fn run(file_path: &Path) {
         },
         ..Default::default()
     };
-    let mdast = markdown::to_mdast(&content, &options).unwrap();
+    let mut mdast = markdown::to_mdast(&content, &options).unwrap();
+
+    // TODO: layout行き
+    let frontmatter = extract_frontmetter_yaml(&mut mdast);
+    println!("{:?}", frontmatter);
 
     // TODO: layout
     let content = mdast_to_html(&mdast);
