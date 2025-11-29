@@ -10,11 +10,11 @@ use std::{
     path::{Path, PathBuf},
 };
 
-fn extract_frontmetter_yaml(mdast: &mut Node) -> Yaml {
+fn extract_frontmetter_yaml(mdast: &Node) -> &Yaml {
     let Node::Root(root) = mdast else {
         panic!("Rootじゃないやん: {:?}", mdast.position());
     };
-    let Node::Yaml(yaml) = root.children.swap_remove(0) else {
+    let Some(Node::Yaml(yaml)) = root.children.first() else {
         panic!("frontmatterが書かれてないやん: {:?}", mdast.position());
     };
     yaml
@@ -32,57 +32,84 @@ impl BasicFrontmatter {
     }
 }
 
-fn mdast_to_html(node: &Node) -> String {
+fn mdast_to_html(node: &Node, buf: &mut String) {
     match node {
-        Node::Root(n) => mdasts_to_html(&n.children),
-        Node::List(n) if n.ordered => format!("<ol>{}</ol>", mdasts_to_html(&n.children)),
-        Node::List(n) => format!("<ul>{}</ul>", mdasts_to_html(&n.children)),
-        Node::Delete(n) => format!("<del>{}</del>", mdasts_to_html(&n.children)),
-        Node::Emphasis(n) => format!("<em>{}</em>", mdasts_to_html(&n.children)),
-        Node::Html(n) => n.value.clone(),
-        Node::Image(n) => format!("<img src=\"{}\" alt=\"{}\" >", n.url, n.alt),
-        Node::Link(n) => format!("<a href=\"{}\">{}</a>", n.url, mdasts_to_html(&n.children)),
-        Node::Strong(n) => format!("<strong>{}</strong>", mdasts_to_html(&n.children)),
-        Node::Text(n) => n.value.clone(),
-        Node::Heading(n) => format!("<h{}>{}</h{0}>", n.depth, mdasts_to_html(&n.children)),
-        Node::ListItem(n) => format!("<li>{}</li>", mdasts_to_html(&n.children)),
-        Node::Paragraph(n) => format!("<p>{}</p>", mdasts_to_html(&n.children)),
-        _ => "".to_string(),
+        Node::Root(n) => mdasts_to_html(&n.children, buf),
+        Node::List(n) if n.ordered => {
+            buf.push_str("<ol>");
+            mdasts_to_html(&n.children, buf);
+            buf.push_str("</ol>");
+        }
+        Node::List(n) => {
+            buf.push_str("<ul>");
+            mdasts_to_html(&n.children, buf);
+            buf.push_str("</ul>");
+        }
+        Node::Yaml(_) => (),
+        Node::Delete(n) => {
+            buf.push_str("<del>");
+            mdasts_to_html(&n.children, buf);
+            buf.push_str("</del>");
+        }
+        Node::Emphasis(n) => {
+            buf.push_str("<em>");
+            mdasts_to_html(&n.children, buf);
+            buf.push_str("</em>");
+        }
+        Node::Html(n) => buf.push_str(&n.value),
+        Node::Image(n) => {
+            buf.push_str("<img src=\"");
+            buf.push_str(&n.url);
+            buf.push_str("\" alt=\"");
+            buf.push_str(&n.alt);
+            buf.push_str("\">");
+        }
+        Node::Link(n) => {
+            buf.push_str("<a href=\"");
+            buf.push_str(&n.url);
+            buf.push_str("\">");
+            mdasts_to_html(&n.children, buf);
+            buf.push_str("</a>");
+        }
+        Node::Strong(n) => {
+            buf.push_str("<strong>");
+            mdasts_to_html(&n.children, buf);
+            buf.push_str("</strong>");
+        }
+        Node::Text(n) => buf.push_str(&n.value),
+        Node::Heading(n) => {
+            buf.push_str(match n.depth {
+                1 => "<h1>",
+                2 => "<h2>",
+                3 => "<h3>",
+                d => panic!("h{d}タグは認めておらん"),
+            });
+            mdasts_to_html(&n.children, buf);
+            buf.push_str(match n.depth {
+                1 => "</h1>",
+                2 => "</h2>",
+                3 => "</h3>",
+                d => panic!("h{d}タグは認めておらん"),
+            });
+        }
+        Node::ListItem(n) => {
+            buf.push_str("<li>");
+            mdasts_to_html(&n.children, buf);
+            buf.push_str("</li>");
+        }
+        Node::Paragraph(n) => {
+            buf.push_str("<p>");
+            mdasts_to_html(&n.children, buf);
+            buf.push_str("</p>");
+        }
+        _ => (),
         // TODO:
         // _ => unimplemented!(),
     }
 }
 
-fn mdasts_to_html(node: &[Node]) -> String {
-    node.iter().map(mdast_to_html).collect()
-}
-
-fn generate_full_html(title: &str, content: &str) -> String {
-    const HTML_TITLE: &str = "\
-        <!DOCTYPE html>\
-        <html lang=\"ja\">\
-        <head>\
-            <meta charset=\"UTF-8\">\
-            <meta name=\"viewport\" content=\"width=device-width\">\
-            <link rel=\"icon\" href=\"/favicon.ico\">\
-            <title>\
-    ";
-    const TITLE_BODY: &str = "\
-            </title>\
-        </head>\
-        <body>\
-    ";
-    const BODY_HTML: &str = "\
-        </body>\
-        </html>\
-    ";
-
-    let mut html = HTML_TITLE.to_string();
-    html.push_str(title);
-    html.push_str(TITLE_BODY);
-    html.push_str(content);
-    html.push_str(BODY_HTML);
-    html
+fn mdasts_to_html(nodes: &[Node], buf: &mut String) {
+    nodes.iter().for_each(|node| mdast_to_html(node, buf));
 }
 
 fn determine_dst_path(src_path: &Path) -> PathBuf {
@@ -113,16 +140,36 @@ pub fn run(file_path: &Path) {
         },
         ..Default::default()
     };
-    let mut mdast = markdown::to_mdast(&content, &options).unwrap();
+    let mdast = markdown::to_mdast(&content, &options).unwrap();
 
-    let frontmatter_yaml = extract_frontmetter_yaml(&mut mdast);
-    let frontmatter = BasicFrontmatter::from(&frontmatter_yaml);
+    let frontmatter_yaml = extract_frontmetter_yaml(&mdast);
+    let frontmatter = BasicFrontmatter::from(frontmatter_yaml);
 
+    const HTML_TITLE: &str = "\
+        <!DOCTYPE html>\
+        <html lang=\"ja\">\
+        <head>\
+            <meta charset=\"UTF-8\">\
+            <meta name=\"viewport\" content=\"width=device-width\">\
+            <link rel=\"icon\" href=\"/favicon.ico\">\
+            <title>\
+    ";
+    const TITLE_BODY: &str = "\
+            </title>\
+        </head>\
+        <body>\
+    ";
+    const BODY_HTML: &str = "\
+        </body>\
+        </html>\
+    ";
+
+    let mut html = HTML_TITLE.to_string();
+    html.push_str(&frontmatter.title);
+    html.push_str(TITLE_BODY);
     // TODO: layout
-    let content = mdast_to_html(&mdast);
+    mdast_to_html(&mdast, &mut html);
+    html.push_str(BODY_HTML);
 
-    write_file(
-        &generate_full_html(&frontmatter.title, &content),
-        &determine_dst_path(file_path),
-    );
+    write_file(&html, &determine_dst_path(file_path));
 }
