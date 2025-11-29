@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "MakeのようなPythonデコレータ"
-genre: "tech"
+genre: "devenv"
 tags: ["build", "python"]
 date: "2025/11/26"
 ---

@@ -16,7 +16,8 @@ struct FrontMatter {
 const STYLE: &str = include_str!("../../../asset/style/post.css");
 const INDEX_STYLE: &str = include_str!("../../../asset/style/index.css");
 const META_STYLE: &str = include_str!("../../../asset/style/meta.css");
-const DEVENV: &str = include_str!("../../../asset/icon/heroicons-command-line.svg");
+const DEVENV: &str = include_str!("../../../asset/icon/heroicons-desktop-computer.svg");
+const PROG: &str = include_str!("../../../asset/icon/heroicons-command-line.svg");
 
 pub fn to_html(content: &Node, ctx: &mut Context) {
     let frontmatter = serde_yaml::from_value::<FrontMatter>(ctx.frontmatter_value.clone()).unwrap();
@@ -36,7 +37,13 @@ pub fn to_html(content: &Node, ctx: &mut Context) {
 
     ctx.buf.push_str("<div class=\"triad-center\">");
     ctx.buf.push_str("<div class=\"catch-icon\">");
-    ctx.buf.push_str(DEVENV);
+    if frontmatter.genre == "devenv" {
+        ctx.buf.push_str(DEVENV);
+    } else if frontmatter.genre == "prog" {
+        ctx.buf.push_str(PROG);
+    } else {
+        panic!("ジャンル{}はサポートしてないよ", frontmatter.genre);
+    }
     ctx.buf.push_str("</div>");
     ctx.buf.push_str("<h1>");
     ctx.buf.push_str(&frontmatter.title);
