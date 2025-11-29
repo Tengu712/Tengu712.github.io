@@ -1,0 +1,12 @@
+.triad {
+    display: flex;
+}
+
+.triad-side {
+    flex: 1;
+}
+
+.triad-center {
+    width: 100%;
+    max-width: 620px;
+}

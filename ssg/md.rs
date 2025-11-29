@@ -13,6 +13,7 @@ use std::{
 };
 
 mod code;
+mod layout;
 
 #[derive(Deserialize)]
 struct BasicFrontmatter {
@@ -145,14 +146,11 @@ pub fn to_html_segments(content: &str) -> Vec<StrOrString> {
     let mdast = markdown::to_mdast(content, &options).unwrap();
     let frontmatter = extract_frontmetter(&mdast);
 
-    // TODO: layout
-    let mut body = String::new();
-    mdast_to_html(&mdast, &mut body);
-
-    // TODO: collect styles
     let mut styles = HashSet::new();
     const MD_STYLE: &str = include_str!("../asset/style/md.css");
     styles.insert(StrPtr(MD_STYLE));
+
+    let body = layout::to_html(&frontmatter.layout, &mdast, &mut styles);
 
     const HTML_STYLE: &str = "\
         <!DOCTYPE html>\
