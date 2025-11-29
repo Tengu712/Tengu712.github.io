@@ -1,11 +1,10 @@
-use super::{replace_root_with_dist, write_file};
+//! Markdown文字列をHTML文字列に変換するモジュール
+//!
+//! - 変換に限らずMarkdownに関するものは取り敢えずこのモジュールの範囲
 
 use markdown::{Constructs, ParseOptions, mdast::Node};
 use serde::Deserialize;
-use std::{
-    fs,
-    path::{Path, PathBuf},
-};
+use std::path::{Path, PathBuf};
 
 #[derive(Deserialize)]
 struct BasicFrontmatter {
@@ -103,20 +102,18 @@ fn mdasts_to_html(nodes: &[Node], buf: &mut String) {
     nodes.iter().for_each(|node| mdast_to_html(node, buf));
 }
 
-fn determine_dst_path(src_path: &Path) -> PathBuf {
-    let mut dst_path = replace_root_with_dist(src_path);
-    if dst_path.file_stem().unwrap() == "index" {
-        dst_path.set_extension("html");
+pub fn to_index_html_path(path: &Path) -> PathBuf {
+    let mut path = PathBuf::from(path);
+    if path.file_stem().unwrap() == "index" {
+        path.set_extension("html");
     } else {
-        dst_path.set_extension("");
-        dst_path.push("index.html");
+        path.set_extension("");
+        path.push("index.html");
     }
-    dst_path
+    path
 }
 
-pub fn run(file_path: &Path) {
-    let content = fs::read_to_string(file_path).unwrap();
-
+pub fn convert_to_html(content: &str) -> String {
     let options = ParseOptions {
         constructs: Constructs {
             code_indented: false,
@@ -131,7 +128,7 @@ pub fn run(file_path: &Path) {
         },
         ..Default::default()
     };
-    let mdast = markdown::to_mdast(&content, &options).unwrap();
+    let mdast = markdown::to_mdast(content, &options).unwrap();
     let frontmatter = extract_frontmetter(&mdast);
 
     const HTML_TITLE: &str = "\
@@ -160,5 +157,5 @@ pub fn run(file_path: &Path) {
     mdast_to_html(&mdast, &mut html);
     html.push_str(BODY_HTML);
 
-    write_file(&html, &determine_dst_path(file_path));
+    html
 }

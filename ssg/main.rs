@@ -1,3 +1,9 @@
+//! IOを扱うモジュール
+//!
+//! - pages内のすべてのファイルをトラバースする
+//! - Markdownファイルが見つかればその対処をmdモジュールに委譲する
+//! - 各モジュールで使う汎用関数もここで定義する
+
 use std::{
     fs,
     path::{Path, PathBuf},
@@ -23,16 +29,6 @@ fn ensure_dir(path: &Path) {
     }
 }
 
-fn copy_file(src_path: &PathBuf, dst_path: &Path) {
-    ensure_dir(dst_path);
-    fs::copy(src_path, dst_path).unwrap();
-}
-
-fn write_file(content: &str, dst_path: &Path) {
-    ensure_dir(dst_path);
-    fs::write(dst_path, content).unwrap();
-}
-
 fn copy_publics() {
     let file_paths = glob::glob("./public/**/*")
         .unwrap()
@@ -41,7 +37,8 @@ fn copy_publics() {
     for file_path in file_paths {
         let mut dst_path = PathBuf::from("dist");
         dst_path.extend(file_path.components().skip(1));
-        copy_file(&file_path, &dst_path);
+        ensure_dir(&dst_path);
+        fs::copy(file_path, dst_path).unwrap();
     }
 }
 
@@ -60,9 +57,16 @@ fn main() {
         if let Some(ext) = file_path.extension()
             && ext == "md"
         {
-            md::run(&file_path);
+            let dst_path = md::to_index_html_path(&file_path);
+            let dst_path = replace_root_with_dist(&dst_path);
+            let content = fs::read_to_string(file_path).unwrap();
+            let content = md::convert_to_html(&content);
+            ensure_dir(&dst_path);
+            fs::write(dst_path, content).unwrap();
         } else {
-            copy_file(&file_path, &replace_root_with_dist(&file_path));
+            let dst_path = replace_root_with_dist(&file_path);
+            ensure_dir(&dst_path);
+            fs::copy(file_path, dst_path).unwrap();
         }
     }
 
