@@ -1,10 +1,16 @@
 //! Markdown文字列をHTML文字列に変換するモジュール
 //!
 //! - 変換に限らずMarkdownに関するものは取り敢えずこのモジュールの範囲
+//! - 実際はlayoutモジュールに委譲する
+
+use crate::strutil::*;
 
 use markdown::{Constructs, ParseOptions, mdast::Node};
 use serde::Deserialize;
-use std::path::{Path, PathBuf};
+use std::{
+    collections::HashSet,
+    path::{Path, PathBuf},
+};
 
 mod code;
 
@@ -121,7 +127,7 @@ pub fn to_index_html_path(path: &Path) -> PathBuf {
     path
 }
 
-pub fn convert_to_html(content: &str) -> String {
+pub fn to_html_segments(content: &str) -> Vec<StrOrString> {
     let options = ParseOptions {
         constructs: Constructs {
             code_indented: false,
@@ -139,13 +145,26 @@ pub fn convert_to_html(content: &str) -> String {
     let mdast = markdown::to_mdast(content, &options).unwrap();
     let frontmatter = extract_frontmetter(&mdast);
 
-    const HTML_TITLE: &str = "\
+    // TODO: layout
+    let mut body = String::new();
+    mdast_to_html(&mdast, &mut body);
+
+    // TODO: collect styles
+    let mut styles = HashSet::new();
+    const MD_STYLE: &str = include_str!("../asset/style/md.css");
+    styles.insert(StrPtr(MD_STYLE));
+
+    const HTML_STYLE: &str = "\
         <!DOCTYPE html>\
         <html lang=\"ja\">\
         <head>\
             <meta charset=\"UTF-8\">\
             <meta name=\"viewport\" content=\"width=device-width\">\
             <link rel=\"icon\" href=\"/favicon.ico\">\
+            <style>\
+    ";
+    const STYLE_TITLE: &str = "\
+            </style>\
             <title>\
     ";
     const TITLE_BODY: &str = "\
@@ -158,12 +177,15 @@ pub fn convert_to_html(content: &str) -> String {
         </html>\
     ";
 
-    let mut html = HTML_TITLE.to_string();
-    html.push_str(&frontmatter.title);
-    html.push_str(TITLE_BODY);
-    // TODO: layout
-    mdast_to_html(&mdast, &mut html);
-    html.push_str(BODY_HTML);
-
-    html
+    let mut segments = Vec::with_capacity(6 + styles.len());
+    segments.push(StrOrString::Str(HTML_STYLE));
+    for style in styles {
+        segments.push(StrOrString::Str(style.0));
+    }
+    segments.push(StrOrString::Str(STYLE_TITLE));
+    segments.push(StrOrString::String(frontmatter.title));
+    segments.push(StrOrString::Str(TITLE_BODY));
+    segments.push(StrOrString::String(body));
+    segments.push(StrOrString::Str(BODY_HTML));
+    segments
 }

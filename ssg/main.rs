@@ -5,11 +5,15 @@
 //! - 各モジュールで使う汎用関数もここで定義する
 
 use std::{
-    fs,
+    fs::{self, File},
+    io::{BufWriter, Write},
     path::{Path, PathBuf},
 };
 
 mod md;
+mod strutil;
+
+use strutil::StrOrString;
 
 fn clear_dist() {
     if Path::new("./dist").exists() {
@@ -60,9 +64,15 @@ fn main() {
             let dst_path = md::to_index_html_path(&file_path);
             let dst_path = replace_root_with_dist(&dst_path);
             let content = fs::read_to_string(file_path).unwrap();
-            let content = md::convert_to_html(&content);
+            let segments = md::to_html_segments(&content);
             ensure_dir(&dst_path);
-            fs::write(dst_path, content).unwrap();
+            let mut writer = BufWriter::new(File::create(dst_path).unwrap());
+            for segment in segments {
+                match segment {
+                    StrOrString::Str(s) => writer.write_all(s.as_bytes()).unwrap(),
+                    StrOrString::String(s) => writer.write_all(s.as_bytes()).unwrap(),
+                }
+            }
         } else {
             let dst_path = replace_root_with_dist(&file_path);
             ensure_dir(&dst_path);
