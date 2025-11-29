@@ -7,7 +7,10 @@ use super::Context;
 
 use markdown::mdast::Node;
 
+mod basic;
 mod post;
+
+const TRIAD_STYLE: &str = include_str!("../../asset/style/triad.css");
 
 pub const HEADER: &str = "\
     <div class=\"header\">\
@@ -25,8 +28,7 @@ pub const FOOTER_STYLE: &str = include_str!("../../asset/style/footer.css");
 
 pub fn to_html(layout: &str, content: &Node, ctx: &mut Context) {
     if layout == "basic" {
-        // TODO:
-        post::to_html(content, ctx);
+        basic::to_html(content, ctx);
     } else if layout == "post" {
         post::to_html(content, ctx);
     }
