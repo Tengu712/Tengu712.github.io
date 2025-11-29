@@ -48,7 +48,8 @@ pub fn to_html(content: &Node, ctx: &mut Context) {
     ctx.buf.push_str("<span>Index</span>");
     ctx.buf.push_str("<ol>");
     for (i, h2) in ctx.h2s.iter().enumerate() {
-        ctx.buf.push_str(&format!("<li><a href=\"#{i}\">{}</a></li>", h2));
+        ctx.buf
+            .push_str(&format!("<li><a href=\"#{}\">{}</a></li>", i + 1, h2));
     }
     ctx.buf.push_str("</ol>");
     ctx.buf.push_str("</div>");

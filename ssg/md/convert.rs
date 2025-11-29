@@ -70,7 +70,8 @@ pub fn mdast_to_html(node: &Node, ctx: &mut Context) {
                     let Node::Text(text) = &n.children[0] else {
                         panic!("h2内に変な要素入れんなや: {:?}", n.position);
                     };
-                    ctx.buf.push_str(&format!("<h2 id=\"{}\">", ctx.h2s.len()));
+                    ctx.buf
+                        .push_str(&format!("<h2 id=\"{}\">", ctx.h2s.len() + 1));
                     ctx.h2s.push(text.value.clone());
                 }
                 3 => ctx.buf.push_str("<h3>"),
