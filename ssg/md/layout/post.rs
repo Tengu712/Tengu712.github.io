@@ -16,7 +16,7 @@ struct FrontMatter {
 const STYLE: &str = include_str!("../../../asset/style/post.css");
 const INDEX_STYLE: &str = include_str!("../../../asset/style/index.css");
 const META_STYLE: &str = include_str!("../../../asset/style/meta.css");
-const DEVENV: &str = include_str!("../../../asset/icon/heroicons-desktop-computer.svg");
+const DEVENV: &str = include_str!("../../../asset/icon/heroicons-wrench.svg");
 const PROG: &str = include_str!("../../../asset/icon/heroicons-command-line.svg");
 
 pub fn to_html(content: &Node, ctx: &mut Context) {
