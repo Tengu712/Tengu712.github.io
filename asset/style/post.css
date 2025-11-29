@@ -6,3 +6,7 @@
 .catch-icon>svg {
     width: 96px;
 }
+
+h1 {
+    margin-bottom: 0;
+}

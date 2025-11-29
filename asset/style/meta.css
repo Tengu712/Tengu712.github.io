@@ -1,0 +1,13 @@
+.meta {
+    display: flex;
+    gap: 4px;
+}
+
+.meta>* {
+    color: #777;
+    font-size: 14px;
+}
+
+.meta>span:last-child {
+    margin-left: auto;
+}

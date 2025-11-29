@@ -15,6 +15,7 @@ struct FrontMatter {
 
 const STYLE: &str = include_str!("../../../asset/style/post.css");
 const INDEX_STYLE: &str = include_str!("../../../asset/style/index.css");
+const META_STYLE: &str = include_str!("../../../asset/style/meta.css");
 const DEVENV: &str = include_str!("../../../asset/icon/heroicons-command-line.svg");
 
 pub fn to_html(content: &Node, ctx: &mut Context) {
@@ -22,6 +23,7 @@ pub fn to_html(content: &Node, ctx: &mut Context) {
 
     ctx.styles.insert(StrPtr(STYLE));
     ctx.styles.insert(StrPtr(INDEX_STYLE));
+    ctx.styles.insert(StrPtr(META_STYLE));
     ctx.styles.insert(StrPtr(TRIAD_STYLE));
     ctx.styles.insert(StrPtr(HEADER_STYLE));
     ctx.styles.insert(StrPtr(FOOTER_STYLE));
@@ -39,6 +41,18 @@ pub fn to_html(content: &Node, ctx: &mut Context) {
     ctx.buf.push_str("<h1>");
     ctx.buf.push_str(&frontmatter.title);
     ctx.buf.push_str("</h1>");
+    ctx.buf.push_str("<div class=\"meta\">");
+    ctx.buf.push_str(&format!(
+        "<a href=\"/?filter={}\">${0}</a>",
+        frontmatter.genre
+    ));
+    for tag in &frontmatter.tags {
+        ctx.buf
+            .push_str(&format!("<a href=\"/?filter={}\">#{0}</a>", tag));
+    }
+    ctx.buf
+        .push_str(&format!("<span>{}</span>", frontmatter.date));
+    ctx.buf.push_str("</div>");
     convert::mdast_to_html(content, ctx);
     ctx.buf.push_str("<p style=\"text-align: right\">■</p>");
     ctx.buf.push_str("</div>");
