@@ -21,14 +21,15 @@ fn extract_frontmetter_yaml(mdast: &mut Node) -> Yaml {
 }
 
 #[derive(Deserialize)]
-struct LayoutInFrontMatter {
+struct BasicFrontmatter {
+    title: String,
     layout: String,
 }
 
-fn get_layout_from(frontmatter_yaml: &Yaml) -> String {
-    serde_yaml::from_str::<LayoutInFrontMatter>(&frontmatter_yaml.value)
-        .unwrap()
-        .layout
+impl BasicFrontmatter {
+    fn from(frontmatter_yaml: &Yaml) -> Self {
+        serde_yaml::from_str::<Self>(&frontmatter_yaml.value).unwrap()
+    }
 }
 
 fn mdast_to_html(node: &Node) -> String {
@@ -54,6 +55,34 @@ fn mdast_to_html(node: &Node) -> String {
 
 fn mdasts_to_html(node: &[Node]) -> String {
     node.iter().map(mdast_to_html).collect()
+}
+
+fn generate_full_html(title: &str, content: &str) -> String {
+    const HTML_TITLE: &str = "\
+        <!DOCTYPE html>\
+        <html lang=\"ja\">\
+        <head>\
+            <meta charset=\"UTF-8\">\
+            <meta name=\"viewport\" content=\"width=device-width\">\
+            <link rel=\"icon\" href=\"/favicon.ico\">\
+            <title>\
+    ";
+    const TITLE_BODY: &str = "\
+            </title>\
+        </head>\
+        <body>\
+    ";
+    const BODY_HTML: &str = "\
+        </body>\
+        </html>\
+    ";
+
+    let mut html = HTML_TITLE.to_string();
+    html.push_str(title);
+    html.push_str(TITLE_BODY);
+    html.push_str(content);
+    html.push_str(BODY_HTML);
+    html
 }
 
 fn determine_dst_path(src_path: &Path) -> PathBuf {
@@ -87,11 +116,13 @@ pub fn run(file_path: &Path) {
     let mut mdast = markdown::to_mdast(&content, &options).unwrap();
 
     let frontmatter_yaml = extract_frontmetter_yaml(&mut mdast);
-    let layout = get_layout_from(&frontmatter_yaml);
-    println!("{}", layout);
+    let frontmatter = BasicFrontmatter::from(&frontmatter_yaml);
 
     // TODO: layout
     let content = mdast_to_html(&mdast);
 
-    write_file(content.as_str(), &determine_dst_path(file_path));
+    write_file(
+        &generate_full_html(&frontmatter.title, &content),
+        &determine_dst_path(file_path),
+    );
 }

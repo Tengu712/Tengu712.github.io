@@ -33,6 +33,18 @@ fn write_file(content: &str, dst_path: &Path) {
     fs::write(dst_path, content).unwrap();
 }
 
+fn copy_publics() {
+    let file_paths = glob::glob("./public/**/*")
+        .unwrap()
+        .map(|n| n.unwrap())
+        .collect::<Vec<_>>();
+    for file_path in file_paths {
+        let mut dst_path = PathBuf::from("dist");
+        dst_path.extend(file_path.components().skip(1));
+        copy_file(&file_path, &dst_path);
+    }
+}
+
 fn main() {
     clear_dist();
 
@@ -53,4 +65,6 @@ fn main() {
             copy_file(&file_path, &replace_root_with_dist(&file_path));
         }
     }
+
+    copy_publics();
 }

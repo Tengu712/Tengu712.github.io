@@ -4,4 +4,6 @@
 
 ```sh
 cargo run
+
+miniserve --index index.html dist
 ```
