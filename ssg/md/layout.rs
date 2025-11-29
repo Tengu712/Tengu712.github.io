@@ -14,7 +14,7 @@ const TRIAD_STYLE: &str = include_str!("../../asset/style/triad.css");
 
 const HEADER: &str = "\
     <div class=\"header\">\
-        <a href=\"/\">天狗会議録</a>\
+        <a href=\"/\"><img src=\"/favicon.ico\"></a>\
         <a href=\"/posts/\">Posts</a>\
         <a href=\"/scraps/\">Scraps</a>\
         <a href=\"/pages/\">Pages</a>\
