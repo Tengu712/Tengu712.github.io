@@ -1,24 +1,11 @@
 use super::{replace_root_with_dist, write_file};
 
-use markdown::{
-    Constructs, ParseOptions,
-    mdast::{Node, Yaml},
-};
+use markdown::{Constructs, ParseOptions, mdast::Node};
 use serde::Deserialize;
 use std::{
     fs,
     path::{Path, PathBuf},
 };
-
-fn extract_frontmetter_yaml(mdast: &Node) -> &Yaml {
-    let Node::Root(root) = mdast else {
-        panic!("Rootじゃないやん: {:?}", mdast.position());
-    };
-    let Some(Node::Yaml(yaml)) = root.children.first() else {
-        panic!("frontmatterが書かれてないやん: {:?}", mdast.position());
-    };
-    yaml
-}
 
 #[derive(Deserialize)]
 struct BasicFrontmatter {
@@ -26,10 +13,14 @@ struct BasicFrontmatter {
     layout: String,
 }
 
-impl BasicFrontmatter {
-    fn from(frontmatter_yaml: &Yaml) -> Self {
-        serde_yaml::from_str::<Self>(&frontmatter_yaml.value).unwrap()
-    }
+fn extract_frontmetter(mdast: &Node) -> BasicFrontmatter {
+    let Node::Root(root) = mdast else {
+        panic!("Rootじゃないやん: {:?}", mdast.position());
+    };
+    let Some(Node::Yaml(yaml)) = root.children.first() else {
+        panic!("frontmatterが書かれてないやん: {:?}", mdast.position());
+    };
+    serde_yaml::from_str(&yaml.value).unwrap()
 }
 
 fn mdast_to_html(node: &Node, buf: &mut String) {
@@ -141,9 +132,7 @@ pub fn run(file_path: &Path) {
         ..Default::default()
     };
     let mdast = markdown::to_mdast(&content, &options).unwrap();
-
-    let frontmatter_yaml = extract_frontmetter_yaml(&mdast);
-    let frontmatter = BasicFrontmatter::from(frontmatter_yaml);
+    let frontmatter = extract_frontmetter(&mdast);
 
     const HTML_TITLE: &str = "\
         <!DOCTYPE html>\
