@@ -13,6 +13,7 @@ use std::{
 };
 
 mod code;
+mod component;
 mod layout;
 
 #[derive(Deserialize)]
