@@ -19,6 +19,15 @@ p {
     margin: 36px 0;
 }
 
+a {
+    color: #08131a;
+    text-decoration: none;
+}
+
+a:hover {
+    color: red;
+}
+
 ul, ol {
     --navbar-primary-top-margin: 0;
     margin: 36px 0;

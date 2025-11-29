@@ -3,10 +3,23 @@ use crate::strutil::StrPtr;
 use markdown::mdast::Node;
 use std::collections::HashSet;
 
+const HEADER: &str = "\
+    <div class=\"header\">\
+        <a href=\"/\">天狗会議録</a>\
+        <a href=\"/posts/\">Posts</a>\
+        <a href=\"/scraps/\">Scraps</a>\
+        <a href=\"/pages/\">Pages</a>\
+        <a href=\"/about/\">About</a>\
+    </div>\
+";
+const HEADER_STYLE: &str = include_str!("../../asset/style/header.css");
+
 fn to_html_post(content: &Node, styles: &mut HashSet<StrPtr>, buf: &mut String) {
     const STYLE_PC: &str = include_str!("../../asset/style/triad.css");
     styles.insert(StrPtr(STYLE_PC));
+    styles.insert(StrPtr(HEADER_STYLE));
 
+    buf.push_str(HEADER);
     buf.push_str("<div class=\"triad\">");
     buf.push_str("<div class=\"triad-side\"></div>");
     buf.push_str("<div class=\"triad-center\">");
