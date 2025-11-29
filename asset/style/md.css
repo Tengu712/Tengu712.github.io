@@ -35,6 +35,13 @@ ul, ol {
     padding-left: 24px;
 }
 
+ul ul,
+ul ol,
+ol ul,
+ol ol {
+    margin: 0;
+}
+
 li p {
     all: unset;
 }
