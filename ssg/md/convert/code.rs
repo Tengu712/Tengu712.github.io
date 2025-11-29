@@ -1,4 +1,4 @@
-//! コードをHTML文字列に変換するモジュール
+//! コードをHTML要素に変換するモジュール
 
 use std::sync::LazyLock;
 use syntect::{

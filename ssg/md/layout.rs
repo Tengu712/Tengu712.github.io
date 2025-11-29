@@ -1,19 +1,33 @@
-//! 適切にレイアウトの変換関数を呼び出すモジュール
+//! レイアウトに関するモジュール
+//!
+//! - 適切にレイアウトの変換関数を呼び出すだけ
+//! - ついでに共有して使われるレイアウト構成コンポーネントをここで定義する
 
-use crate::strutil::StrPtr;
+use super::Context;
 
 use markdown::mdast::Node;
-use std::collections::HashSet;
 
 mod post;
 
-pub fn to_html(layout: &str, content: &Node, styles: &mut HashSet<StrPtr>) -> String {
-    let mut body = String::new();
+pub const HEADER: &str = "\
+    <div class=\"header\">\
+        <a href=\"/\">天狗会議録</a>\
+        <a href=\"/posts/\">Posts</a>\
+        <a href=\"/scraps/\">Scraps</a>\
+        <a href=\"/pages/\">Pages</a>\
+        <a href=\"/about/\">About</a>\
+    </div>\
+";
+pub const HEADER_STYLE: &str = include_str!("../../asset/style/header.css");
+
+pub const FOOTER: &str = "<div class=\"footer\">2022-2025, Tengu712, Skydog Association</div>";
+pub const FOOTER_STYLE: &str = include_str!("../../asset/style/footer.css");
+
+pub fn to_html(layout: &str, content: &Node, ctx: &mut Context) {
     if layout == "basic" {
         // TODO:
-        post::to_html_post(content, styles, &mut body);
+        post::to_html(content, ctx);
     } else if layout == "post" {
-        post::to_html_post(content, styles, &mut body);
+        post::to_html(content, ctx);
     }
-    body
 }
