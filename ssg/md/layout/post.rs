@@ -38,6 +38,7 @@ pub fn to_html(content: &Node, ctx: &mut Context) {
     ctx.buf.push_str(&frontmatter.title);
     ctx.buf.push_str("</h1>");
     convert::mdast_to_html(content, ctx);
+    ctx.buf.push_str("<p style=\"text-align: right\">■</p>");
     ctx.buf.push_str("</div>");
 
     ctx.buf.push_str("<div class=\"triad-side\">");
