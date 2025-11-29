@@ -6,6 +6,8 @@ use markdown::{Constructs, ParseOptions, mdast::Node};
 use serde::Deserialize;
 use std::path::{Path, PathBuf};
 
+mod code;
+
 #[derive(Deserialize)]
 struct BasicFrontmatter {
     title: String,
@@ -36,6 +38,11 @@ fn mdast_to_html(node: &Node, buf: &mut String) {
             buf.push_str("</ul>");
         }
         Node::Yaml(_) => (),
+        Node::InlineCode(n) => {
+            buf.push_str("<code>");
+            buf.push_str(&n.value);
+            buf.push_str("</code>");
+        }
         Node::Delete(n) => {
             buf.push_str("<del>");
             mdasts_to_html(&n.children, buf);
@@ -67,6 +74,7 @@ fn mdast_to_html(node: &Node, buf: &mut String) {
             buf.push_str("</strong>");
         }
         Node::Text(n) => buf.push_str(&n.value),
+        Node::Code(n) => buf.push_str(&code::to_html(&n.value, &n.lang)),
         Node::Heading(n) => {
             buf.push_str(match n.depth {
                 1 => "<h1>",
