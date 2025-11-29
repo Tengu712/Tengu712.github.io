@@ -95,9 +95,7 @@ pub fn mdast_to_html(node: &Node, ctx: &mut Context) {
             mdasts_to_html(&n.children, ctx);
             ctx.buf.push_str("</p>");
         }
-        _ => (),
-        // TODO:
-        // _ => unimplemented!(),
+        _ => unimplemented!(),
     }
 }
 
