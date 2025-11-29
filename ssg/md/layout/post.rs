@@ -14,12 +14,14 @@ struct FrontMatter {
 }
 
 const STYLE: &str = include_str!("../../../asset/style/post.css");
+const INDEX_STYLE: &str = include_str!("../../../asset/style/index.css");
 const DEVENV: &str = include_str!("../../../asset/icon/heroicons-command-line.svg");
 
 pub fn to_html(content: &Node, ctx: &mut Context) {
     let frontmatter = serde_yaml::from_value::<FrontMatter>(ctx.frontmatter_value.clone()).unwrap();
 
     ctx.styles.insert(StrPtr(STYLE));
+    ctx.styles.insert(StrPtr(INDEX_STYLE));
     ctx.styles.insert(StrPtr(TRIAD_STYLE));
     ctx.styles.insert(StrPtr(HEADER_STYLE));
     ctx.styles.insert(StrPtr(FOOTER_STYLE));
@@ -42,7 +44,14 @@ pub fn to_html(content: &Node, ctx: &mut Context) {
     ctx.buf.push_str("</div>");
 
     ctx.buf.push_str("<div class=\"triad-side\">");
-    // TODO: index
+    ctx.buf.push_str("<div class=\"index\">");
+    ctx.buf.push_str("<span>Index</span>");
+    ctx.buf.push_str("<ol>");
+    for (i, h2) in ctx.h2s.iter().enumerate() {
+        ctx.buf.push_str(&format!("<li><a href=\"#{i}\">{}</a></li>", h2));
+    }
+    ctx.buf.push_str("</ol>");
+    ctx.buf.push_str("</div>");
     ctx.buf.push_str("</div>");
 
     ctx.buf.push_str("</div>");

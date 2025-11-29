@@ -61,12 +61,21 @@ pub fn mdast_to_html(node: &Node, ctx: &mut Context) {
         Node::Text(n) => ctx.buf.push_str(&n.value),
         Node::Code(n) => ctx.buf.push_str(&code::to_html(&n.value, &n.lang)),
         Node::Heading(n) => {
-            ctx.buf.push_str(match n.depth {
-                1 => "<h1>",
-                2 => "<h2>",
-                3 => "<h3>",
+            match n.depth {
+                1 => ctx.buf.push_str("<h1>"),
+                2 => {
+                    if n.children.len() != 1 {
+                        panic!("h2内に変な要素入れんなや: {:?}", n.position);
+                    };
+                    let Node::Text(text) = &n.children[0] else {
+                        panic!("h2内に変な要素入れんなや: {:?}", n.position);
+                    };
+                    ctx.buf.push_str(&format!("<h2 id=\"{}\">", ctx.h2s.len()));
+                    ctx.h2s.push(text.value.clone());
+                }
+                3 => ctx.buf.push_str("<h3>"),
                 d => panic!("h{d}タグは認めておらん"),
-            });
+            }
             mdasts_to_html(&n.children, ctx);
             ctx.buf.push_str(match n.depth {
                 1 => "</h1>",

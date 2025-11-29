@@ -23,6 +23,7 @@ struct Context<'a> {
     frontmatter_value: Value,
     buf: String,
     styles: &'a mut HashSet<StrPtr>,
+    h2s: Vec<String>,
 }
 
 fn extract_frontmetter_yaml(mdast: &Node) -> &Yaml {
@@ -82,6 +83,7 @@ pub fn to_html_segments(content: &str) -> Vec<StrOrString> {
         frontmatter_value,
         buf: String::new(),
         styles: &mut styles,
+        h2s: Vec::new(),
     };
     layout::to_html(&frontmatter.layout, &mdast, &mut ctx);
 
