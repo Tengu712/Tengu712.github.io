@@ -12,3 +12,9 @@
     width: 100%;
     max-width: 620px;
 }
+
+@media (max-width: 652px) {
+    .triad-center {
+      padding: 16px;
+    }
+}
