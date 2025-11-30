@@ -44,5 +44,17 @@ pub fn generate_posts_index_page(metas: Vec<(String, Value)>) -> String {
     );
     component::push_footer(&mut buf, &mut styles);
 
+    const FILTER_SCRIPT: &str = "\
+        <script>\
+            const filter = new URLSearchParams(location.search).get('filter');\
+            if (filter) {\
+                document.querySelectorAll('.card').forEach(n => {\
+                    n.style.display = n.querySelector(`a[href*=\"filter=${filter}\"]`) ? '' : 'none';\
+                });\
+            }\
+        </script>\
+    ";
+    buf.push_str(FILTER_SCRIPT);
+
     template::generate_html_string(&styles, "天狗会議録", &buf)
 }
