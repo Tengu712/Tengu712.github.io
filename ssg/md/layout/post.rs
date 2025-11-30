@@ -21,7 +21,7 @@ const PROG_ICON: &str = include_str!("../../../asset/icon/heroicons-command-line
 const ESSAY_ICON: &str = include_str!("../../../asset/icon/heroicons-pencil-square.svg");
 
 pub fn to_html(content: &Node, ctx: &mut Context) {
-    let frontmatter = serde_yaml::from_value::<FrontMatter>(ctx.frontmatter_value.clone()).unwrap();
+    let frontmatter = serde_yaml::from_value::<FrontMatter>(ctx.fm_value.clone()).unwrap();
 
     ctx.styles.insert(StrPtr(STYLE));
     ctx.styles.insert(StrPtr(INDEX_STYLE));

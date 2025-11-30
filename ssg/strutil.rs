@@ -5,11 +5,6 @@ use std::{
     ptr,
 };
 
-pub enum StrOrString {
-    Str(&'static str),
-    String(String),
-}
-
 #[derive(Eq)]
 pub struct StrPtr(pub &'static str);
 
