@@ -11,3 +11,7 @@
 .meta>span:last-child {
     margin-left: auto;
 }
+
+.meta a {
+    text-decoration: none !important;
+}
