@@ -7,10 +7,19 @@ use super::Styles;
 use markdown::mdast::Node;
 
 mod code;
+mod center;
 
 pub fn mdast_to_html(node: &Node, buf: &mut String, styles: &mut Styles) {
     match node {
         Node::Root(n) => mdasts_to_html(&n.children, buf, styles),
+        Node::MdxJsxFlowElement(n) => {
+            let name = n.name.as_ref().unwrap();
+            if name == "Center" {
+                center::center(n, buf, styles);
+            } else {
+                panic!("{name}コンポーネントはねえよ");
+            }
+        }
         Node::List(n) if n.ordered => {
             buf.push_str("<ol>");
             mdasts_to_html(&n.children, buf, styles);
@@ -27,6 +36,8 @@ pub fn mdast_to_html(node: &Node, buf: &mut String, styles: &mut Styles) {
             buf.push_str(&n.value);
             buf.push_str("</code>");
         }
+        // TODO:
+        Node::InlineMath(_) => (),
         Node::Delete(n) => {
             buf.push_str("<del>");
             mdasts_to_html(&n.children, buf, styles);
@@ -39,11 +50,16 @@ pub fn mdast_to_html(node: &Node, buf: &mut String, styles: &mut Styles) {
         }
         Node::Html(n) => buf.push_str(&n.value),
         Node::Image(n) => {
+            buf.push_str("<div class=\"img-container\">");
             buf.push_str("<img src=\"");
             buf.push_str(&n.url);
-            buf.push_str("\" alt=\"");
-            buf.push_str(&n.alt);
             buf.push_str("\">");
+            if !n.alt.is_empty() {
+                buf.push_str("<label><i>");
+                buf.push_str(&n.alt);
+                buf.push_str("</i></label>");
+            }
+            buf.push_str("</div>");
         }
         Node::Link(n) => {
             buf.push_str("<a href=\"");
