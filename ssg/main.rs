@@ -11,6 +11,7 @@ use std::{
     path::{Path, PathBuf},
 };
 
+mod component;
 mod defaults;
 mod embedded;
 mod md;

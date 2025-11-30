@@ -12,6 +12,10 @@ body {
    flex-direction: column;
 }
 
+h1 {
+    margin-bottom: 0;
+}
+
 h2 {
     margin: 0;
     margin-top: 54px;

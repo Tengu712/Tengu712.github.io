@@ -1,7 +1,7 @@
 //! Markdown文字列からpostレイアウトでbodyを作成するモジュール
 
 use super::*;
-use crate::{embedded::*, md::convert, strutil::StrPtr};
+use crate::{component, embedded::*, md::convert, strutil::StrPtr};
 
 use serde::Deserialize;
 
@@ -20,10 +20,8 @@ pub fn to_html(content: &Node, ctx: &mut Context) {
     ctx.styles.insert(StrPtr(style::TRIAD));
     ctx.styles.insert(StrPtr(style::INDEX));
     ctx.styles.insert(StrPtr(style::META));
-    ctx.styles.insert(StrPtr(style::HEADER));
-    ctx.styles.insert(StrPtr(style::FOOTER));
 
-    ctx.buf.push_str(HEADER);
+    component::push_header(&mut ctx.buf, &mut ctx.styles);
 
     ctx.buf.push_str("<div class=\"triad\">");
 
@@ -74,5 +72,5 @@ pub fn to_html(content: &Node, ctx: &mut Context) {
 
     ctx.buf.push_str("</div>");
 
-    ctx.buf.push_str(FOOTER);
+    component::push_footer(&mut ctx.buf, &mut ctx.styles);
 }

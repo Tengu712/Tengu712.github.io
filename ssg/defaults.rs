@@ -2,7 +2,7 @@
 
 use std::collections::HashSet;
 
-use crate::template;
+use crate::{embedded::*, strutil::StrPtr, template};
 
 use serde::Deserialize;
 use serde_yaml::Value;
@@ -16,6 +16,14 @@ struct PostMeta {
 }
 
 pub fn generate_posts_index_page(metas: Vec<(String, Value)>) -> String {
-    // TODO:
+    let mut styles = HashSet::new();
+    styles.insert(StrPtr(style::MD));
+    styles.insert(StrPtr(style::TRIAD));
+    styles.insert(StrPtr(style::HEADER));
+    styles.insert(StrPtr(style::FOOTER));
+    styles.insert(StrPtr(style::META));
+
+    let mut buf = String::new();
+
     template::generate_html_string(&HashSet::new(), "天狗会議録", "")
 }
