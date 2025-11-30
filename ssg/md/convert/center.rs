@@ -1,7 +1,7 @@
 //! <Center></Center>
 
-use markdown::mdast::MdxJsxFlowElement;
 use super::*;
+use markdown::mdast::MdxJsxFlowElement;
 
 pub fn center(n: &MdxJsxFlowElement, buf: &mut String, styles: &mut Styles) {
     buf.push_str("<div style=\"text-align: center\">");

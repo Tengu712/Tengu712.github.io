@@ -42,6 +42,8 @@ fn center(mdast: &Node, fm: &FrontMatter, buf: &mut String, styles: &mut Styles)
         buf.push_str(icon::WRENCH);
     } else if fm.genre == "prog" {
         buf.push_str(icon::COMMAND_LINE);
+    } else if fm.genre == "experiment" {
+        buf.push_str(icon::BEAKER);
     } else if fm.genre == "essay" {
         buf.push_str(icon::PENCIL_SQUARE);
     } else {

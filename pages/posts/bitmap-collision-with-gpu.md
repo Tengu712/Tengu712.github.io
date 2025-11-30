@@ -1,8 +1,8 @@
 ---
 layout: post
 title: "GPUを用いたビットマップによる衝突判定"
-genre: "devenv"
-tags: ["cg", "directx", "experiment"]
+genre: "experiment"
+tags: ["cg", "directx"]
 date: "2025/03/09"
 ---
 

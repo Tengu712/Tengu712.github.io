@@ -6,8 +6,8 @@
 use super::Styles;
 use markdown::mdast::Node;
 
-mod code;
 mod center;
+mod code;
 
 pub fn mdast_to_html(node: &Node, buf: &mut String, styles: &mut Styles) {
     match node {
