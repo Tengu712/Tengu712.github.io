@@ -36,7 +36,7 @@ pub fn push_header(buf: &mut String, styles: &mut HashSet<StrPtr>) {
         "\
         <div class=\"header\">\
             <a href=\"/\"><img src=\"/favicon.ico\"></a>\
-            <a href=\"/posts/\">Posts</a>\
+            <a href=\"/\">Posts</a>\
             <a href=\"/scraps/\">Scraps</a>\
             <a href=\"/pages/\">Pages</a>\
             <a href=\"/about/\">About</a>\
@@ -48,4 +48,21 @@ pub fn push_header(buf: &mut String, styles: &mut HashSet<StrPtr>) {
 pub fn push_footer(buf: &mut String, styles: &mut HashSet<StrPtr>) {
     styles.insert(StrPtr(style::FOOTER));
     buf.push_str("<div class=\"footer\">2022-2025, Tengu712, Skydog Association</div>");
+}
+
+pub fn push_meta(
+    buf: &mut String,
+    styles: &mut HashSet<StrPtr>,
+    genre: &str,
+    tags: &Vec<String>,
+    date: &str,
+) {
+    styles.insert(StrPtr(style::META));
+    buf.push_str("<div class=\"meta\">");
+    buf.push_str(&format!("<a href=\"/?filter={}\">${0}</a>", genre));
+    for tag in tags {
+        buf.push_str(&format!("<a href=\"/?filter={}\">#{0}</a>", tag));
+    }
+    buf.push_str(&format!("<span>{}</span>", date));
+    buf.push_str("</div>");
 }

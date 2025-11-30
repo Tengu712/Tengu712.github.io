@@ -1,6 +1,6 @@
 //! 強制的に作られるファイルを作るモジュール
 
-use crate::{embedded::*, strutil::StrPtr, template};
+use crate::{component, embedded::*, strutil::StrPtr, template};
 use serde::Deserialize;
 use serde_yaml::Value;
 use std::collections::HashSet;
@@ -14,14 +14,30 @@ struct PostMeta {
 }
 
 pub fn generate_posts_index_page(metas: Vec<(String, Value)>) -> String {
-    let mut styles = HashSet::new();
-    styles.insert(StrPtr(style::MD));
-    styles.insert(StrPtr(style::TRIAD));
-    styles.insert(StrPtr(style::HEADER));
-    styles.insert(StrPtr(style::FOOTER));
-    styles.insert(StrPtr(style::META));
-
     let mut buf = String::new();
+    let mut styles = HashSet::new();
 
-    template::generate_html_string(&HashSet::new(), "天狗会議録", "")
+    styles.insert(StrPtr(style::MD));
+    styles.insert(StrPtr(style::POSTS_INDEX));
+
+    component::push_header(&mut buf, &mut styles);
+    component::push_triad(
+        &mut buf,
+        &mut styles,
+        component::skip,
+        |buf, styles| {
+            buf.push_str("<img src=\"/catch.png\" class=\"catch\">");
+            for (id, value) in metas {
+                let meta = serde_yaml::from_value::<PostMeta>(value).unwrap();
+                buf.push_str("<div class=\"card\">");
+                buf.push_str(&format!("<a href=\"/posts/{id}\">{}</a>", meta.title));
+                component::push_meta(buf, styles, &meta.genre, &meta.tags, &meta.date);
+                buf.push_str("</div>");
+            }
+        },
+        component::skip,
+    );
+    component::push_footer(&mut buf, &mut styles);
+
+    template::generate_html_string(&styles, "天狗会議録", &buf)
 }

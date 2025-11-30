@@ -49,19 +49,11 @@ fn center(mdast: &Node, fm: &FrontMatter, buf: &mut String, styles: &mut Styles)
     }
     buf.push_str("</div>");
 
-    // title
+    // title & meta
     buf.push_str("<h1>");
     buf.push_str(&fm.title);
     buf.push_str("</h1>");
-
-    // TODO: meta
-    buf.push_str("<div class=\"meta\">");
-    buf.push_str(&format!("<a href=\"/?filter={}\">${0}</a>", fm.genre));
-    for tag in &fm.tags {
-        buf.push_str(&format!("<a href=\"/?filter={}\">#{0}</a>", tag));
-    }
-    buf.push_str(&format!("<span>{}</span>", fm.date));
-    buf.push_str("</div>");
+    component::push_meta(buf, styles, &fm.genre, &fm.tags, &fm.date);
 
     // content
     convert::mdast_to_html(mdast, buf, styles);
@@ -87,7 +79,6 @@ pub fn to_html(mdast: &Node, value: &Value, buf: &mut String, styles: &mut Style
 
     styles.insert(StrPtr(style::POST));
     styles.insert(StrPtr(style::INDEX));
-    styles.insert(StrPtr(style::META));
 
     component::push_header(buf, styles);
     component::push_triad(

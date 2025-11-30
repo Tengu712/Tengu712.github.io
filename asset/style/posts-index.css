@@ -1,0 +1,13 @@
+.catch {
+    margin-top: 48px;
+    width: 100%;
+}
+
+.card {
+    margin: 16px 0;
+}
+
+.card>a:first-child {
+    font-size: 28px;
+    font-weight: 700;
+}

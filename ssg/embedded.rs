@@ -24,6 +24,9 @@ pub mod style {
     pub const HEADER: &str = include_str!("../asset/style/header.css");
     pub const META: &str = include_str!("../asset/style/meta.css");
 
-    // レイアウト固有コンポーネント
+    // ページ固有
+    pub const POSTS_INDEX: &str = include_str!("../asset/style/posts-index.css");
+
+    // レイアウト固有
     pub const INDEX: &str = include_str!("../asset/style/index.css");
 }

@@ -108,6 +108,11 @@ fn main() {
         }
     }
 
-    defaults::generate_posts_index_page(post_metas);
+    fs::write(
+        "dist/index.html",
+        defaults::generate_posts_index_page(post_metas),
+    )
+    .unwrap();
+
     copy_publics();
 }
