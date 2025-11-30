@@ -39,6 +39,17 @@ a:hover {
     color: red;
 }
 
+blockquote {
+    margin: 36px 0;
+    padding: 16px 10px;
+    border-left: 5.6px solid #7a7a7a;
+    background-color: #eee;
+}
+
+blockquote p {
+    margin: 16px;
+}
+
 ul, ol {
     --navbar-primary-top-margin: 0;
     margin: 36px 0;

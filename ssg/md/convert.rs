@@ -12,6 +12,11 @@ mod code;
 pub fn mdast_to_html(node: &Node, buf: &mut String, styles: &mut Styles) {
     match node {
         Node::Root(n) => mdasts_to_html(&n.children, buf, styles),
+        Node::Blockquote(n) => {
+            buf.push_str("<blockquote>");
+            mdasts_to_html(&n.children, buf, styles);
+            buf.push_str("</blockquote>");
+        }
         Node::MdxJsxFlowElement(n) => {
             let name = n.name.as_ref().unwrap();
             if name == "Center" {
