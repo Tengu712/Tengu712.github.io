@@ -22,6 +22,8 @@ pub mod style {
     // コンポーネント
     pub const FOOTER: &str = include_str!("../asset/style/footer.css");
     pub const HEADER: &str = include_str!("../asset/style/header.css");
-    pub const INDEX: &str = include_str!("../asset/style/index.css");
     pub const META: &str = include_str!("../asset/style/meta.css");
+
+    // レイアウト固有コンポーネント
+    pub const INDEX: &str = include_str!("../asset/style/index.css");
 }

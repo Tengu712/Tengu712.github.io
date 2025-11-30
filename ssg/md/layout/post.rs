@@ -2,7 +2,6 @@
 
 use super::*;
 use crate::{component, embedded::*, md::convert, strutil::StrPtr};
-
 use serde::Deserialize;
 
 #[derive(Deserialize)]
@@ -13,13 +12,30 @@ struct FrontMatter {
     date: String,
 }
 
-fn center(
-    mdast: &Node,
-    fm: &FrontMatter,
-    buf: &mut String,
-    styles: &mut Styles,
-    ctx: &mut Context,
-) {
+pub fn collect_h2s(mdast: &Node) -> Vec<(String, usize)> {
+    let Node::Root(root) = mdast else {
+        panic!("Rootじゃねえじゃん");
+    };
+    let mut h2s = Vec::new();
+    for node in &root.children {
+        let Node::Heading(h) = node else {
+            continue;
+        };
+        if h.depth != 2 {
+            continue;
+        }
+        if h.children.len() != 1 {
+            panic!("h2に変なもんいれんな: {:?}", node);
+        }
+        let Some(Node::Text(t)) = h.children.first() else {
+            panic!("h2に変なもんいれんな: {:?}", node);
+        };
+        h2s.push((t.value.clone(), h.position.as_ref().unwrap().start.line));
+    }
+    h2s
+}
+
+fn center(mdast: &Node, fm: &FrontMatter, buf: &mut String, styles: &mut Styles) {
     // icon
     buf.push_str("<div class=\"catch-icon\">");
     if fm.genre == "devenv" {
@@ -48,20 +64,26 @@ fn center(
     buf.push_str("</div>");
 
     // content
-    convert::mdast_to_html(mdast, buf, styles, ctx);
+    convert::mdast_to_html(mdast, buf, styles);
 
     // tombstone
     buf.push_str("<p style=\"text-align: right\">■</p>");
 }
 
-pub fn to_html(
-    mdast: &Node,
-    value: &Value,
-    buf: &mut String,
-    styles: &mut Styles,
-    ctx: &mut Context,
-) {
-    let frontmatter = serde_yaml::from_value::<FrontMatter>(value.clone()).unwrap();
+pub fn right(buf: &mut String, h2s: Vec<(String, usize)>) {
+    buf.push_str("<div class=\"index\">");
+    buf.push_str("<span>Index</span>");
+    buf.push_str("<ol>");
+    for (text, id) in h2s {
+        buf.push_str(&format!("<li><a href=\"#{}\">{}</a></li>", id, text));
+    }
+    buf.push_str("</ol>");
+    buf.push_str("</div>");
+}
+
+pub fn to_html(mdast: &Node, value: &Value, buf: &mut String, styles: &mut Styles) {
+    let fm = serde_yaml::from_value::<FrontMatter>(value.clone()).unwrap();
+    let h2s = collect_h2s(mdast);
 
     styles.insert(StrPtr(style::POST));
     styles.insert(StrPtr(style::INDEX));
@@ -72,18 +94,8 @@ pub fn to_html(
         buf,
         styles,
         component::skip,
-        |buf, styles| center(mdast, &frontmatter, buf, styles, ctx),
-        component::skip,
+        |buf, styles| center(mdast, &fm, buf, styles),
+        |buf, _| right(buf, h2s),
     );
     component::push_footer(buf, styles);
-
-    // TODO: index
-    // buf.push_str("<div class=\"index\">");
-    // buf.push_str("<span>Index</span>");
-    // buf.push_str("<ol>");
-    // for (i, h2) in ctx.h2s.iter().enumerate() {
-    //     buf.push_str(&format!("<li><a href=\"#{}\">{}</a></li>", i + 1, h2));
-    // }
-    // buf.push_str("</ol>");
-    // buf.push_str("</div>");
 }

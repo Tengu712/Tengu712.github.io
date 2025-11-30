@@ -4,7 +4,6 @@
 //! - レイアウト固有コンポーネントは定義しない
 
 use crate::{embedded::style, strutil::StrPtr};
-
 use std::collections::HashSet;
 
 /// コンテナ型のクロージャを渡す必要がないとき簡潔に書けるようにする空関数

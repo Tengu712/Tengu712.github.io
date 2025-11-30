@@ -4,7 +4,6 @@
 //! - 実際はlayoutモジュールに委譲する
 
 use crate::{embedded::*, strutil::StrPtr, template};
-
 use markdown::{
     Constructs, ParseOptions,
     mdast::{Node, Yaml},
@@ -16,10 +15,6 @@ mod convert;
 mod layout;
 
 type Styles = HashSet<StrPtr>;
-
-struct Context {
-    h2s: Vec<String>,
-}
 
 fn extract_frontmetter_yaml(mdast: &Node) -> &Yaml {
     let Node::Root(root) = mdast else {
@@ -55,9 +50,8 @@ fn parse(content: &str) -> (Node, Value) {
 fn to_html_body(mdast: &Node, value: &Value, layout: &str) -> (String, Styles) {
     let mut buf = String::new();
     let mut styles = Styles::new();
-    let mut ctx = Context { h2s: Vec::new() };
     styles.insert(StrPtr(style::MD));
-    layout::to_html(layout, mdast, value, &mut buf, &mut styles, &mut ctx);
+    layout::to_html(layout, mdast, value, &mut buf, &mut styles);
     (buf, styles)
 }
 

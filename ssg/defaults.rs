@@ -1,11 +1,9 @@
 //! 強制的に作られるファイルを作るモジュール
 
-use std::collections::HashSet;
-
 use crate::{embedded::*, strutil::StrPtr, template};
-
 use serde::Deserialize;
 use serde_yaml::Value;
+use std::collections::HashSet;
 
 #[derive(Deserialize)]
 struct PostMeta {

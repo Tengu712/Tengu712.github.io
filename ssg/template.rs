@@ -1,7 +1,6 @@
 //! 本ホームページで作られるすべてHTMLの共通部分に関するモジュール
 
 use crate::strutil::StrPtr;
-
 use std::collections::HashSet;
 
 pub fn generate_html_string(styles: &HashSet<StrPtr>, title: &str, body: &str) -> String {
