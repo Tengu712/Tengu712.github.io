@@ -47,6 +47,8 @@ fn center(mdast: &Node, fm: &FrontMatter, buf: &mut String, styles: &mut Styles)
         buf.push_str(icon::BEAKER);
     } else if fm.genre == "essay" {
         buf.push_str(icon::PENCIL_SQUARE);
+    } else if fm.genre == "release" {
+        buf.push_str(icon::ROCKET_LAUNCH);
     } else {
         panic!("ジャンル{}はサポートしてないよ", fm.genre);
     }

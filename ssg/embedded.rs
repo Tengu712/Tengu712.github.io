@@ -7,6 +7,7 @@ pub mod icon {
     pub const BEAKER: &str = include_str!("../asset/icon/heroicons-beaker.svg");
     pub const COMMAND_LINE: &str = include_str!("../asset/icon/heroicons-command-line.svg");
     pub const PENCIL_SQUARE: &str = include_str!("../asset/icon/heroicons-pencil-square.svg");
+    pub const ROCKET_LAUNCH: &str = include_str!("../asset/icon/heroicons-rocket-launch.svg");
     pub const WRENCH: &str = include_str!("../asset/icon/heroicons-wrench.svg");
 }
 
