@@ -12,6 +12,7 @@ use std::{
 };
 
 mod defaults;
+mod embedded;
 mod md;
 mod strutil;
 mod template;

@@ -1,7 +1,7 @@
 //! Markdown文字列からpostレイアウトでbodyを作成するモジュール
 
 use super::*;
-use crate::{md::convert, strutil::StrPtr};
+use crate::{embedded::*, md::convert, strutil::StrPtr};
 
 use serde::Deserialize;
 
@@ -13,22 +13,15 @@ struct FrontMatter {
     date: String,
 }
 
-const STYLE: &str = include_str!("../../../asset/style/post.css");
-const INDEX_STYLE: &str = include_str!("../../../asset/style/index.css");
-const META_STYLE: &str = include_str!("../../../asset/style/meta.css");
-const DEVENV_ICON: &str = include_str!("../../../asset/icon/heroicons-wrench.svg");
-const PROG_ICON: &str = include_str!("../../../asset/icon/heroicons-command-line.svg");
-const ESSAY_ICON: &str = include_str!("../../../asset/icon/heroicons-pencil-square.svg");
-
 pub fn to_html(content: &Node, ctx: &mut Context) {
     let frontmatter = serde_yaml::from_value::<FrontMatter>(ctx.fm_value.clone()).unwrap();
 
-    ctx.styles.insert(StrPtr(STYLE));
-    ctx.styles.insert(StrPtr(INDEX_STYLE));
-    ctx.styles.insert(StrPtr(META_STYLE));
-    ctx.styles.insert(StrPtr(TRIAD_STYLE));
-    ctx.styles.insert(StrPtr(HEADER_STYLE));
-    ctx.styles.insert(StrPtr(FOOTER_STYLE));
+    ctx.styles.insert(StrPtr(style::POST));
+    ctx.styles.insert(StrPtr(style::TRIAD));
+    ctx.styles.insert(StrPtr(style::INDEX));
+    ctx.styles.insert(StrPtr(style::META));
+    ctx.styles.insert(StrPtr(style::HEADER));
+    ctx.styles.insert(StrPtr(style::FOOTER));
 
     ctx.buf.push_str(HEADER);
 
@@ -39,11 +32,11 @@ pub fn to_html(content: &Node, ctx: &mut Context) {
     ctx.buf.push_str("<div class=\"triad-center\">");
     ctx.buf.push_str("<div class=\"catch-icon\">");
     if frontmatter.genre == "devenv" {
-        ctx.buf.push_str(DEVENV_ICON);
+        ctx.buf.push_str(icon::WRENCH);
     } else if frontmatter.genre == "prog" {
-        ctx.buf.push_str(PROG_ICON);
+        ctx.buf.push_str(icon::COMMAND_LINE);
     } else if frontmatter.genre == "essay" {
-        ctx.buf.push_str(ESSAY_ICON);
+        ctx.buf.push_str(icon::PENCIL_SQUARE);
     } else {
         panic!("ジャンル{}はサポートしてないよ", frontmatter.genre);
     }

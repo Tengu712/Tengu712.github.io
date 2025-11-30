@@ -3,23 +3,22 @@
 //! - 変換に限らずMarkdownに関するものは取り敢えずこのモジュールの範囲
 //! - 実際はlayoutモジュールに委譲する
 
-use crate::{strutil::*, template};
+use crate::{embedded::*, strutil::StrPtr, template};
 
 use markdown::{
     Constructs, ParseOptions,
     mdast::{Node, Yaml},
 };
-use serde::Deserialize;
 use serde_yaml::Value;
 use std::collections::HashSet;
 
 mod convert;
 mod layout;
 
-struct Context<'a> {
+struct Context {
     fm_value: Value,
     buf: String,
-    styles: &'a mut HashSet<StrPtr>,
+    styles: HashSet<StrPtr>,
     h2s: Vec<String>,
 }
 
@@ -33,13 +32,7 @@ fn extract_frontmetter_yaml(mdast: &Node) -> &Yaml {
     yaml
 }
 
-#[derive(Deserialize)]
-struct BasicFrontmatter {
-    title: String,
-    layout: String,
-}
-
-pub fn to_html(content: &str) -> (String, Value) {
+fn parse(content: &str) -> (Node, Value) {
     let options = ParseOptions {
         constructs: Constructs {
             code_indented: false,
@@ -55,26 +48,28 @@ pub fn to_html(content: &str) -> (String, Value) {
         ..Default::default()
     };
     let mdast = markdown::to_mdast(content, &options).unwrap();
-    let fm_yaml = extract_frontmetter_yaml(&mdast);
-    let fm_value = serde_yaml::from_str::<Value>(&fm_yaml.value).unwrap();
+    let yaml = extract_frontmetter_yaml(&mdast);
+    let value = serde_yaml::from_str::<Value>(&yaml.value).unwrap();
+    (mdast, value)
+}
 
-    let frontmatter = serde_yaml::from_value::<BasicFrontmatter>(fm_value.clone()).unwrap();
-
-    let mut styles = HashSet::new();
-    const MD_STYLE: &str = include_str!("../asset/style/md.css");
-    styles.insert(StrPtr(MD_STYLE));
-
+fn to_html_body(mdast: &Node, value: &Value, layout: &str) -> (String, HashSet<StrPtr>) {
     let mut ctx = Context {
-        fm_value: fm_value.clone(),
+        fm_value: value.clone(),
         buf: String::new(),
-        styles: &mut styles,
+        styles: HashSet::new(),
         h2s: Vec::new(),
     };
-    layout::to_html(&frontmatter.layout, &mdast, &mut ctx);
-    let Context { buf, .. } = ctx;
+    ctx.styles.insert(StrPtr(style::MD));
+    layout::to_html(layout, mdast, &mut ctx);
+    (ctx.buf, ctx.styles)
+}
 
-    let styles = styles.iter().map(|n| n.0).collect::<Vec<_>>();
-    let html = template::generate_html_string(&styles, &frontmatter.title, &buf);
-
-    (html, fm_value)
+pub fn to_html(content: &str) -> (String, Value) {
+    let (mdast, value) = parse(content);
+    let title = value["title"].as_str().unwrap();
+    let layout = value["layout"].as_str().unwrap();
+    let (body, styles) = to_html_body(&mdast, &value, &layout);
+    let html = template::generate_html_string(&styles, &title, &body);
+    (html, value)
 }

@@ -1,6 +1,10 @@
 //! 本ホームページで作られるすべてHTMLの共通部分に関するモジュール
 
-pub fn generate_html_string(styles: &[&'static str], title: &str, body: &str) -> String {
+use crate::strutil::StrPtr;
+
+use std::collections::HashSet;
+
+pub fn generate_html_string(styles: &HashSet<StrPtr>, title: &str, body: &str) -> String {
     const HTML_STYLE: &str = "\
         <!DOCTYPE html>\
         <html lang=\"ja\">\
@@ -27,7 +31,7 @@ pub fn generate_html_string(styles: &[&'static str], title: &str, body: &str) ->
     let mut buf = String::new();
     buf.push_str(HTML_STYLE);
     for style in styles.iter() {
-        buf.push_str(style);
+        buf.push_str(style.0);
     }
     buf.push_str(STYLE_TITLE);
     buf.push_str(title);

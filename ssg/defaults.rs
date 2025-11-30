@@ -1,5 +1,7 @@
 //! 強制的に作られるファイルを作るモジュール
 
+use std::collections::HashSet;
+
 use crate::template;
 
 use serde::Deserialize;
@@ -15,5 +17,5 @@ struct PostMeta {
 
 pub fn generate_posts_index_page(metas: Vec<(String, Value)>) -> String {
     // TODO:
-    template::generate_html_string(&[], "天狗会議録", "")
+    template::generate_html_string(&HashSet::new(), "天狗会議録", "")
 }

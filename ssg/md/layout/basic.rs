@@ -1,12 +1,12 @@
 //! Markdown文字列からbasicレイアウトでbodyを作成するモジュール
 
 use super::*;
-use crate::{md::convert, strutil::StrPtr};
+use crate::{md::convert, embedded::*, strutil::StrPtr};
 
 pub fn to_html(content: &Node, ctx: &mut Context) {
-    ctx.styles.insert(StrPtr(TRIAD_STYLE));
-    ctx.styles.insert(StrPtr(HEADER_STYLE));
-    ctx.styles.insert(StrPtr(FOOTER_STYLE));
+    ctx.styles.insert(StrPtr(style::TRIAD));
+    ctx.styles.insert(StrPtr(style::HEADER));
+    ctx.styles.insert(StrPtr(style::FOOTER));
 
     ctx.buf.push_str(HEADER);
 

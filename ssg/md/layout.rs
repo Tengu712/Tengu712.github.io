@@ -10,8 +10,6 @@ use markdown::mdast::Node;
 mod basic;
 mod post;
 
-const TRIAD_STYLE: &str = include_str!("../../asset/style/triad.css");
-
 const HEADER: &str = "\
     <div class=\"header\">\
         <a href=\"/\"><img src=\"/favicon.ico\"></a>\
@@ -21,10 +19,7 @@ const HEADER: &str = "\
         <a href=\"/about/\">About</a>\
     </div>\
 ";
-const HEADER_STYLE: &str = include_str!("../../asset/style/header.css");
-
 const FOOTER: &str = "<div class=\"footer\">2022-2025, Tengu712, Skydog Association</div>";
-const FOOTER_STYLE: &str = include_str!("../../asset/style/footer.css");
 
 pub fn to_html(layout: &str, content: &Node, ctx: &mut Context) {
     if layout == "basic" {
