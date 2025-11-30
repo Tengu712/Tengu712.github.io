@@ -51,6 +51,10 @@ pub fn generate_posts_index_page(metas: Vec<(String, Value)>) -> String {
                 document.querySelectorAll('.card').forEach(n => {\
                     n.style.display = n.querySelector(`a[href*=\"filter=${filter}\"]`) ? '' : 'none';\
                 });\
+                const display = document.createElement('div');\
+                display.className = 'filter-display';\
+                display.textContent = `Filtered by \"${filter}\"`;\
+                document.querySelector('.catch').insertAdjacentElement('afterend', display);\
             }\
         </script>\
     ";
