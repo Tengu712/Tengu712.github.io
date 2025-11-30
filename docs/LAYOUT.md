@@ -32,3 +32,4 @@
 - `genre`: ジャンル
 - `tags`: タグ
 - `date`: 執筆年月日`YYYY/MM/DD`
+- `index`: `false`で目次を非表示

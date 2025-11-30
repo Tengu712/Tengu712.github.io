@@ -10,6 +10,7 @@ struct FrontMatter {
     genre: String,
     tags: Vec<String>,
     date: String,
+    index: Option<bool>,
 }
 
 pub fn collect_h2s(mdast: &Node) -> Vec<(String, usize)> {
@@ -77,7 +78,11 @@ pub fn right(buf: &mut String, h2s: Vec<(String, usize)>) {
 
 pub fn to_html(mdast: &Node, value: &Value, buf: &mut String, styles: &mut Styles) {
     let fm = serde_yaml::from_value::<FrontMatter>(value.clone()).unwrap();
-    let h2s = collect_h2s(mdast);
+    let h2s = if fm.index != Some(false) {
+        collect_h2s(mdast)
+    } else {
+        Vec::new()
+    };
 
     styles.insert(StrPtr(style::POST));
     styles.insert(StrPtr(style::INDEX));
@@ -88,7 +93,11 @@ pub fn to_html(mdast: &Node, value: &Value, buf: &mut String, styles: &mut Style
         styles,
         component::skip,
         |buf, styles| center(mdast, &fm, buf, styles),
-        |buf, _| right(buf, h2s),
+        |buf, _| {
+            if !h2s.is_empty() {
+                right(buf, h2s)
+            }
+        },
     );
     component::push_footer(buf, styles);
 }

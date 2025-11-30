@@ -4,6 +4,7 @@ title: "OSSのフリーライドについて"
 genre: "essay"
 tags: ["oss"]
 date: "2024/01/02"
+index: false
 ---
 
 ## 背景
