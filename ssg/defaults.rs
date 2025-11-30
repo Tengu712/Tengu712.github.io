@@ -20,6 +20,12 @@ pub fn generate_posts_index_page(metas: Vec<(String, Value)>) -> String {
     styles.insert(StrPtr(style::MD));
     styles.insert(StrPtr(style::POSTS_INDEX));
 
+    let mut metas = metas
+        .into_iter()
+        .map(|(id, value)| (id, serde_yaml::from_value::<PostMeta>(value).unwrap()))
+        .collect::<Vec<_>>();
+    metas.sort_by(|(_, meta1), (_, meta2)| meta2.date.cmp(&meta1.date));
+
     component::push_header(&mut buf, &mut styles);
     component::push_triad(
         &mut buf,
@@ -27,8 +33,7 @@ pub fn generate_posts_index_page(metas: Vec<(String, Value)>) -> String {
         component::skip,
         |buf, styles| {
             buf.push_str("<img src=\"/catch.png\" class=\"catch\">");
-            for (id, value) in metas {
-                let meta = serde_yaml::from_value::<PostMeta>(value).unwrap();
+            for (id, meta) in metas {
                 buf.push_str("<div class=\"card\">");
                 buf.push_str(&format!("<a href=\"/posts/{id}\">{}</a>", meta.title));
                 component::push_meta(buf, styles, &meta.genre, &meta.tags, &meta.date);
