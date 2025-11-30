@@ -2,17 +2,25 @@
 //!
 //! - 適切にレイアウトの変換関数を呼び出すだけ
 
-use super::Context;
+use super::{Context, Styles};
 
 use markdown::mdast::Node;
+use serde_yaml::Value;
 
 mod basic;
 mod post;
 
-pub fn to_html(layout: &str, content: &Node, ctx: &mut Context) {
+pub fn to_html(
+    layout: &str,
+    mdast: &Node,
+    value: &Value,
+    buf: &mut String,
+    styles: &mut Styles,
+    ctx: &mut Context,
+) {
     if layout == "basic" {
-        basic::to_html(content, ctx);
+        basic::to_html(mdast, value, buf, styles, ctx);
     } else if layout == "post" {
-        post::to_html(content, ctx);
+        post::to_html(mdast, value, buf, styles, ctx);
     }
 }

@@ -15,10 +15,9 @@ use std::collections::HashSet;
 mod convert;
 mod layout;
 
+type Styles = HashSet<StrPtr>;
+
 struct Context {
-    fm_value: Value,
-    buf: String,
-    styles: HashSet<StrPtr>,
     h2s: Vec<String>,
 }
 
@@ -53,23 +52,20 @@ fn parse(content: &str) -> (Node, Value) {
     (mdast, value)
 }
 
-fn to_html_body(mdast: &Node, value: &Value, layout: &str) -> (String, HashSet<StrPtr>) {
-    let mut ctx = Context {
-        fm_value: value.clone(),
-        buf: String::new(),
-        styles: HashSet::new(),
-        h2s: Vec::new(),
-    };
-    ctx.styles.insert(StrPtr(style::MD));
-    layout::to_html(layout, mdast, &mut ctx);
-    (ctx.buf, ctx.styles)
+fn to_html_body(mdast: &Node, value: &Value, layout: &str) -> (String, Styles) {
+    let mut buf = String::new();
+    let mut styles = Styles::new();
+    let mut ctx = Context { h2s: Vec::new() };
+    styles.insert(StrPtr(style::MD));
+    layout::to_html(layout, mdast, value, &mut buf, &mut styles, &mut ctx);
+    (buf, styles)
 }
 
 pub fn to_html(content: &str) -> (String, Value) {
     let (mdast, value) = parse(content);
     let title = value["title"].as_str().unwrap();
     let layout = value["layout"].as_str().unwrap();
-    let (body, styles) = to_html_body(&mdast, &value, &layout);
-    let html = template::generate_html_string(&styles, &title, &body);
+    let (body, styles) = to_html_body(&mdast, &value, layout);
+    let html = template::generate_html_string(&styles, title, &body);
     (html, value)
 }
