@@ -2,18 +2,20 @@
 
 レイアウトはMarkdownファイルの中でも役割ごとに異なる雛形。
 
-Markdownはbasicテンプレートを使われるので、triadの中央コンテナ内での雛形である。
+> [!NOTE]
+> Markdownはbasicテンプレートを使われるので、triadの中央コンテナ内での雛形である。
 
 ## basic
 
-`/articles/`下でも`/scraps/`下でも`/pages/`下でもないMarkdownファイルのレイアウト。
+他のレイアウトに該当しないすべてMarkdownファイルに該当する。
 
 レイアウト特有の追加要素はない。
 MarkdownのASTがそのままHTML要素のASTに変換される。
 
 ## article
 
-`/articles/`下のMarkdownファイルのレイアウト。
+[articles](/articles)下のMarkdownファイルのレイアウト。
+次の特徴を持つ:
 
 - コンテンツの先頭に次が並ぶ:
    1. ジャンル別アイコン

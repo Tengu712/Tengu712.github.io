@@ -4,6 +4,8 @@
 
 ## basic
 
+次の特徴を持つ:
+
 - Headerを持つ
 - Footerを持つ
 - Triadを持つ
@@ -11,4 +13,5 @@
 
 すべてのMarkdownソースは最終的にbasicテンプレートによってHTML文字列へ変換される。
 
-どんなレイアウトであろうが、frontmatterに`index: false`を指定するとindexは生成されない。
+> [!NOTE]
+> どんなレイアウトであろうが、frontmatterに`index: false`を指定するとindexは生成されない。
