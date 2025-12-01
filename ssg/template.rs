@@ -28,12 +28,6 @@ fn push_css(css: &str, buf: &mut String) {
     }
 }
 
-/// 基本的なテンプレート
-///
-/// - Headerを持つ
-/// - Footerを持つ
-/// - Triadを持つ
-/// - 目次を持つ (`h2s`が空でなければ)
 pub fn generate_basic_html(mut styles: Styles, title: &str, content: &str, h2s: H2s) -> String {
     const HTML_STYLE: &str = "\
         <!DOCTYPE html>\
