@@ -15,8 +15,7 @@ pub fn to_html(mdast: &Node, value: &Value, styles: &mut Styles) -> String {
     let mut buf = String::new();
     let fm = serde_yaml::from_value::<FrontMatter>(value.clone()).unwrap();
 
-    styles.insert(StrPtr(style::POST));
-    styles.insert(StrPtr(style::META));
+    styles.insert(StrPtr(style::ARTICLE));
 
     // icon
     buf.push_str("<div class=\"catch-icon\">");

@@ -9,7 +9,7 @@ date: "2025/03/09"
 
 ![シミュレーションの様子](https://img.skdassoc.work/posts/bitmap-collision-with-gpu/01.gif)
 
-[だいぶ昔に行ったビットマップによる衝突判定実験](https://skdassoc.com/posts/bitmap-collision/)の再検証です。
+[だいぶ昔に行ったビットマップによる衝突判定実験](/articles/bitmap-collision/)の再検証です。
 
 前提として、この衝突判定は2DSTGに用いることを想定しています。
 

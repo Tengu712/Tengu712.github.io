@@ -48,7 +48,7 @@ pub fn generate_basic_html(mut styles: Styles, title: &str, content: &str, h2s: 
         <body>\
             <div class=\"header\">\
                 <a href=\"/\"><img src=\"/favicon.ico\"></a>\
-                <a href=\"/\">Posts</a>\
+                <a href=\"/\">Articles</a>\
                 <a href=\"/scraps/\">Scraps</a>\
                 <a href=\"/pages/\">Pages</a>\
                 <a href=\"/about/\">About</a>\

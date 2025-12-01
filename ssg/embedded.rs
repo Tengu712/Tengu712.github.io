@@ -16,10 +16,10 @@ pub mod style {
     pub const BASIC: &str = include_str!("../asset/style/basic.css");
 
     // ページ固有
-    pub const POSTS_INDEX: &str = include_str!("../asset/style/posts-index.css");
+    pub const ARTICLES_INDEX: &str = include_str!("../asset/style/articles-index.css");
 
     // レイアウト
-    pub const POST: &str = include_str!("../asset/style/post.css");
+    pub const ARTICLE: &str = include_str!("../asset/style/article.css");
 
     // コンポーネント
     pub const META: &str = include_str!("../asset/style/meta.css");

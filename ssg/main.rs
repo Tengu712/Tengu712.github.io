@@ -75,8 +75,8 @@ fn clear_dist() {
     }
 }
 
-fn generate_posts_and_index() {
-    let metas = glob::glob("pages/posts/*.md")
+fn generate_articles_and_index() {
+    let metas = glob::glob("pages/articles/*.md")
         .unwrap()
         .map(|p| {
             let p = p.unwrap();
@@ -87,7 +87,7 @@ fn generate_posts_and_index() {
         .collect::<Vec<_>>();
     fs::write(
         "dist/index.html",
-        defaults::generate_posts_index_html(metas),
+        defaults::generate_articles_index_html(metas),
     )
     .unwrap();
 }
@@ -106,7 +106,7 @@ fn copy_publics() {
 
 fn main() {
     clear_dist();
-    generate_posts_and_index();
+    generate_articles_and_index();
     generate_about();
     copy_publics();
 }
