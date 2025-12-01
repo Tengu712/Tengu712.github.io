@@ -3,7 +3,7 @@
 レイアウトはMarkdownファイルの中でも役割ごとに異なる雛形。
 
 > [!NOTE]
-> Markdownはbasicテンプレートを使われるので、triadの中央コンテナ内での雛形である。
+> Markdownにはbasicテンプレートが使われるので、triadの中央コンテナ内での雛形である。
 
 ## basic
 
