@@ -14,7 +14,7 @@ MarkdownのASTがそのままHTML要素のASTに変換される。
 
 ## article
 
-[articles](/articles)下のMarkdownファイルのレイアウト。
+[articles](/pages/articles)下のMarkdownファイルのレイアウト。
 次の特徴を持つ:
 
 - コンテンツの先頭に次が並ぶ:
