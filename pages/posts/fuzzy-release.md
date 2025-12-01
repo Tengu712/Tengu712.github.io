@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "ジョークプログラミング言語「Fuzzy」"
 genre: "release"
 tags: ["lang"]

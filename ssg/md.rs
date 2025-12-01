@@ -1,29 +1,18 @@
 //! Markdown文字列をHTML文字列に変換するモジュール
-//!
-//! - 変換に限らずMarkdownに関するものは取り敢えずこのモジュールの範囲
-//! - 実際はlayoutモジュールに委譲する
 
-use crate::{embedded::*, strutil::StrPtr, template};
+use crate::template::{self, H2s, Styles};
 use markdown::{
     Constructs, ParseOptions,
     mdast::{Node, Yaml},
 };
 use serde_yaml::Value;
-use std::collections::HashSet;
 
 mod convert;
 mod layout;
 
-type Styles = HashSet<StrPtr>;
-
-fn extract_frontmetter_yaml(mdast: &Node) -> &Yaml {
-    let Node::Root(root) = mdast else {
-        panic!("Rootじゃないやん: {:?}", mdast.position());
-    };
-    let Some(Node::Yaml(yaml)) = root.children.first() else {
-        panic!("frontmatterが書かれてないやん: {:?}", mdast.position());
-    };
-    yaml
+pub enum Layout {
+    Basic,
+    Article,
 }
 
 fn parse(content: &str) -> (Node, Value) {
@@ -47,19 +36,59 @@ fn parse(content: &str) -> (Node, Value) {
     (mdast, value)
 }
 
-fn to_html_body(mdast: &Node, value: &Value, layout: &str) -> (String, Styles) {
-    let mut buf = String::new();
-    let mut styles = Styles::new();
-    styles.insert(StrPtr(style::MD));
-    layout::to_html(layout, mdast, value, &mut buf, &mut styles);
-    (buf, styles)
+fn extract_frontmetter_yaml(mdast: &Node) -> &Yaml {
+    let Node::Root(root) = mdast else {
+        panic!("Rootじゃないやん: {:?}", mdast.position());
+    };
+    let Some(Node::Yaml(yaml)) = root.children.first() else {
+        panic!("frontmatterが書かれてないやん: {:?}", mdast.position());
+    };
+    yaml
 }
 
-pub fn to_html(content: &str) -> (String, Value) {
-    let (mdast, value) = parse(content);
+fn collect_h2s(mdast: &Node) -> H2s {
+    let Node::Root(root) = mdast else {
+        panic!("Rootじゃねえじゃん");
+    };
+    let mut h2s = Vec::new();
+    for node in &root.children {
+        let Node::Heading(h) = node else {
+            continue;
+        };
+        if h.depth != 2 {
+            continue;
+        }
+        if h.children.len() != 1 {
+            panic!("h2に変なもんいれんな: {:?}", node);
+        }
+        let Some(Node::Text(t)) = h.children.first() else {
+            panic!("h2に変なもんいれんな: {:?}", node);
+        };
+        h2s.push((t.value.clone(), h.position.as_ref().unwrap().start.line));
+    }
+    h2s
+}
+
+pub fn to_html(mdtxt: &str, layout: Layout) -> (String, Value) {
+    let (mdast, value) = parse(mdtxt);
+
     let title = value["title"].as_str().unwrap();
-    let layout = value["layout"].as_str().unwrap();
-    let (body, styles) = to_html_body(&mdast, &value, layout);
-    let html = template::generate_html_string(&styles, title, &body);
-    (html, value)
+    let index = value["index"].as_bool();
+
+    let mut styles = Styles::new();
+
+    let content = match layout {
+        Layout::Basic => layout::basic::to_html(&mdast, &mut styles),
+        Layout::Article => layout::article::to_html(&mdast, &value, &mut styles),
+    };
+    let h2s = if index == Some(false) {
+        Vec::new()
+    } else {
+        collect_h2s(&mdast)
+    };
+
+    (
+        template::generate_basic_html(styles, title, &content, h2s),
+        value,
+    )
 }

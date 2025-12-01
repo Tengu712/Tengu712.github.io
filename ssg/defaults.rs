@@ -1,9 +1,13 @@
 //! 強制的に作られるファイルを作るモジュール
 
-use crate::{component, embedded::*, strutil::StrPtr, template};
+use crate::{
+    component,
+    embedded::*,
+    strutil::StrPtr,
+    template::{self, H2s, Styles},
+};
 use serde::Deserialize;
 use serde_yaml::Value;
-use std::collections::HashSet;
 
 #[derive(Deserialize)]
 struct PostMeta {
@@ -13,37 +17,7 @@ struct PostMeta {
     date: String,
 }
 
-pub fn generate_posts_index_page(metas: Vec<(String, Value)>) -> String {
-    let mut buf = String::new();
-    let mut styles = HashSet::new();
-
-    styles.insert(StrPtr(style::MD));
-    styles.insert(StrPtr(style::POSTS_INDEX));
-
-    let mut metas = metas
-        .into_iter()
-        .map(|(id, value)| (id, serde_yaml::from_value::<PostMeta>(value).unwrap()))
-        .collect::<Vec<_>>();
-    metas.sort_by(|(_, meta1), (_, meta2)| meta2.date.cmp(&meta1.date));
-
-    component::push_header(&mut buf, &mut styles);
-    component::push_triad(
-        &mut buf,
-        &mut styles,
-        component::skip,
-        |buf, styles| {
-            buf.push_str("<img src=\"/catch.png\" class=\"catch\">");
-            for (id, meta) in metas {
-                buf.push_str("<div class=\"card\">");
-                buf.push_str(&format!("<a href=\"/posts/{id}\">{}</a>", meta.title));
-                component::push_meta(buf, styles, &meta.genre, &meta.tags, &meta.date);
-                buf.push_str("</div>");
-            }
-        },
-        component::skip,
-    );
-    component::push_footer(&mut buf, &mut styles);
-
+pub fn generate_posts_index_html(metas: Vec<(String, Value)>) -> String {
     const FILTER_SCRIPT: &str = "\
         <script>\
             const filter = new URLSearchParams(location.search).get('filter');\
@@ -58,7 +32,25 @@ pub fn generate_posts_index_page(metas: Vec<(String, Value)>) -> String {
             }\
         </script>\
     ";
+
+    let mut buf = String::new();
+    let mut styles = Styles::new();
+    let mut metas = metas
+        .into_iter()
+        .map(|(id, value)| (id, serde_yaml::from_value::<PostMeta>(value).unwrap()))
+        .collect::<Vec<_>>();
+
+    styles.insert(StrPtr(style::POSTS_INDEX));
+    metas.sort_by(|(_, meta1), (_, meta2)| meta2.date.cmp(&meta1.date));
+
+    buf.push_str("<img src=\"/catch.png\" class=\"catch\">");
+    for (id, meta) in metas {
+        buf.push_str("<div class=\"card\">");
+        buf.push_str(&format!("<a href=\"/posts/{id}\">{}</a>", meta.title));
+        component::push_meta(&mut buf, &mut styles, &meta.genre, &meta.tags, &meta.date);
+        buf.push_str("</div>");
+    }
     buf.push_str(FILTER_SCRIPT);
 
-    template::generate_html_string(&styles, "天狗会議録", &buf)
+    template::generate_basic_html(styles, "天狗会議録", &buf, H2s::new())
 }

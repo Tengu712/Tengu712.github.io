@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "MakeのようなPythonデコレータ"
 genre: "devenv"
 tags: ["build", "python"]

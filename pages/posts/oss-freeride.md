@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "OSSのフリーライドについて"
 genre: "essay"
 tags: ["oss"]

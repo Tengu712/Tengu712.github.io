@@ -1,7 +1,13 @@
-//! 本ホームページで作られるすべてHTMLの共通部分に関するモジュール
+//! テンプレートに関するモジュール
+//!
+//! - 情報を与えてHTML文字列を生成する
+//! - テンプレートの種類ごとに関数を定義する
 
-use crate::strutil::StrPtr;
+use crate::{embedded::style, strutil::StrPtr};
 use std::collections::HashSet;
+
+pub type Styles = HashSet<StrPtr>;
+pub type H2s = Vec<(String, usize)>;
 
 fn push_css(css: &str, buf: &mut String) {
     let mut space_count = 0;
@@ -22,7 +28,13 @@ fn push_css(css: &str, buf: &mut String) {
     }
 }
 
-pub fn generate_html_string(styles: &HashSet<StrPtr>, title: &str, body: &str) -> String {
+/// 基本的なテンプレート
+///
+/// - Headerを持つ
+/// - Footerを持つ
+/// - Triadを持つ
+/// - 目次を持つ (`h2s`が空でなければ)
+pub fn generate_basic_html(mut styles: Styles, title: &str, content: &str, h2s: H2s) -> String {
     const HTML_STYLE: &str = "\
         <!DOCTYPE html>\
         <html lang=\"ja\">\
@@ -36,15 +48,46 @@ pub fn generate_html_string(styles: &HashSet<StrPtr>, title: &str, body: &str) -
             </style>\
             <title>\
     ";
-    const TITLE_BODY: &str = "\
+    const TITLE_TRIAD_CENTER: &str = "\
             </title>\
         </head>\
         <body>\
+            <div class=\"header\">\
+                <a href=\"/\"><img src=\"/favicon.ico\"></a>\
+                <a href=\"/\">Posts</a>\
+                <a href=\"/scraps/\">Scraps</a>\
+                <a href=\"/pages/\">Pages</a>\
+                <a href=\"/about/\">About</a>\
+            </div>\
+            <div class=\"triad\">\
+                <div class=\"triad-side\">\
+                </div>\
+                <div class=\"triad-center\">\
     ";
-    const BODY_HTML: &str = "\
+    const TRIAD_CENTER_TRIAD_SIDE: &str = "\
+                </div>\
+                <div class=\"triad-side\">\
+    ";
+    const INDEX_FORMER: &str = "\
+                    <div class=\"index\">\
+                        <span>Index</span>\
+                        <ol>\
+    ";
+    const INDEX_LATTER: &str = "\
+                        </ol>\
+                    </div>\
+    ";
+    const TRIAD_SIDE_HTML: &str = "\
+                </div>\
+            </div>\
+            <div class=\"footer\">\
+                2022-2025, Tengu712, Skydog Association\
+            </div>\
         </body>\
         </html>\
     ";
+
+    styles.insert(StrPtr(style::BASIC));
 
     let mut buf = String::new();
     buf.push_str(HTML_STYLE);
@@ -53,8 +96,17 @@ pub fn generate_html_string(styles: &HashSet<StrPtr>, title: &str, body: &str) -
     }
     buf.push_str(STYLE_TITLE);
     buf.push_str(title);
-    buf.push_str(TITLE_BODY);
-    buf.push_str(body);
-    buf.push_str(BODY_HTML);
+    buf.push_str(TITLE_TRIAD_CENTER);
+    buf.push_str(content);
+    buf.push_str(TRIAD_CENTER_TRIAD_SIDE);
+    if !h2s.is_empty() {
+        buf.push_str(INDEX_FORMER);
+        for (text, id) in h2s {
+            buf.push_str(&format!("<li><a href=\"#{id}\">{text}</a></li>"));
+        }
+        buf.push_str(INDEX_LATTER);
+    }
+    buf.push_str(TRIAD_SIDE_HTML);
+
     buf
 }

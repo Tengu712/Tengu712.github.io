@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "GPUを用いたビットマップによる衝突判定"
 genre: "experiment"
 tags: ["cg", "directx"]

@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "えいがさき2章を受け入れられない話"
 genre: "essay"
 tags: ["nijigasaki"]

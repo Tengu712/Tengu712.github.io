@@ -1,0 +1,166 @@
+html, body {
+    -webkit-text-size-adjust: 100%;
+    margin: 0;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+    color: #08131a;
+    font-size: 16px;
+}
+
+body {
+   display: flex;
+   flex-direction: column;
+}
+
+h1 {
+    margin-bottom: 0;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+h2 {
+    margin: 0;
+    margin-top: 54px;
+    margin-bottom: -18px;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+p {
+    margin: 36px 0;
+}
+
+a {
+    color: #08131a;
+    text-decoration: none;
+}
+
+a:hover {
+    color: red;
+}
+
+blockquote {
+    margin: 36px 0;
+    padding: 16px 10px;
+    border-left: 5.6px solid #7a7a7a;
+    background-color: #eee;
+}
+
+blockquote p {
+    margin: 16px;
+}
+
+ul, ol {
+    --navbar-primary-top-margin: 0;
+    margin: 36px 0;
+    padding: 0;
+    padding-left: 24px;
+}
+
+ul ul,
+ul ol,
+ol ul,
+ol ol {
+    margin: 0;
+}
+
+li p {
+    all: unset;
+}
+
+pre {
+    margin: 16px 0;
+    padding: 24px;
+    border-radius: 5px;
+    overflow-x: auto;
+    overflow-wrap: break-word;
+    tab-size: 4;
+    -moz-tab-size: 4;
+}
+
+.header {
+    width: 100%;
+    height: 48px;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header>* {
+    margin: 0 8px;
+}
+
+.header>*:first-child {
+    margin-left: 16px;
+    margin-right: auto;
+}
+
+.header>*:last-child {
+    margin-right: 16px;
+}
+
+.header img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    display: block;
+}
+
+.footer {
+    width: 100%;
+    padding-top: 40px;
+    padding-bottom: 16px;
+    text-align: center;
+    color: #aaa;
+}
+
+.triad {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+}
+
+.triad-side {
+    flex: 1;
+}
+
+.triad-center {
+    width: 100%;
+    max-width: 620px;
+}
+
+@media (max-width: 652px) {
+    .triad-center {
+      padding: 16px;
+    }
+}
+
+.index {
+    max-width: 100%;
+    padding-top: 48px;
+    padding-left: 60px;
+    padding-right: 16px;
+    position: sticky;
+    top: 0;
+    display: block;
+    box-sizing: border-box;
+}
+
+.index>ol {
+    margin: 8px 0;
+    font-size: 14px;
+}
+
+.index * {
+    color: #777 !important;
+}
+
+@media (max-width: 1100px) {
+    .index {
+        display: none;
+    }
+}

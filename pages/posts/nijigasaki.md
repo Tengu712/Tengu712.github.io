@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "俺は高咲侑ではなかったという話"
 genre: "essay"
 tags: ["nijigasaki"]

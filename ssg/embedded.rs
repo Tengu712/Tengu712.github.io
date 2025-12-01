@@ -12,23 +12,15 @@ pub mod icon {
 }
 
 pub mod style {
-    // レイアウト共通
-    pub const MD: &str = include_str!("../asset/style/md.css");
-
-    // レイアウト
-    pub const POST: &str = include_str!("../asset/style/post.css");
-
-    // レイアウトコンポーネント
-    pub const TRIAD: &str = include_str!("../asset/style/triad.css");
-
-    // コンポーネント
-    pub const FOOTER: &str = include_str!("../asset/style/footer.css");
-    pub const HEADER: &str = include_str!("../asset/style/header.css");
-    pub const META: &str = include_str!("../asset/style/meta.css");
+    // テンプレート
+    pub const BASIC: &str = include_str!("../asset/style/basic.css");
 
     // ページ固有
     pub const POSTS_INDEX: &str = include_str!("../asset/style/posts-index.css");
 
-    // レイアウト固有
-    pub const INDEX: &str = include_str!("../asset/style/index.css");
+    // レイアウト
+    pub const POST: &str = include_str!("../asset/style/post.css");
+
+    // コンポーネント
+    pub const META: &str = include_str!("../asset/style/meta.css");
 }
