@@ -99,7 +99,11 @@ fn generate_about() {
 fn copy_publics() {
     glob::glob("public/**/*").unwrap().for_each(|src| {
         let src = src.unwrap();
+        if !src.is_file() {
+            return;
+        }
         let dst = replace_root_with_dist(&src);
+        ensure_dir(&dst);
         fs::copy(&src, &dst).unwrap();
     });
 }

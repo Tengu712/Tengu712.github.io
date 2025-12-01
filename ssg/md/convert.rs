@@ -4,6 +4,7 @@
 //! - コンポーネントやコード量の多くなりそうな要素は子モジュールへ
 
 use super::Styles;
+use crate::{embedded::style, strutil::StrPtr};
 use markdown::mdast::Node;
 
 mod center;
@@ -41,8 +42,10 @@ pub fn mdast_to_html(node: &Node, buf: &mut String, styles: &mut Styles) {
             buf.push_str(&n.value);
             buf.push_str("</code>");
         }
-        // TODO:
-        Node::InlineMath(_) => (),
+        Node::InlineMath(n) => {
+            styles.insert(StrPtr(style::KATEX_MIN_CSS));
+            buf.push_str(&katex::render(&n.value).unwrap());
+        }
         Node::Delete(n) => {
             buf.push_str("<del>");
             mdasts_to_html(&n.children, buf, styles);
@@ -80,6 +83,11 @@ pub fn mdast_to_html(node: &Node, buf: &mut String, styles: &mut Styles) {
         }
         Node::Text(n) => buf.push_str(&n.value),
         Node::Code(n) => buf.push_str(&code::to_html(&n.value, &n.lang)),
+        Node::Math(n) => {
+            styles.insert(StrPtr(style::KATEX_MIN_CSS));
+            let opts = katex::Opts::builder().display_mode(true).build().unwrap();
+            buf.push_str(&katex::render_with_opts(&n.value, opts).unwrap());
+        }
         Node::Heading(n) => {
             match n.depth {
                 1 => buf.push_str("<h1>"),

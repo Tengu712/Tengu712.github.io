@@ -23,4 +23,7 @@ pub mod style {
 
     // コンポーネント
     pub const META: &str = include_str!("../asset/style/meta.css");
+
+    // 他
+    pub const KATEX_MIN_CSS: &str = include_str!("../asset/style/katex.min.css");
 }

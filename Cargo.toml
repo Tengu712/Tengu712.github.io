@@ -9,6 +9,7 @@ path = "ssg/main.rs"
 
 [dependencies]
 glob = "0.3.3"
+katex = "0.4"
 markdown = "1.0.0"
 serde = { version = "1.0.228", features = ["derive"] }
 serde_yaml = "0.9.34"
