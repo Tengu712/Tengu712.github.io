@@ -20,7 +20,7 @@ pub fn mdast_to_html(node: &Node, buf: &mut String, styles: &mut Styles) {
         Node::MdxJsxFlowElement(n) => {
             let name = n.name.as_ref().unwrap();
             if name == "Center" {
-                center::center(n, buf, styles);
+                center::to_html(n, buf, styles);
             } else {
                 panic!("{name}コンポーネントはねえよ");
             }
