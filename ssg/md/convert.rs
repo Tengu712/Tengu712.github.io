@@ -23,6 +23,8 @@ pub fn mdast_to_html(node: &Node, buf: &mut String, styles: &mut Styles) {
             let name = n.name.as_ref().unwrap();
             if name == "Center" {
                 center::to_html(n, buf, styles);
+            } else if name == "Tombstone" {
+                buf.push_str("<p style=\"text-align: right\">■</p>");
             } else {
                 panic!("{name}コンポーネントはねえよ");
             }

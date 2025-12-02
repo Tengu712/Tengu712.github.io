@@ -6,20 +6,3 @@
 .catch-icon>svg {
     width: 96px;
 }
-
-.img-container {
-    margin: 0 auto;
-    width: 80%;
-    max-width: 80%;
-    text-align: center;
-}
-
-.img-container label {
-    font-size: 14px;
-}
-
-img {
-    margin: 0 auto;
-    max-width: 100%;
-    display: block;
-}
