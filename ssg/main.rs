@@ -22,9 +22,9 @@ mod template;
 
 use md::Layout;
 
-// fn is_markdown(path: &Path) -> bool {
-//     path.extension().is_some_and(|ext| ext == "md")
-// }
+fn is_markdown(path: &Path) -> bool {
+    path.extension().is_some_and(|ext| ext == "md")
+}
 
 fn get_file_stem(path: &Path) -> String {
     path.file_stem().unwrap().to_string_lossy().to_string()
@@ -63,11 +63,11 @@ fn process_markdown_source(path: &Path, layout: Layout) -> Value {
     value
 }
 
-// fn process_normal_source(path: &Path) {
-//     let dst_path = replace_root_with_dist(path);
-//     ensure_dir(&dst_path);
-//     fs::copy(path, dst_path).unwrap();
-// }
+fn process_normal_source(path: &Path) {
+    let dst_path = replace_root_with_dist(path);
+    ensure_dir(&dst_path);
+    fs::copy(path, dst_path).unwrap();
+}
 
 fn clear_dist() {
     if Path::new("dist").exists() {
@@ -92,6 +92,20 @@ fn generate_articles_and_index() {
     .unwrap();
 }
 
+fn generate_pages() {
+    glob::glob("pages/pages/**/*").unwrap().for_each(|p| {
+        let p = p.unwrap();
+        if !p.is_file() {
+            return;
+        }
+        if is_markdown(&p) {
+            process_markdown_source(&p, Layout::Basic);
+        } else {
+            process_normal_source(&p);
+        }
+    });
+}
+
 fn generate_about() {
     process_markdown_source(Path::new("pages/about/index.md"), Layout::Basic);
 }
@@ -111,6 +125,7 @@ fn copy_publics() {
 fn main() {
     clear_dist();
     generate_articles_and_index();
+    generate_pages();
     generate_about();
     copy_publics();
 }

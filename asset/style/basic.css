@@ -165,6 +165,10 @@ td:last-child {
     max-width: 620px;
 }
 
+.triad-center a {
+    text-decoration: underline;
+}
+
 @media (max-width: 652px) {
     .triad-center {
       padding: 16px;
