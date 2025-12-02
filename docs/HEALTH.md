@@ -11,7 +11,6 @@ flowchart TD
     md --> md::layout::article
     md::layout::basic --> md::convert
     md::layout::article --> md::convert
-    md::convert <--> md::convert::center
     md::convert --> md::convert::code
     md::convert <--> md::convert::table
     main --> defaults

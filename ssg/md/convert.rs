@@ -7,9 +7,20 @@ use super::Styles;
 use crate::{embedded::style, strutil::StrPtr};
 use markdown::mdast::Node;
 
-mod center;
 mod code;
 mod table;
+
+fn component_to_html(name: &str, children: &[Node], buf: &mut String, styles: &mut Styles) {
+    if name == "Center" {
+        buf.push_str("<div style=\"text-align: center\">");
+        mdasts_to_html(children, buf, styles);
+        buf.push_str("</div>");
+    } else if name == "Tombstone" {
+        buf.push_str("<p style=\"text-align: right\">■</p>");
+    } else {
+        panic!("{name}コンポーネントはねえよ");
+    }
+}
 
 pub fn mdast_to_html(node: &Node, buf: &mut String, styles: &mut Styles) {
     match node {
@@ -20,14 +31,7 @@ pub fn mdast_to_html(node: &Node, buf: &mut String, styles: &mut Styles) {
             buf.push_str("</blockquote>");
         }
         Node::MdxJsxFlowElement(n) => {
-            let name = n.name.as_ref().unwrap();
-            if name == "Center" {
-                center::to_html(n, buf, styles);
-            } else if name == "Tombstone" {
-                buf.push_str("<p style=\"text-align: right\">■</p>");
-            } else {
-                panic!("{name}コンポーネントはねえよ");
-            }
+            component_to_html(n.name.as_ref().unwrap(), &n.children, buf, styles)
         }
         Node::List(n) if n.ordered => {
             buf.push_str("<ol>");
@@ -71,6 +75,9 @@ pub fn mdast_to_html(node: &Node, buf: &mut String, styles: &mut Styles) {
                 buf.push_str("</i></label>");
             }
             buf.push_str("</div>");
+        }
+        Node::MdxJsxTextElement(n) => {
+            component_to_html(n.name.as_ref().unwrap(), &n.children, buf, styles)
         }
         Node::Link(n) => {
             buf.push_str("<a href=\"");
@@ -120,7 +127,7 @@ pub fn mdast_to_html(node: &Node, buf: &mut String, styles: &mut Styles) {
             mdasts_to_html(&n.children, buf, styles);
             buf.push_str("</p>");
         }
-        _ => unimplemented!(),
+        _ => panic!("unimplemented ast: {:?}", node),
     }
 }
 
