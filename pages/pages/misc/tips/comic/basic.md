@@ -1,6 +1,5 @@
 ---
 title: "基礎知識"
-index: false
 ---
 
 # 基礎知識
