@@ -46,7 +46,7 @@ pub fn generate_articles_index_html(metas: Vec<(String, Value)>) -> String {
     buf.push_str("<img src=\"/catch.png\" class=\"catch\">");
     for (id, meta) in metas {
         buf.push_str("<div class=\"card\">");
-        buf.push_str(&format!("<a href=\"/articles/{id}\">{}</a>", meta.title));
+        buf.push_str(&format!("<a href=\"/articles/{id}\" style=\"text-decoration: none !important\">{}</a>", meta.title));
         component::push_meta(&mut buf, &mut styles, &meta.genre, &meta.tags, &meta.date);
         buf.push_str("</div>");
     }
