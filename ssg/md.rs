@@ -20,6 +20,7 @@ fn parse(content: &str) -> (Node, Value) {
         constructs: Constructs {
             code_indented: false,
             frontmatter: true,
+            gfm_table: true,
             html_flow: false,
             html_text: false,
             math_flow: true,

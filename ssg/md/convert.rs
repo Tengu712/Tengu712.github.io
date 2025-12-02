@@ -9,6 +9,7 @@ use markdown::mdast::Node;
 
 mod center;
 mod code;
+mod table;
 
 pub fn mdast_to_html(node: &Node, buf: &mut String, styles: &mut Styles) {
     match node {
@@ -106,6 +107,7 @@ pub fn mdast_to_html(node: &Node, buf: &mut String, styles: &mut Styles) {
                 d => panic!("h{d}タグは認めておらん"),
             });
         }
+        Node::Table(n) => table::to_html(n, buf, styles),
         Node::ListItem(n) => {
             buf.push_str("<li>");
             mdasts_to_html(&n.children, buf, styles);
