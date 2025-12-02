@@ -117,8 +117,8 @@ title: "演出"
 <Small>近年の荒木飛呂彦先生の作品では、例のような焦燥や逡巡のシーンだけでなく、格言や迫力のシーン、フォーカスの当たっていない物体を描くときに多用されている。</Small>
 
 <DoubleImages
-    src1={https://img.skdassoc.work/pages%2Fmisc%2Ftips%2Fcomic%2Fwhite.png}
-    src2={https://img.skdassoc.work/pages%2Fmisc%2Ftips%2Fcomic%2Fwhite-out.png}
+    src1="https://img.skdassoc.work/pages%2Fmisc%2Ftips%2Fcomic%2Fwhite.png"
+    src2="https://img.skdassoc.work/pages%2Fmisc%2Ftips%2Fcomic%2Fwhite-out.png"
 />
 
 また、シルエットをぼかしたり・上にトーンを貼ることで、エモーショナルな雰囲気を演出できる。

@@ -25,10 +25,10 @@ fn find_jsx_attribute<'a>(attributes: &'a [AttributeContent], name: &str) -> &'a
         if prop.name != name {
             continue;
         }
-        let AttributeValue::Expression(v) = prop.value.as_ref().unwrap() else {
-            panic!("Expressionじゃねえ: {:?}", a);
+        return match prop.value.as_ref().unwrap() {
+            AttributeValue::Expression(v) => &v.value,
+            AttributeValue::Literal(v) => v,
         };
-        return &v.value;
     }
     panic!("{name}がねえ: {:?}", attributes);
 }
@@ -43,9 +43,9 @@ fn component_to_html(n: MdxJsx, buf: &mut String, styles: &mut Styles) {
         mdasts_to_html(children, buf, styles);
         buf.push_str("</div>");
     } else if name == "Small" {
-        buf.push_str("<div style=\"font-size: 14px; color: #777\">");
+        buf.push_str("<div style=\"font-size: 14px; color: #777\"><p>");
         mdasts_to_html(children, buf, styles);
-        buf.push_str("</div>");
+        buf.push_str("</p></div>");
     } else if name == "DoubleImages" {
         let (src1, src2) = match n {
             MdxJsx::Flow(n) => (
