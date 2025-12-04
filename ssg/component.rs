@@ -30,9 +30,9 @@ pub fn push_scrap_meta(
 ) {
     styles.insert(StrPtr(style::SCRAP_META));
     buf.push_str("<div class=\"scrap-meta\">");
-    buf.push_str(&format!("<a href=\"/scraps/?filter={}\">%{0}</a>", topic));
+    buf.push_str(&format!("<a href=\"/scraps/?filter={}\">${0}</a>", topic));
     for tag in tags {
-        buf.push_str(&format!("<a href=\"/?filter={}\">#{0}</a>", tag));
+        buf.push_str(&format!("<a href=\"/scraps/?filter={}\">#{0}</a>", tag));
     }
     buf.push_str("</div>");
 }

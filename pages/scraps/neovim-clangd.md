@@ -1,7 +1,7 @@
 ---
 title: Neovim+clangd
 topic: neovim
-tags: ["c/c++"]
+tags: ["c/cpp"]
 ---
 
 ```lua
