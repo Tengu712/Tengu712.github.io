@@ -1,0 +1,1969 @@
+<!DOCTYPE html>
+<html lang='ja'>
+
+<head>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1, minimum-scale=1, user-scalable=yes'>
+  <title>クリア機体表</title>
+  <style>
+	/* ============================================================================================================= */
+	/*     general                                                                                                                                           */
+	/* ============================================================================================================= */
+
+	body {
+	  text-size-adjust: none;
+	  background-color: black;
+	  color: white;
+	}
+
+	tr,
+	th,
+	td {
+	  border: none;
+	  padding: 0;
+	}
+
+	/* ============================================================================================================= */
+	/*     outline                                                                                                                                           */
+	/* ============================================================================================================= */
+
+	#outline {
+	  text-align: center;
+	}
+
+	#outline a,
+	#outline a:visited {
+	  color: red;
+	  cursor: pointer;
+	  text-decoration: none;
+	}
+
+	/* ============================================================================================================= */
+	/*     return                                                                                                                                            */
+	/* ============================================================================================================= */
+
+	#return {
+	  text-align: center;
+	}
+
+	#return a,
+	#return a:visited {
+	  color: red;
+	  cursor: pointer;
+	  text-decoration: underline;
+	}
+
+	/* ============================================================================================================= */
+	/*     all-diffs                                                                                                                                         */
+	/* ============================================================================================================= */
+
+	#all-diffs {
+	  width: 850px;
+	  margin: 0 auto;
+	  padding: 0;
+	  border: none;
+	  border-collapse: collapse;
+	  white-space: nowrap;
+	}
+
+	#all-diffs table {
+	  width: 100%;
+	  height: 100%;
+	  margin: 0;
+	  padding: 0;
+	  border: none;
+	  border-collapse: collapse;
+	  white-space: nowrap;
+	}
+
+	#all-diffs .work-table th {
+	  font-size: 1.0rem;
+	  height: 1.0rem;
+	}
+
+	#all-diffs .work-table th,
+	#all-diffs .work-table td {
+	  border: 1px white solid;
+	}
+
+	#all-diffs .work-table a,
+	#all-diffs .work-table a:visited {
+	  color: inherit;
+	  cursor: pointer;
+	  text-decoration: none;
+	}
+
+	#all-difs .th6,
+	#all-difs .th10,
+	#all-difs .th11,
+	#all-difs .th12,
+	#all-difs .th13,
+	#all-difs .th14,
+	#all-difs .th15,
+	#all-difs .th18 {
+	  font-size: 1.0rem;
+	}
+
+	#all-diffs .th7,
+	#all-diffs .th8,
+	#all-diffs .th9,
+	#all-diffs .th16,
+	#all-diffs .th17 {
+	  font-size: 0.7rem;
+	}
+
+	@media screen and (max-width: 850px) {
+	  #all-diffs {
+		width: 100%;
+	  }
+	  
+	  #all-diffs .work-table th {
+		font-size: clamp(0rem, 1.88vw, 1rem);
+		height: clamp(0rem, 1.88vw, 1rem);
+	  }
+
+	  #all-diffs .th6 td,
+	  #all-diffs .th10 td,
+	  #all-diffs .th11 td,
+	  #all-diffs .th12 td,
+	  #all-diffs .th13 td,
+	  #all-diffs .th14 td,
+	  #all-diffs .th15 td,
+	  #all-diffs .th18 td {
+		font-size: clamp(0rem, 1.88vw, 1rem);
+	  }
+	  
+	  #all-diffs .th7 td,
+	  #all-diffs .th8 td,
+	  #all-diffs .th9 td,
+	  #all-diffs .th16 td,
+	  #all-diffs .th17 td {
+		font-size: clamp(0rem, 1.32vw, 0.7rem);
+	  }
+	}
+
+	/* ============================================================================================================= */
+	/*     lunatic-only                                                                                                                                      */
+	/* ============================================================================================================= */
+
+	#lunatic-only {
+	  display: none;
+	  width: 500px;
+	  margin: 0 auto;
+	  padding: 0;
+	  border: none;
+	  border-collapse: collapse;
+	  white-space: nowrap;
+	}
+
+	#lunatic-only table {
+	  width: 100%;
+	  height: 100%;
+	  margin: 0;
+	  padding: 0;
+	  border: none;
+	  border-collapse: collapse;
+	  white-space: nowrap;
+	}
+
+	#lunatic-only td {
+	  height: 100%;
+	}
+
+	#lunatic-only .lunatic-only-row {
+	  border: 1px white solid;
+	}
+
+	#lunatic-only .lunatic-only-row>th {
+	  border: 1px white solid;
+	  padding: 0 0.2rem;
+	}
+
+	#lunatic-only .lunatic-only-row>td {
+	  border: none;
+	  padding: 0;
+	}
+
+	#lunatic-only .work-table {
+	  table-layout: fixed;
+	}
+
+	#lunatic-only .work-table td {
+	  border: 1px white solid;
+	  padding: 0 0.2rem;
+	}
+
+	#lunatic-only .work-table a,
+	#lunatic-only .work-table a:visited {
+	  color: inherit;
+	  cursor: pointer;
+	  text-decoration: none;
+	}
+
+	@media screen and (max-width: 500px) {
+	  #lunatic-only {
+		width: 100%;
+		font-size: clamp(0rem, 3.2vw, 1rem);
+	  }
+	}
+
+	/* ============================================================================================================= */
+	/*     timeline                                                                                                                                          */
+	/* ============================================================================================================= */
+
+	#timeline {
+	  display: none;
+	  margin: 0 auto;
+	  padding: 0;
+	  border: none;
+	  border-collapse: collapse;
+	  white-space: nowrap;
+	}
+
+	#timeline th,
+	#timeline td {
+	  border: 1px white solid;
+	  padding: 0 0.4rem;
+	}
+
+	#timeline td a,
+	#timeline td a:visited {
+	  color: red;
+	  cursor: pointer;
+	  text-decoration: underline;
+	}
+
+	@media screen and (max-width: 500px) {
+	  #timeline {
+		width: 100%;
+		font-size: clamp(0rem, 3.2vw, 1rem);
+	  }
+	}
+
+	/* ============================================================================================================= */
+	/*     td                                                                                                                                                */
+	/* ============================================================================================================= */
+
+	.diff {
+	  width: 0;
+	}
+
+	.nmnbnr {
+	  background-color: #e2041b;
+	}
+
+	.nmnb {
+	  background-color: #ea5506;
+	}
+
+	.nmnr {
+	  background-color: #864084;
+	}
+
+	.nm {
+	  background-color: #cc5bc8;
+	}
+
+	.nbnr {
+	  background-color: #1e50a2;
+	}
+
+	.nb {
+	  background-color: #0c9ea8;
+	}
+
+	.c {
+	  background-color: #2d7555;
+	}
+
+	/* ============================================================================================================= */
+	/*     popup                                                                                                                                             */
+	/* ============================================================================================================= */
+
+	.popup {
+	  background-color: rgba(0, 0, 0, 0.9);
+	  color: white;
+	  padding: 16px;
+	  position: absolute;
+	  min-width: 300px;
+	  min-height: 200px;
+	  top: 50%;
+	  left: 50%;
+	  transform: translate(-50%, -50%);
+	  -webkit-transform: translate(-50%, -50%);
+	  -ms-transform: translate(-50%, -50%);
+	}
+
+	.popup a,
+	.popup a:visited {
+	  color: red;
+	  cursor: pointer;
+	  text-decoration: underline;
+	}
+  </style>
+  <script>
+	document.addEventListener("DOMContentLoaded", async () => {
+	  function isReleasable(thn) {
+		switch (thn) {
+		  case "th6":
+		  case "th8":
+		  case "th9":
+		  case "th10":
+		  case "th11":
+		  case "th14":
+		  case "th15":
+			return false;
+		  default:
+			return true;
+		}
+	  }
+
+	  function getClassName(achivement, releasable) {
+		if (releasable) {
+		  if (achivement.includes('NMNBNR')) return "nmnbnr"
+		  if (achivement.includes('NMNBNV')) return "nmnbnr"
+		  if (achivement.includes('NMNBNT')) return "nmnbnr"
+		  if (achivement.includes('NMNBNC')) return "nmnbnr"
+		  if (achivement.includes('NMNB')) return "nmnb"
+		  if (achivement.includes('NMNR')) return "nmnr"
+		  if (achivement.includes('NMNV')) return "nmnr"
+		  if (achivement.includes('NMNT')) return "nmnr"
+		  if (achivement.includes('NMNC')) return "nmnr"
+		  if (achivement.includes('NM')) return "nm"
+		  if (achivement.includes('NBNR')) return "nbnr"
+		  if (achivement.includes('NBNV')) return "nbnr"
+		  if (achivement.includes('NBNT')) return "nbnr"
+		  if (achivement.includes('NBNC')) return "nbnr"
+		  if (achivement.includes('NB')) return "nb"
+		  return "c"
+		}
+		else {
+		  if (achivement.includes('NMNB')) return "nmnbnr"
+		  if (achivement.includes('NM')) return "nmnr"
+		  if (achivement.includes('NB')) return "nbnr"
+		  return "c"
+		}
+	  }
+
+	  function getTitle(th) {
+		switch (th) {
+		  case "th6": return "東方紅魔郷"
+		  case "th7": return "東方妖々夢"
+		  case "th8": return "東方永夜抄"
+		  case "th9": return "東方花映塚"
+		  case "th10": return "東方風神録"
+		  case "th11": return "東方地霊殿"
+		  case "th12": return "東方星蓮船"
+		  case "th13": return "東方神霊廟"
+		  case "th14": return "東方輝針城"
+		  case "th15": return "東方紺珠伝"
+		  case "th16": return "東方天空璋"
+		  case "th17": return "東方鬼形獣"
+		  case "th18": return "東方虹龍洞"
+		}
+	  }
+
+	  function getChara(eng) {
+		switch (eng) {
+		  case "Reimu": return "霊夢"
+		  case "ReimuA": return "霊夢A"
+		  case "ReimuB": return "霊夢B"
+		  case "ReimuC": return "霊夢C"
+		  case "ReimuSpring": return "霊夢(春)"
+		  case "ReimuSummer": return "霊夢(夏)"
+		  case "ReimuAutumn": return "霊夢(秋)"
+		  case "ReimuWinter": return "霊夢(冬)"
+
+		  // marisa
+		  case "Marisa": return "魔理沙"
+		  case "MarisaA": return "魔理沙A"
+		  case "MarisaB": return "魔理沙B"
+		  case "MarisaC": return "魔理沙C"
+		  case "MarisaSpring": return "魔理沙(春)"
+		  case "MarisaSummer": return "魔理沙(夏)"
+		  case "MarisaAutumn": return "魔理沙(秋)"
+		  case "MarisaWinter": return "魔理沙(冬)"
+
+		  // sakuya
+		  case "Sakuya": return "咲夜"
+		  case "SakuyaA": return "咲夜A"
+		  case "SakuyaB": return "咲夜B"
+
+		  // sanae
+		  case "Sanae": return "早苗"
+		  case "SanaeA": return "早苗A"
+		  case "SanaeB": return "早苗B"
+
+		  // youmu
+		  case "Youmu": return "妖夢"
+		  case "YoumuA": return "妖夢A"
+		  case "YoumuB": return "妖夢B"
+		  case "YoumuC": return "妖夢C"
+
+		  // cirno
+		  case "Cirno": return "チルノ"
+		  case "CirnoSpring": return "チルノ(春)"
+		  case "CirnoSummer": return "チルノ(夏)"
+		  case "CirnoAutumn": return "チルノ(秋)"
+		  case "CirnoWinter": return "チルノ(冬)"
+
+		  // Aya
+		  case "Aya": return "文"
+		  case "AyaSpring": return "文(春)"
+		  case "AyaSummer": return "文(夏)"
+		  case "AyaAutumn": return "文(秋)"
+		  case "AyaWinter": return "文(冬)"
+
+		  // other
+		  case "Reisen": return "鈴仙"
+		  case "Lyrica": return "リリカ"
+		  case "Mystia": return "ミスティア"
+		  case "Tei": return "てゐ"
+		  case "Medicine": return "メディスン"
+		  case "Yuuka": return "幽香"
+		  case "Komachi": return "小町"
+		  case "Eiki": return "映姫"
+
+		  // group
+		  case "Kekkai": return "結界組"
+		  case "AKekkai": return "√A 結界組"
+		  case "BKekkai": return "√B 結界組"
+		  case "Eishou": return "詠唱組"
+		  case "AEishou": return "√A 詠唱組"
+		  case "BEishou": return "√B 詠唱組"
+		  case "Kouma": return "紅魔組"
+		  case "AKouma": return "√A 紅魔組"
+		  case "BKouma": return "√B 紅魔組"
+		  case "Yuumei": return "幽冥組"
+		  case "AYuumei": return "√A 幽冥組"
+		  case "BYuumei": return "√B 幽冥組"
+		  // human
+		  case "AReimu": return "√A 霊夢"
+		  case "BReimu": return "√B 霊夢"
+		  case "AMarisa": return "√A 魔理沙"
+		  case "BMarisa": return "√B 魔理沙"
+		  case "ASakuya": return "√A 咲夜"
+		  case "BSakuya": return "√B 咲夜"
+		  case "AYoumu": return "√A 妖夢"
+		  case "BYoumu": return "√B 妖夢"
+		  // evil
+		  case "Yukari": return "紫"
+		  case "AYukari": return "√A 紫"
+		  case "BYukari": return "√B 紫"
+		  case "Alice": return "アリス"
+		  case "AAlice": return "√A アリス"
+		  case "BAlice": return "√B アリス"
+		  case "Remilia": return "レミリア"
+		  case "ARemilia": return "√A レミリア"
+		  case "BRemilia": return "√B レミリア"
+		  case "Yuyuko": return "幽々子"
+		  case "AYuyuko": return "√A 幽々子"
+		  case "BYuyuko": return "√B 幽々子"
+		}
+	  }
+
+	  function getDate(date) {
+		var year = Number(date.substring(0, 4))
+		var month = Number(date.substring(4, 6))
+		var day = Number(date.substring(6, 8))
+		return new Date(year, month - 1, day)
+	  }
+
+	  const clickEventName = (window.ontouchstart === undefined) ? 'click' : 'touchstart'
+
+	  let popup = null
+	  document.addEventListener(clickEventName, (e) => {
+		if (popup !== null) {
+		  document.body.removeChild(popup)
+		  popup = null
+		  e.stopPropagation()
+		}
+	  })
+	  function openPopup(datum) {
+		if (popup !== null) {
+		  document.body.removeChild(popup)
+		}
+		popup = document.createElement("div")
+		popup.classList.add("popup")
+		const p_title = document.createElement("p")
+		const p_diff = document.createElement("p")
+		const p_chara = document.createElement("p")
+		const p_status = document.createElement("p")
+		const p_date = document.createElement("p")
+		const p_link = document.createElement("p")
+		const a_link = document.createElement("A", false)
+		p_title.innerText = "作品　：" + datum.title
+		p_diff.innerText = "難易度：" + datum.diff
+		p_chara.innerText = "機体　：" + datum.chara
+		p_status.innerText = "実績　：" + datum.achive
+		p_date.innerText = "達成日：" + datum.date.toLocaleDateString("ja-JP", { year: "numeric", month: "2-digit", day: "2-digit" })
+		a_link.href = "https://rpys.skdassoc.work/" + datum.fileName
+		a_link.innerText = "リプレイをダウンロード"
+		p_link.appendChild(a_link)
+		popup.appendChild(p_title)
+		popup.appendChild(p_diff)
+		popup.appendChild(p_chara)
+		popup.appendChild(p_status)
+		popup.appendChild(p_date)
+		popup.appendChild(p_link)
+		document.body.appendChild(popup)
+		popup.addEventListener(clickEventName, (e) => e.stopPropagation())
+	  }
+
+	  // ======================================================================================================================================================= //
+
+	  const response = await fetch('https://listrpys.genreihoutengu.workers.dev')
+	  if (!response.ok) {
+		alert("データの取得に失敗しました。通信環境の良い場所に移るか天狗に連絡してください。")
+		return
+	  }
+	  const json = await response.json()
+	  const dataTemp = []
+	  for (const n of json.list) {
+		if (n.startsWith("_")) {
+		  continue
+		}
+		const splitted = n.split("_")
+		const datum = {}
+		datum.fileName = n
+		datum.elemName = splitted.slice(0, 3).join("_")
+		datum.releasable = isReleasable(splitted[0])
+		datum.title = getTitle(splitted[0])
+		datum.diff = splitted[1]
+		datum.chara = getChara(splitted[2])
+		datum.achive = splitted[3]
+		datum.date = getDate(splitted[4].substring(0, 8))
+		dataTemp.push(datum)
+	  }
+	  const data = dataTemp.sort((x, y) => (x.date.getTime()) - (y.date.getTime()))
+
+	  // ======================================================================================================================================================= //
+
+	  for (const n of data) {
+		const nodes = document.getElementsByClassName(n.elemName)
+		if (!nodes) {
+		  alert('不正なデータ ' + n.fileName + ' を発見。天狗に連絡していただけると助かります。')
+		  continue
+		}
+		for (const node of nodes) {
+		  node.classList.add(getClassName(n.achive, n.releasable))
+		  const a = document.createElement("a")
+		  a.addEventListener(clickEventName, (e) => {
+			openPopup(n)
+			e.stopPropagation()
+		  })
+		  a.innerText = node.innerText
+		  node.innerText = ""
+		  node.appendChild(a)
+		}
+	  }
+
+	  // ======================================================================================================================================================= //
+
+	  const tableAllDiffs = document.getElementById("all-diffs")
+	  const tableLunaticOnly = document.getElementById("lunatic-only")
+	  const tableTimeline = document.getElementById("timeline")
+
+	  const aShowAllDiffs = document.getElementById("show-all-diffs")
+	  const aShowLunaticOnly = document.getElementById("show-lunatic-only")
+	  const aShowTimeline = document.getElementById("show-timeline")
+
+	  aShowAllDiffs.addEventListener(clickEventName, () => {
+		tableAllDiffs.style.display = "table"
+		tableLunaticOnly.style.display = "none"
+		tableTimeline.style.display = "none"
+	  })
+	  aShowLunaticOnly.addEventListener(clickEventName, () => {
+		tableAllDiffs.style.display = "none"
+		tableLunaticOnly.style.display = "table"
+		tableTimeline.style.display = "none"
+	  })
+	  aShowTimeline.addEventListener(clickEventName, () => {
+		tableAllDiffs.style.display = "none"
+		tableLunaticOnly.style.display = "none"
+		tableTimeline.style.display = "table"
+		tableTimeline.innerHTML = "<tr><th>作品</th><th>難易度</th><th>機体</th><th>実績</th><th>達成日</th></tr>"
+		for (const n of data) {
+		  const tr = document.createElement("tr")
+		  const tdTitle = document.createElement("td")
+		  const tdDiff = document.createElement("td")
+		  const tdChara = document.createElement("td")
+		  const tdAchive = document.createElement("td")
+		  const tdDate = document.createElement("td")
+		  const aLink = document.createElement("a")
+		  tdTitle.innerText = n.title.substring(2)
+		  tdDiff.innerText = n.diff
+		  tdChara.innerText = n.chara
+		  tdAchive.innerHTML = n.achive
+		  tdAchive.classList.add(getClassName(n.achive, n.releasable))
+		  aLink.innerText = n.date.toLocaleDateString("ja-JP", { year: "numeric", month: "2-digit", day: "2-digit" })
+		  aLink.href = "https://rpys.skdassoc.work/" + n.fileName
+		  tdDate.classList.add("link")
+		  tdDate.appendChild(aLink)
+		  tr.appendChild(tdTitle)
+		  tr.appendChild(tdDiff)
+		  tr.appendChild(tdChara)
+		  tr.appendChild(tdAchive)
+		  tr.appendChild(tdDate)
+		  tableTimeline.appendChild(tr)
+		}
+	  })
+	})
+  </script>
+</head>
+
+<body>
+  <div id='outline'>
+	<p>
+	  <span>SKD(天狗)の東方整数作品のクリア機体表兼リプレイ置き場です。</span>
+	  <br>
+	  <span>同階級の実績のうち、最も古いリプレイを安置しています。</span>
+	  <br>
+	  <span>NBについて、3M以内であれば特筆してあります。</span>
+	</p>
+	<p>
+	  <a id='show-all-diffs'>全機体表</a>
+	  <span>　</span>
+	  <a id='show-lunatic-only'>Lunatic表</a>
+	  <span>　</span>
+	  <a id='show-timeline'>時系列</a>
+	</p>
+  </div>
+  
+  
+  
+  
+  
+  <hr>
+  <br>
+
+
+
+
+
+  <table id='all-diffs'>
+	<tr>
+	  <td>
+		<table>
+		  <tr>
+			<td>
+			  <table class='work-table th6'>
+				<tr>
+				  <th colSpan='3'>紅魔郷</th>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>E</td>
+				  <td class='th6_Easy_ReimuA'>霊A</td>
+				  <td class='th6_Easy_MarisaA'>魔A</td>
+				</tr>
+				<tr>
+				  <td class='th6_Easy_ReimuB'>霊B</td>
+				  <td class='th6_Easy_MarisaB'>魔B</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>N</td>
+				  <td class='th6_Normal_ReimuA'>霊A</td>
+				  <td class='th6_Normal_MarisaA'>魔A</td>
+				</tr>
+				<tr>
+				  <td class='th6_Normal_ReimuB'>霊B</td>
+				  <td class='th6_Normal_MarisaB'>魔B</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>H</td>
+				  <td class='th6_Hard_ReimuA'>霊A</td>
+				  <td class='th6_Hard_MarisaA'>魔A</td>
+				</tr>
+				<tr>
+				  <td class='th6_Hard_ReimuB'>霊B</td>
+				  <td class='th6_Hard_MarisaB'>魔B</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>L</td>
+				  <td class='th6_Lunatic_ReimuA'>霊A</td>
+				  <td class='th6_Lunatic_MarisaA'>魔A</td>
+				</tr>
+				<tr>
+				  <td class='th6_Lunatic_ReimuB'>霊B</td>
+				  <td class='th6_Lunatic_MarisaB'>魔B</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>X</td>
+				  <td class='th6_Extra_ReimuA'>霊A</td>
+				  <td class='th6_Extra_MarisaA'>魔A</td>
+				</tr>
+				<tr>
+				  <td class='th6_Extra_ReimuB'>霊B</td>
+				  <td class='th6_Extra_MarisaB'>魔B</td>
+				</tr>
+			  </table>
+			</td>
+			<td>
+			  <table class='work-table th7'>
+				<tr>
+				  <th colSpan='4'>妖々夢</th>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>E</td>
+				  <td class='th7_Easy_ReimuA'>霊A</td>
+				  <td class='th7_Easy_MarisaA'>魔A</td>
+				  <td class='th7_Easy_SakuyaA'>咲A</td>
+				</tr>
+				<tr>
+				  <td class='th7_Easy_ReimuB'>霊B</td>
+				  <td class='th7_Easy_MarisaB'>魔B</td>
+				  <td class='th7_Easy_SakuyaB'>咲B</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>N</td>
+				  <td class='th7_Normal_ReimuA'>霊A</td>
+				  <td class='th7_Normal_MarisaA'>魔A</td>
+				  <td class='th7_Normal_SakuyaA'>咲A</td>
+				</tr>
+				<tr>
+				  <td class='th7_Normal_ReimuB'>霊B</td>
+				  <td class='th7_Normal_MarisaB'>魔B</td>
+				  <td class='th7_Normal_SakuyaB'>咲B</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>H</td>
+				  <td class='th7_Hard_ReimuA'>霊A</td>
+				  <td class='th7_Hard_MarisaA'>魔A</td>
+				  <td class='th7_Hard_SakuyaA'>咲A</td>
+				</tr>
+				<tr>
+				  <td class='th7_Hard_ReimuB'>霊B</td>
+				  <td class='th7_Hard_MarisaB'>魔B</td>
+				  <td class='th7_Hard_SakuyaB'>咲B</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>L</td>
+				  <td class='th7_Lunatic_ReimuA'>霊A</td>
+				  <td class='th7_Lunatic_MarisaA'>魔A</td>
+				  <td class='th7_Lunatic_SakuyaA'>咲A</td>
+				</tr>
+				<tr>
+				  <td class='th7_Lunatic_ReimuB'>霊B</td>
+				  <td class='th7_Lunatic_MarisaB'>魔B</td>
+				  <td class='th7_Lunatic_SakuyaB'>咲B</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>X</td>
+				  <td class='th7_Extra_ReimuA'>霊A</td>
+				  <td class='th7_Extra_MarisaA'>魔A</td>
+				  <td class='th7_Extra_SakuyaA'>咲A</td>
+				</tr>
+				<tr>
+				  <td class='th7_Extra_ReimuB'>霊B</td>
+				  <td class='th7_Extra_MarisaB'>魔B</td>
+				  <td class='th7_Extra_SakuyaB'>咲B</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>P</td>
+				  <td class='th7_Phantasm_ReimuA'>霊A</td>
+				  <td class='th7_Phantasm_MarisaA'>魔A</td>
+				  <td class='th7_Phantasm_SakuyaA'>咲A</td>
+				</tr>
+				<tr>
+				  <td class='th7_Phantasm_ReimuB'>霊B</td>
+				  <td class='th7_Phantasm_MarisaB'>魔B</td>
+				  <td class='th7_Phantasm_SakuyaB'>咲B</td>
+				</tr>
+			  </table>
+			</td>
+			<td>
+			  <table class='work-table th8'>
+				<tr>
+				  <th colSpan='9'>永夜抄</th>
+				</tr>
+				<tr>
+				  <td rowSpan='3' class='diff'>E</td>
+				  <td class='th8_Easy_AKekkai'>A結</td>
+				  <td class='th8_Easy_AEishou'>A詠</td>
+				  <td class='th8_Easy_AKouma'>A紅</td>
+				  <td class='th8_Easy_AYuumei'>A冥</td>
+				  <td class='th8_Easy_BKekkai'>B結</td>
+				  <td class='th8_Easy_BEishou'>B詠</td>
+				  <td class='th8_Easy_BKouma'>B紅</td>
+				  <td class='th8_Easy_BYuumei'>B冥</td>
+				</tr>
+				<tr>
+				  <td class='th8_Easy_AReimu'>A霊</td>
+				  <td class='th8_Easy_AMarisa'>A魔</td>
+				  <td class='th8_Easy_ASakuya'>A咲</td>
+				  <td class='th8_Easy_AYoumu'>A妖</td>
+				  <td class='th8_Easy_BReimu'>B霊</td>
+				  <td class='th8_Easy_BMarisa'>B魔</td>
+				  <td class='th8_Easy_BSakuya'>B咲</td>
+				  <td class='th8_Easy_BYoumu'>B妖</td>
+				</tr>
+				<tr>
+				  <td class='th8_Easy_AYukari'>A紫</td>
+				  <td class='th8_Easy_AAlice'>Aア</td>
+				  <td class='th8_Easy_ARemilia'>Aレ</td>
+				  <td class='th8_Easy_AYuyuko'>A幽</td>
+				  <td class='th8_Easy_BYukari'>B紫</td>
+				  <td class='th8_Easy_BAlice'>Bア</td>
+				  <td class='th8_Easy_BRemilia'>Bレ</td>
+				  <td class='th8_Easy_BYuyuko'>B幽</td>
+				</tr>
+				<tr>
+				  <td rowSpan='3' class='diff'>N</td>
+				  <td class='th8_Normal_AKekkai'>A結</td>
+				  <td class='th8_Normal_AEishou'>A詠</td>
+				  <td class='th8_Normal_AKouma'>A紅</td>
+				  <td class='th8_Normal_AYuumei'>A冥</td>
+				  <td class='th8_Normal_BKekkai'>B結</td>
+				  <td class='th8_Normal_BEishou'>B詠</td>
+				  <td class='th8_Normal_BKouma'>B紅</td>
+				  <td class='th8_Normal_BYuumei'>B冥</td>
+				</tr>
+				<tr>
+				  <td class='th8_Normal_AReimu'>A霊</td>
+				  <td class='th8_Normal_AMarisa'>A魔</td>
+				  <td class='th8_Normal_ASakuya'>A咲</td>
+				  <td class='th8_Normal_AYoumu'>A妖</td>
+				  <td class='th8_Normal_BReimu'>B霊</td>
+				  <td class='th8_Normal_BMarisa'>B魔</td>
+				  <td class='th8_Normal_BSakuya'>B咲</td>
+				  <td class='th8_Normal_BYoumu'>B妖</td>
+				</tr>
+				<tr>
+				  <td class='th8_Normal_AYukari'>A紫</td>
+				  <td class='th8_Normal_AAlice'>Aア</td>
+				  <td class='th8_Normal_ARemilia'>Aレ</td>
+				  <td class='th8_Normal_AYuyuko'>A幽</td>
+				  <td class='th8_Normal_BYukari'>B紫</td>
+				  <td class='th8_Normal_BAlice'>Bア</td>
+				  <td class='th8_Normal_BRemilia'>Bレ</td>
+				  <td class='th8_Normal_BYuyuko'>B幽</td>
+				</tr>
+				<tr>
+				  <td rowSpan='3' class='diff'>H</td>
+				  <td class='th8_Hard_AKekkai'>A結</td>
+				  <td class='th8_Hard_AEishou'>A詠</td>
+				  <td class='th8_Hard_AKouma'>A紅</td>
+				  <td class='th8_Hard_AYuumei'>A冥</td>
+				  <td class='th8_Hard_BKekkai'>B結</td>
+				  <td class='th8_Hard_BEishou'>B詠</td>
+				  <td class='th8_Hard_BKouma'>B紅</td>
+				  <td class='th8_Hard_BYuumei'>B冥</td>
+				</tr>
+				<tr>
+				  <td class='th8_Hard_AReimu'>A霊</td>
+				  <td class='th8_Hard_AMarisa'>A魔</td>
+				  <td class='th8_Hard_ASakuya'>A咲</td>
+				  <td class='th8_Hard_AYoumu'>A妖</td>
+				  <td class='th8_Hard_BReimu'>B霊</td>
+				  <td class='th8_Hard_BMarisa'>B魔</td>
+				  <td class='th8_Hard_BSakuya'>B咲</td>
+				  <td class='th8_Hard_BYoumu'>B妖</td>
+				</tr>
+				<tr>
+				  <td class='th8_Hard_AYukari'>A紫</td>
+				  <td class='th8_Hard_AAlice'>Aア</td>
+				  <td class='th8_Hard_ARemilia'>Aレ</td>
+				  <td class='th8_Hard_AYuyuko'>A幽</td>
+				  <td class='th8_Hard_BYukari'>B紫</td>
+				  <td class='th8_Hard_BAlice'>Bア</td>
+				  <td class='th8_Hard_BRemilia'>Bレ</td>
+				  <td class='th8_Hard_BYuyuko'>B幽</td>
+				</tr>
+				<tr>
+				  <td rowSpan='3' class='diff'>L</td>
+				  <td class='th8_Lunatic_AKekkai'>A結</td>
+				  <td class='th8_Lunatic_AEishou'>A詠</td>
+				  <td class='th8_Lunatic_AKouma'>A紅</td>
+				  <td class='th8_Lunatic_AYuumei'>A冥</td>
+				  <td class='th8_Lunatic_BKekkai'>B結</td>
+				  <td class='th8_Lunatic_BEishou'>B詠</td>
+				  <td class='th8_Lunatic_BKouma'>B紅</td>
+				  <td class='th8_Lunatic_BYuumei'>B冥</td>
+				</tr>
+				<tr>
+				  <td class='th8_Lunatic_AReimu'>A霊</td>
+				  <td class='th8_Lunatic_AMarisa'>A魔</td>
+				  <td class='th8_Lunatic_ASakuya'>A咲</td>
+				  <td class='th8_Lunatic_AYoumu'>A妖</td>
+				  <td class='th8_Lunatic_BReimu'>B霊</td>
+				  <td class='th8_Lunatic_BMarisa'>B魔</td>
+				  <td class='th8_Lunatic_BSakuya'>B咲</td>
+				  <td class='th8_Lunatic_BYoumu'>B妖</td>
+				</tr>
+				<tr>
+				  <td class='th8_Lunatic_AYukari'>A紫</td>
+				  <td class='th8_Lunatic_AAlice'>Aア</td>
+				  <td class='th8_Lunatic_ARemilia'>Aレ</td>
+				  <td class='th8_Lunatic_AYuyuko'>A幽</td>
+				  <td class='th8_Lunatic_BYukari'>B紫</td>
+				  <td class='th8_Lunatic_BAlice'>Bア</td>
+				  <td class='th8_Lunatic_BRemilia'>Bレ</td>
+				  <td class='th8_Lunatic_BYuyuko'>B幽</td>
+				</tr>
+				<tr>
+				  <td rowSpan='3' class='diff'>X</td>
+				  <td class='th8_Extra_Kekkai' colSpan='2'>結</td>
+				  <td class='th8_Extra_Eishou' colSpan='2'>詠</td>
+				  <td class='th8_Extra_Kouma' colSpan='2'>紅</td>
+				  <td class='th8_Extra_Yuumei' colSpan='2'>冥</td>
+				</tr>
+				<tr>
+				  <td class='th8_Extra_Reimu' colSpan='2'>霊</td>
+				  <td class='th8_Extra_Marisa' colSpan='2'>魔</td>
+				  <td class='th8_Extra_Sakuya' colSpan='2'>咲</td>
+				  <td class='th8_Extra_Youmu' colSpan='2'>妖</td>
+				</tr>
+				<tr>
+				  <td class='th8_Extra_Yukari' colSpan='2'>紫</td>
+				  <td class='th8_Extra_Alice' colSpan='2'>ア</td>
+				  <td class='th8_Extra_Remilia' colSpan='2'>レ</td>
+				  <td class='th8_Extra_Yuyuko' colSpan='2'>幽</td>
+				</tr>
+			  </table>
+			</td>
+			<td>
+			  <table class='work-table th9'>
+				<tr>
+				  <th colSpan='6'>花映塚</th>
+				</tr>
+				<tr>
+				  <td rowSpan='3' class='diff'>E</td>
+				  <td class='th9_Easy_Reimu'>霊</td>
+				  <td class='th9_Easy_Marisa'>魔</td>
+				  <td class='th9_Easy_Sakuya'>咲</td>
+				  <td class='th9_Easy_Youmu'>妖</td>
+				  <td class='th9_Easy_Reisen'>鈴</td>
+				</tr>
+				<tr>
+				  <td class='th9_Easy_Cirno'>チ</td>
+				  <td class='th9_Easy_Lyrica'>リ</td>
+				  <td class='th9_Easy_Mystia'>ミ</td>
+				  <td class='th9_Easy_Tei'>て</td>
+				  <td class='th9_Easy_Aya'>文</td>
+				</tr>
+				<tr>
+				  <td class='th9_Easy_Medicine'>メ</td>
+				  <td class='th9_Easy_Yuuka'>香</td>
+				  <td class='th9_Easy_Komachi'>小</td>
+				  <td class='th9_Easy_Eiki'>映</td>
+				</tr>
+				<tr>
+				  <td rowSpan='3' class='diff'>N</td>
+				  <td class='th9_Normal_Reimu'>霊</td>
+				  <td class='th9_Normal_Marisa'>魔</td>
+				  <td class='th9_Normal_Sakuya'>咲</td>
+				  <td class='th9_Normal_Youmu'>妖</td>
+				  <td class='th9_Normal_Reisen'>鈴</td>
+				</tr>
+				<tr>
+				  <td class='th9_Normal_Cirno'>チ</td>
+				  <td class='th9_Normal_Lyrica'>リ</td>
+				  <td class='th9_Normal_Mystia'>ミ</td>
+				  <td class='th9_Normal_Tei'>て</td>
+				  <td class='th9_Normal_Aya'>文</td>
+				</tr>
+				<tr>
+				  <td class='th9_Normal_Medicine'>メ</td>
+				  <td class='th9_Normal_Yuuka'>香</td>
+				  <td class='th9_Normal_Komachi'>小</td>
+				  <td class='th9_Normal_Eiki'>映</td>
+				</tr>
+				<tr>
+				  <td rowSpan='3' class='diff'>H</td>
+				  <td class='th9_Hard_Reimu'>霊</td>
+				  <td class='th9_Hard_Marisa'>魔</td>
+				  <td class='th9_Hard_Sakuya'>咲</td>
+				  <td class='th9_Hard_Youmu'>妖</td>
+				  <td class='th9_Hard_Reisen'>鈴</td>
+				</tr>
+				<tr>
+				  <td class='th9_Hard_Cirno'>チ</td>
+				  <td class='th9_Hard_Lyrica'>リ</td>
+				  <td class='th9_Hard_Mystia'>ミ</td>
+				  <td class='th9_Hard_Tei'>て</td>
+				  <td class='th9_Hard_Aya'>文</td>
+				</tr>
+				<tr>
+				  <td class='th9_Hard_Medicine'>メ</td>
+				  <td class='th9_Hard_Yuuka'>香</td>
+				  <td class='th9_Hard_Komachi'>小</td>
+				  <td class='th9_Hard_Eiki'>映</td>
+				</tr>
+				<tr>
+				  <td rowSpan='3' class='diff'>L</td>
+				  <td class='th9_Lunatic_Reimu'>霊</td>
+				  <td class='th9_Lunatic_Marisa'>魔</td>
+				  <td class='th9_Lunatic_Sakuya'>咲</td>
+				  <td class='th9_Lunatic_Youmu'>妖</td>
+				  <td class='th9_Lunatic_Reisen'>鈴</td>
+				</tr>
+				<tr>
+				  <td class='th9_Lunatic_Cirno'>チ</td>
+				  <td class='th9_Lunatic_Lyrica'>リ</td>
+				  <td class='th9_Lunatic_Mystia'>ミ</td>
+				  <td class='th9_Lunatic_Tei'>て</td>
+				  <td class='th9_Lunatic_Aya'>文</td>
+				</tr>
+				<tr>
+				  <td class='th9_Lunatic_Medicine'>メ</td>
+				  <td class='th9_Lunatic_Yuuka'>香</td>
+				  <td class='th9_Lunatic_Komachi'>小</td>
+				  <td class='th9_Lunatic_Eiki'>映</td>
+				</tr>
+				<tr>
+				  <td rowSpan='3' class='diff'>X</td>
+				  <td class='th9_Extra_Reimu'>霊</td>
+				  <td class='th9_Extra_Marisa'>魔</td>
+				  <td class='th9_Extra_Sakuya'>咲</td>
+				  <td class='th9_Extra_Youmu'>妖</td>
+				  <td class='th9_Extra_Reisen'>鈴</td>
+				</tr>
+				<tr>
+				  <td class='th9_Extra_Cirno'>チ</td>
+				  <td class='th9_Extra_Lyrica'>リ</td>
+				  <td class='th9_Extra_Mystia'>ミ</td>
+				  <td class='th9_Extra_Tei'>て</td>
+				  <td class='th9_Extra_Aya'>文</td>
+				</tr>
+				<tr>
+				  <td class='th9_Extra_Medicine'>メ</td>
+				  <td class='th9_Extra_Yuuka'>香</td>
+				  <td class='th9_Extra_Komachi'>小</td>
+				  <td class='th9_Extra_Eiki'>映</td>
+				</tr>
+			  </table>
+			</td>
+			<td>
+			  <table class='work-table th10'>
+				<tr>
+				  <th colSpan='4'>風神録</th>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>E</td>
+				  <td class='th10_Easy_ReimuA'>霊A</td>
+				  <td class='th10_Easy_ReimuB'>霊B</td>
+				  <td class='th10_Easy_ReimuC'>霊C</td>
+				</tr>
+				<tr>
+				  <td class='th10_Easy_MarisaA'>魔A</td>
+				  <td class='th10_Easy_MarisaB'>魔B</td>
+				  <td class='th10_Easy_MarisaC'>魔C</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>N</td>
+				  <td class='th10_Normal_ReimuA'>霊A</td>
+				  <td class='th10_Normal_ReimuB'>霊B</td>
+				  <td class='th10_Normal_ReimuC'>霊C</td>
+				</tr>
+				<tr>
+				  <td class='th10_Normal_MarisaA'>魔A</td>
+				  <td class='th10_Normal_MarisaB'>魔B</td>
+				  <td class='th10_Normal_MarisaC'>魔C</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>H</td>
+				  <td class='th10_Hard_ReimuA'>霊A</td>
+				  <td class='th10_Hard_ReimuB'>霊B</td>
+				  <td class='th10_Hard_ReimuC'>霊C</td>
+				</tr>
+				<tr>
+				  <td class='th10_Hard_MarisaA'>魔A</td>
+				  <td class='th10_Hard_MarisaB'>魔B</td>
+				  <td class='th10_Hard_MarisaC'>魔C</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>L</td>
+				  <td class='th10_Lunatic_ReimuA'>霊A</td>
+				  <td class='th10_Lunatic_ReimuB'>霊B</td>
+				  <td class='th10_Lunatic_ReimuC'>霊C</td>
+				</tr>
+				<tr>
+				  <td class='th10_Lunatic_MarisaA'>魔A</td>
+				  <td class='th10_Lunatic_MarisaB'>魔B</td>
+				  <td class='th10_Lunatic_MarisaC'>魔C</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>X</td>
+				  <td class='th10_Extra_ReimuA'>霊A</td>
+				  <td class='th10_Extra_ReimuB'>霊B</td>
+				  <td class='th10_Extra_ReimuC'>霊C</td>
+				</tr>
+				<tr>
+				  <td class='th10_Extra_MarisaA'>魔A</td>
+				  <td class='th10_Extra_MarisaB'>魔B</td>
+				  <td class='th10_Extra_MarisaC'>魔C</td>
+				</tr>
+			  </table>
+			</td>
+			<td>
+			  <table class='work-table th11'>
+				<tr>
+				  <th colSpan='4'>地霊殿</th>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>E</td>
+				  <td class='th11_Easy_ReimuA'>霊A</td>
+				  <td class='th11_Easy_ReimuB'>霊B</td>
+				  <td class='th11_Easy_ReimuC'>霊C</td>
+				</tr>
+				<tr>
+				  <td class='th11_Easy_MarisaA'>魔A</td>
+				  <td class='th11_Easy_MarisaB'>魔B</td>
+				  <td class='th11_Easy_MarisaC'>魔C</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>N</td>
+				  <td class='th11_Normal_ReimuA'>霊A</td>
+				  <td class='th11_Normal_ReimuB'>霊B</td>
+				  <td class='th11_Normal_ReimuC'>霊C</td>
+				</tr>
+				<tr>
+				  <td class='th11_Normal_MarisaA'>魔A</td>
+				  <td class='th11_Normal_MarisaB'>魔B</td>
+				  <td class='th11_Normal_MarisaC'>魔C</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>H</td>
+				  <td class='th11_Hard_ReimuA'>霊A</td>
+				  <td class='th11_Hard_ReimuB'>霊B</td>
+				  <td class='th11_Hard_ReimuC'>霊C</td>
+				</tr>
+				<tr>
+				  <td class='th11_Hard_MarisaA'>魔A</td>
+				  <td class='th11_Hard_MarisaB'>魔B</td>
+				  <td class='th11_Hard_MarisaC'>魔C</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>L</td>
+				  <td class='th11_Lunatic_ReimuA'>霊A</td>
+				  <td class='th11_Lunatic_ReimuB'>霊B</td>
+				  <td class='th11_Lunatic_ReimuC'>霊C</td>
+				</tr>
+				<tr>
+				  <td class='th11_Lunatic_MarisaA'>魔A</td>
+				  <td class='th11_Lunatic_MarisaB'>魔B</td>
+				  <td class='th11_Lunatic_MarisaC'>魔C</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>X</td>
+				  <td class='th11_Extra_ReimuA'>霊A</td>
+				  <td class='th11_Extra_ReimuB'>霊B</td>
+				  <td class='th11_Extra_ReimuC'>霊C</td>
+				</tr>
+				<tr>
+				  <td class='th11_Extra_MarisaA'>魔A</td>
+				  <td class='th11_Extra_MarisaB'>魔B</td>
+				  <td class='th11_Extra_MarisaC'>魔C</td>
+				</tr>
+			  </table>
+			</td>
+			<td>
+			  <table class='work-table th12'>
+				<tr>
+				  <th colSpan='4'>星蓮船</th>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>E</td>
+				  <td class='th12_Easy_ReimuA'>霊A</td>
+				  <td class='th12_Easy_MarisaA'>魔A</td>
+				  <td class='th12_Easy_SanaeA'>早A</td>
+				</tr>
+				<tr>
+				  <td class='th12_Easy_ReimuB'>霊B</td>
+				  <td class='th12_Easy_MarisaB'>魔B</td>
+				  <td class='th12_Easy_SanaeB'>早B</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>N</td>
+				  <td class='th12_Normal_ReimuA'>霊A</td>
+				  <td class='th12_Normal_MarisaA'>魔A</td>
+				  <td class='th12_Normal_SanaeA'>早A</td>
+				</tr>
+				<tr>
+				  <td class='th12_Normal_ReimuB'>霊B</td>
+				  <td class='th12_Normal_MarisaB'>魔B</td>
+				  <td class='th12_Normal_SanaeB'>早B</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>H</td>
+				  <td class='th12_Hard_ReimuA'>霊A</td>
+				  <td class='th12_Hard_MarisaA'>魔A</td>
+				  <td class='th12_Hard_SanaeA'>早A</td>
+				</tr>
+				<tr>
+				  <td class='th12_Hard_ReimuB'>霊B</td>
+				  <td class='th12_Hard_MarisaB'>魔B</td>
+				  <td class='th12_Hard_SanaeB'>早B</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>L</td>
+				  <td class='th12_Lunatic_ReimuA'>霊A</td>
+				  <td class='th12_Lunatic_MarisaA'>魔A</td>
+				  <td class='th12_Lunatic_SanaeA'>早A</td>
+				</tr>
+				<tr>
+				  <td class='th12_Lunatic_ReimuB'>霊B</td>
+				  <td class='th12_Lunatic_MarisaB'>魔B</td>
+				  <td class='th12_Lunatic_SanaeB'>早B</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>X</td>
+				  <td class='th12_Extra_ReimuA'>霊A</td>
+				  <td class='th12_Extra_MarisaA'>魔A</td>
+				  <td class='th12_Extra_SanaeA'>早A</td>
+				</tr>
+				<tr>
+				  <td class='th12_Extra_ReimuB'>霊B</td>
+				  <td class='th12_Extra_MarisaB'>魔B</td>
+				  <td class='th12_Extra_SanaeB'>早B</td>
+				</tr>
+			  </table>
+			</td>
+		  </tr>
+		</table>
+	  </td>
+	</tr>
+	<tr>
+	  <td>
+		<table>
+		  <tr>
+			<td>
+			  <table class='work-table th13'>
+				<tr>
+				  <th colSpan='3'>神霊廟</th>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>E</td>
+				  <td class='th13_Easy_Reimu'>霊</td>
+				  <td class='th13_Easy_Marisa'>魔</td>
+				</tr>
+				<tr>
+				  <td class='th13_Easy_Sanae'>早</td>
+				  <td class='th13_Easy_Youmu'>妖</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>N</td>
+				  <td class='th13_Normal_Reimu'>霊</td>
+				  <td class='th13_Normal_Marisa'>魔</td>
+				</tr>
+				<tr>
+				  <td class='th13_Normal_Sanae'>早</td>
+				  <td class='th13_Normal_Youmu'>妖</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>H</td>
+				  <td class='th13_Hard_Reimu'>霊</td>
+				  <td class='th13_Hard_Marisa'>魔</td>
+				</tr>
+				<tr>
+				  <td class='th13_Hard_Sanae'>早</td>
+				  <td class='th13_Hard_Youmu'>妖</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>L</td>
+				  <td class='th13_Lunatic_Reimu'>霊</td>
+				  <td class='th13_Lunatic_Marisa'>魔</td>
+				</tr>
+				<tr>
+				  <td class='th13_Lunatic_Sanae'>早</td>
+				  <td class='th13_Lunatic_Youmu'>妖</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>X</td>
+				  <td class='th13_Extra_Reimu'>霊</td>
+				  <td class='th13_Extra_Marisa'>魔</td>
+				</tr>
+				<tr>
+				  <td class='th13_Extra_Sanae'>早</td>
+				  <td class='th13_Extra_Youmu'>妖</td>
+				</tr>
+			  </table>
+			</td>
+			<td>
+			  <table class='work-table th14'>
+				<tr>
+				  <th colSpan='4'>輝針城</th>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>E</td>
+				  <td class='th14_Easy_ReimuA'>霊A</td>
+				  <td class='th14_Easy_MarisaA'>魔A</td>
+				  <td class='th14_Easy_SakuyaA'>咲A</td>
+				</tr>
+				<tr>
+				  <td class='th14_Easy_ReimuB'>霊B</td>
+				  <td class='th14_Easy_MarisaB'>魔B</td>
+				  <td class='th14_Easy_SakuyaB'>咲B</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>N</td>
+				  <td class='th14_Normal_ReimuA'>霊A</td>
+				  <td class='th14_Normal_MarisaA'>魔A</td>
+				  <td class='th14_Normal_SakuyaA'>咲A</td>
+				</tr>
+				<tr>
+				  <td class='th14_Normal_ReimuB'>霊B</td>
+				  <td class='th14_Normal_MarisaB'>魔B</td>
+				  <td class='th14_Normal_SakuyaB'>咲B</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>H</td>
+				  <td class='th14_Hard_ReimuA'>霊A</td>
+				  <td class='th14_Hard_MarisaA'>魔A</td>
+				  <td class='th14_Hard_SakuyaA'>咲A</td>
+				</tr>
+				<tr>
+				  <td class='th14_Hard_ReimuB'>霊B</td>
+				  <td class='th14_Hard_MarisaB'>魔B</td>
+				  <td class='th14_Hard_SakuyaB'>咲B</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>L</td>
+				  <td class='th14_Lunatic_ReimuA'>霊A</td>
+				  <td class='th14_Lunatic_MarisaA'>魔A</td>
+				  <td class='th14_Lunatic_SakuyaA'>咲A</td>
+				</tr>
+				<tr>
+				  <td class='th14_Lunatic_ReimuB'>霊B</td>
+				  <td class='th14_Lunatic_MarisaB'>魔B</td>
+				  <td class='th14_Lunatic_SakuyaB'>咲B</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>X</td>
+				  <td class='th14_Extra_ReimuA'>霊A</td>
+				  <td class='th14_Extra_MarisaA'>魔A</td>
+				  <td class='th14_Extra_SakuyaA'>咲A</td>
+				</tr>
+				<tr>
+				  <td class='th14_Extra_ReimuB'>霊B</td>
+				  <td class='th14_Extra_MarisaB'>魔B</td>
+				  <td class='th14_Extra_SakuyaB'>咲B</td>
+				</tr>
+			  </table>
+			</td>
+			<td>
+			  <table class='work-table th15'>
+				<tr>
+				  <th colSpan='3'>紺珠伝</th>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>E</td>
+				  <td class='th15_Easy_Reimu'>霊</td>
+				  <td class='th15_Easy_Marisa'>魔</td>
+				</tr>
+				<tr>
+				  <td class='th15_Easy_Sanae'>早</td>
+				  <td class='th15_Easy_Reisen'>鈴</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>N</td>
+				  <td class='th15_Normal_Reimu'>霊</td>
+				  <td class='th15_Normal_Marisa'>魔</td>
+				</tr>
+				<tr>
+				  <td class='th15_Normal_Sanae'>早</td>
+				  <td class='th15_Normal_Reisen'>鈴</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>H</td>
+				  <td class='th15_Hard_Reimu'>霊</td>
+				  <td class='th15_Hard_Marisa'>魔</td>
+				</tr>
+				<tr>
+				  <td class='th15_Hard_Sanae'>早</td>
+				  <td class='th15_Hard_Reisen'>鈴</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>L</td>
+				  <td class='th15_Lunatic_Reimu'>霊</td>
+				  <td class='th15_Lunatic_Marisa'>魔</td>
+				</tr>
+				<tr>
+				  <td class='th15_Lunatic_Sanae'>早</td>
+				  <td class='th15_Lunatic_Reisen'>鈴</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>X</td>
+				  <td class='th15_Extra_Reimu'>霊</td>
+				  <td class='th15_Extra_Marisa'>魔</td>
+				</tr>
+				<tr>
+				  <td class='th15_Extra_Sanae'>早</td>
+				  <td class='th15_Extra_Reisen'>鈴</td>
+				</tr>
+			  </table>
+			</td>
+			<td>
+			  <table class='work-table th16'>
+				<tr>
+				  <th colSpan='5'>天空璋</th>
+				</tr>
+				<tr>
+				  <td rowSpan='4' class='diff'>E</td>
+				  <td class='th16_Easy_ReimuSpring'>霊春</td>
+				  <td class='th16_Easy_CirnoSpring'>チ春</td>
+				  <td class='th16_Easy_AyaSpring'>文春</td>
+				  <td class='th16_Easy_MarisaSpring'>魔春</td>
+				</tr>
+				<tr>
+				  <td class='th16_Easy_ReimuSummer'>霊夏</td>
+				  <td class='th16_Easy_CirnoSummer'>チ夏</td>
+				  <td class='th16_Easy_AyaSummer'>文夏</td>
+				  <td class='th16_Easy_MarisaSummer'>魔夏</td>
+				</tr>
+				<tr>
+				  <td class='th16_Easy_ReimuAutumn'>霊秋</td>
+				  <td class='th16_Easy_CirnoAutumn'>チ秋</td>
+				  <td class='th16_Easy_AyaAutumn'>文秋</td>
+				  <td class='th16_Easy_MarisaAutumn'>魔秋</td>
+				</tr>
+				<tr>
+				  <td class='th16_Easy_ReimuWinter'>霊冬</td>
+				  <td class='th16_Easy_CirnoWinter'>チ冬</td>
+				  <td class='th16_Easy_AyaWinter'>文冬</td>
+				  <td class='th16_Easy_MarisaWinter'>魔冬</td>
+				</tr>
+				<tr>
+				  <td rowSpan='4' class='diff'>N</td>
+				  <td class='th16_Normal_ReimuSpring'>霊春</td>
+				  <td class='th16_Normal_CirnoSpring'>チ春</td>
+				  <td class='th16_Normal_AyaSpring'>文春</td>
+				  <td class='th16_Normal_MarisaSpring'>魔春</td>
+				</tr>
+				<tr>
+				  <td class='th16_Normal_ReimuSummer'>霊夏</td>
+				  <td class='th16_Normal_CirnoSummer'>チ夏</td>
+				  <td class='th16_Normal_AyaSummer'>文夏</td>
+				  <td class='th16_Normal_MarisaSummer'>魔夏</td>
+				</tr>
+				<tr>
+				  <td class='th16_Normal_ReimuAutumn'>霊秋</td>
+				  <td class='th16_Normal_CirnoAutumn'>チ秋</td>
+				  <td class='th16_Normal_AyaAutumn'>文秋</td>
+				  <td class='th16_Normal_MarisaAutumn'>魔秋</td>
+				</tr>
+				<tr>
+				  <td class='th16_Normal_ReimuWinter'>霊冬</td>
+				  <td class='th16_Normal_CirnoWinter'>チ冬</td>
+				  <td class='th16_Normal_AyaWinter'>文冬</td>
+				  <td class='th16_Normal_MarisaWinter'>魔冬</td>
+				</tr>
+				<tr>
+				  <td rowSpan='4' class='diff'>H</td>
+				  <td class='th16_Hard_ReimuSpring'>霊春</td>
+				  <td class='th16_Hard_CirnoSpring'>チ春</td>
+				  <td class='th16_Hard_AyaSpring'>文春</td>
+				  <td class='th16_Hard_MarisaSpring'>魔春</td>
+				</tr>
+				<tr>
+				  <td class='th16_Hard_ReimuSummer'>霊夏</td>
+				  <td class='th16_Hard_CirnoSummer'>チ夏</td>
+				  <td class='th16_Hard_AyaSummer'>文夏</td>
+				  <td class='th16_Hard_MarisaSummer'>魔夏</td>
+				</tr>
+				<tr>
+				  <td class='th16_Hard_ReimuAutumn'>霊秋</td>
+				  <td class='th16_Hard_CirnoAutumn'>チ秋</td>
+				  <td class='th16_Hard_AyaAutumn'>文秋</td>
+				  <td class='th16_Hard_MarisaAutumn'>魔秋</td>
+				</tr>
+				<tr>
+				  <td class='th16_Hard_ReimuWinter'>霊冬</td>
+				  <td class='th16_Hard_CirnoWinter'>チ冬</td>
+				  <td class='th16_Hard_AyaWinter'>文冬</td>
+				  <td class='th16_Hard_MarisaWinter'>魔冬</td>
+				</tr>
+				<tr>
+				  <td rowSpan='4' class='diff'>L</td>
+				  <td class='th16_Lunatic_ReimuSpring'>霊春</td>
+				  <td class='th16_Lunatic_CirnoSpring'>チ春</td>
+				  <td class='th16_Lunatic_AyaSpring'>文春</td>
+				  <td class='th16_Lunatic_MarisaSpring'>魔春</td>
+				</tr>
+				<tr>
+				  <td class='th16_Lunatic_ReimuSummer'>霊夏</td>
+				  <td class='th16_Lunatic_CirnoSummer'>チ夏</td>
+				  <td class='th16_Lunatic_AyaSummer'>文夏</td>
+				  <td class='th16_Lunatic_MarisaSummer'>魔夏</td>
+				</tr>
+				<tr>
+				  <td class='th16_Lunatic_ReimuAutumn'>霊秋</td>
+				  <td class='th16_Lunatic_CirnoAutumn'>チ秋</td>
+				  <td class='th16_Lunatic_AyaAutumn'>文秋</td>
+				  <td class='th16_Lunatic_MarisaAutumn'>魔秋</td>
+				</tr>
+				<tr>
+				  <td class='th16_Lunatic_ReimuWinter'>霊冬</td>
+				  <td class='th16_Lunatic_CirnoWinter'>チ冬</td>
+				  <td class='th16_Lunatic_AyaWinter'>文冬</td>
+				  <td class='th16_Lunatic_MarisaWinter'>魔冬</td>
+				</tr>
+				<tr>
+				  <td rowSpan='1' class='diff'>X</td>
+				  <td class='th16_Extra_Reimu'>霊</td>
+				  <td class='th16_Extra_Cirno'>チ</td>
+				  <td class='th16_Extra_Aya'>文</td>
+				  <td class='th16_Extra_Marisa'>魔</td>
+				</tr>
+			  </table>
+			</td>
+			<td>
+			  <table class='work-table th17'>
+				<tr>
+				  <th colSpan='4'>鬼形獣</th>
+				</tr>
+				<tr>
+				  <td rowSpan='3' class='diff'>E</td>
+				  <td class='th17_Easy_ReimuA'>霊A</td>
+				  <td class='th17_Easy_MarisaA'>魔A</td>
+				  <td class='th17_Easy_YoumuA'>妖A</td>
+				</tr>
+				<tr>
+				  <td class='th17_Easy_ReimuB'>霊B</td>
+				  <td class='th17_Easy_MarisaB'>魔B</td>
+				  <td class='th17_Easy_YoumuB'>妖B</td>
+				</tr>
+				<tr>
+				  <td class='th17_Easy_ReimuC'>霊C</td>
+				  <td class='th17_Easy_MarisaC'>魔C</td>
+				  <td class='th17_Easy_YoumuC'>妖C</td>
+				</tr>
+				<tr>
+				  <td rowSpan='3' class='diff'>N</td>
+				  <td class='th17_Normal_ReimuA'>霊A</td>
+				  <td class='th17_Normal_MarisaA'>魔A</td>
+				  <td class='th17_Normal_YoumuA'>妖A</td>
+				</tr>
+				<tr>
+				  <td class='th17_Normal_ReimuB'>霊B</td>
+				  <td class='th17_Normal_MarisaB'>魔B</td>
+				  <td class='th17_Normal_YoumuB'>妖B</td>
+				</tr>
+				<tr>
+				  <td class='th17_Normal_ReimuC'>霊C</td>
+				  <td class='th17_Normal_MarisaC'>魔C</td>
+				  <td class='th17_Normal_YoumuC'>妖C</td>
+				</tr>
+				<tr>
+				  <td rowSpan='3' class='diff'>H</td>
+				  <td class='th17_Hard_ReimuA'>霊A</td>
+				  <td class='th17_Hard_MarisaA'>魔A</td>
+				  <td class='th17_Hard_YoumuA'>妖A</td>
+				</tr>
+				<tr>
+				  <td class='th17_Hard_ReimuB'>霊B</td>
+				  <td class='th17_Hard_MarisaB'>魔B</td>
+				  <td class='th17_Hard_YoumuB'>妖B</td>
+				</tr>
+				<tr>
+				  <td class='th17_Hard_ReimuC'>霊C</td>
+				  <td class='th17_Hard_MarisaC'>魔C</td>
+				  <td class='th17_Hard_YoumuC'>妖C</td>
+				</tr>
+				<tr>
+				  <td rowSpan='3' class='diff'>L</td>
+				  <td class='th17_Lunatic_ReimuA'>霊A</td>
+				  <td class='th17_Lunatic_MarisaA'>魔A</td>
+				  <td class='th17_Lunatic_YoumuA'>妖A</td>
+				</tr>
+				<tr>
+				  <td class='th17_Lunatic_ReimuB'>霊B</td>
+				  <td class='th17_Lunatic_MarisaB'>魔B</td>
+				  <td class='th17_Lunatic_YoumuB'>妖B</td>
+				</tr>
+				<tr>
+				  <td class='th17_Lunatic_ReimuC'>霊C</td>
+				  <td class='th17_Lunatic_MarisaC'>魔C</td>
+				  <td class='th17_Lunatic_YoumuC'>妖C</td>
+				</tr>
+				<tr>
+				  <td rowSpan='3' class='diff'>X</td>
+				  <td class='th17_Extra_ReimuA'>霊A</td>
+				  <td class='th17_Extra_MarisaA'>魔A</td>
+				  <td class='th17_Extra_YoumuA'>妖A</td>
+				</tr>
+				<tr>
+				  <td class='th17_Extra_ReimuB'>霊B</td>
+				  <td class='th17_Extra_MarisaB'>魔B</td>
+				  <td class='th17_Extra_YoumuB'>妖B</td>
+				</tr>
+				<tr>
+				  <td class='th17_Extra_ReimuC'>霊C</td>
+				  <td class='th17_Extra_MarisaC'>魔C</td>
+				  <td class='th17_Extra_YoumuC'>妖C</td>
+				</tr>
+			  </table>
+			</td>
+			<td>
+			  <table class='work-table th18'>
+				<tr>
+				  <th colSpan='3'>虹龍洞</th>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>E</td>
+				  <td class='th18_Easy_Reimu'>霊</td>
+				  <td class='th18_Easy_Marisa'>魔</td>
+				</tr>
+				<tr>
+				  <td class='th18_Easy_Sanae'>早</td>
+				  <td class='th18_Easy_Sakuya'>咲</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>N</td>
+				  <td class='th18_Normal_Reimu'>霊</td>
+				  <td class='th18_Normal_Marisa'>魔</td>
+				</tr>
+				<tr>
+				  <td class='th18_Normal_Sanae'>早</td>
+				  <td class='th18_Normal_Sakuya'>咲</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>H</td>
+				  <td class='th18_Hard_Reimu'>霊</td>
+				  <td class='th18_Hard_Marisa'>魔</td>
+				</tr>
+				<tr>
+				  <td class='th18_Hard_Sanae'>早</td>
+				  <td class='th18_Hard_Sakuya'>咲</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>L</td>
+				  <td class='th18_Lunatic_Reimu'>霊</td>
+				  <td class='th18_Lunatic_Marisa'>魔</td>
+				</tr>
+				<tr>
+				  <td class='th18_Lunatic_Sanae'>早</td>
+				  <td class='th18_Lunatic_Sakuya'>咲</td>
+				</tr>
+				<tr>
+				  <td rowSpan='2' class='diff'>X</td>
+				  <td class='th18_Extra_Reimu'>霊</td>
+				  <td class='th18_Extra_Marisa'>魔</td>
+				</tr>
+				<tr>
+				  <td class='th18_Extra_Sanae'>早</td>
+				  <td class='th18_Extra_Sakuya'>咲</td>
+				</tr>
+			  </table>
+			</td>
+			<td>
+			  <table class='work-table th6'>
+				<tr>
+				  <th>　</th>
+				</tr>
+				<tr>
+				  <td class='nmnbnr'>NMNBNR</td>
+				</tr>
+				<tr>
+				  <td class='nmnb'>NMNB</td>
+				</tr>
+				<tr>
+				  <td class='nmnr'>NMNR</td>
+				</tr>
+				<tr>
+				  <td class='nm'>NM</td>
+				</tr>
+				<tr>
+				  <td class='nbnr'>NBNR</td>
+				</tr>
+				<tr>
+				  <td class='nb'>NB</td>
+				</tr>
+				<tr>
+				  <td class='c'>ALL</td>
+				</tr>
+				<tr>
+				  <td class=''>not-cleared</td>
+				</tr>
+			  </table>
+			</td>
+		  </tr>
+		</table>
+	  </td>
+	</tr>
+  </table>
+
+
+
+
+
+  <table id='lunatic-only'>
+	<tr class='lunatic-only-row'>
+	  <th>紅魔郷</th>
+	  <td>
+		<table class='work-table th6'>
+		  <tr>
+			<td class='th6_Lunatic_ReimuA'>霊夢A</td>
+			<td class='th6_Lunatic_ReimuB'>霊夢B</td>
+			<td class='th6_Lunatic_MarisaA'>魔理沙A</td>
+			<td class='th6_Lunatic_MarisaB'>魔理沙B</td>
+		  </tr>
+		</table>
+	  </td>
+	</tr>
+	<tr class='lunatic-only-row'>
+	  <th>妖々夢</th>
+	  <td>
+		<table class='work-table th7'>
+		  <tr>
+			<td class='th7_Lunatic_ReimuA'>霊夢A</td>
+			<td class='th7_Lunatic_MarisaA'>魔理沙A</td>
+			<td class='th7_Lunatic_SakuyaA'>咲夜A</td>
+		  </tr>
+		  <tr>
+			<td class='th7_Lunatic_ReimuB'>霊夢B</td>
+			<td class='th7_Lunatic_MarisaB'>魔理沙B</td>
+			<td class='th7_Lunatic_SakuyaB'>咲夜B</td>
+		  </tr>
+		</table>
+	  </td>
+	</tr>
+	<tr class='lunatic-only-row'>
+	  <th>永夜抄</th>
+	  <td>
+		<table class='work-table th8'>
+		  <tr>
+			<td class='th8_Lunatic_AKekkai'>√A 結界組</td>
+			<td class='th8_Lunatic_AEishou'>√A 詠唱組</td>
+			<td class='th8_Lunatic_AKouma'>√A 紅魔組</td>
+			<td class='th8_Lunatic_AYuumei'>√A 幽冥組</td>
+		  </tr>
+		  <tr>
+			<td class='th8_Lunatic_AReimu'>√A 霊夢</td>
+			<td class='th8_Lunatic_AMarisa'>√A 魔理沙</td>
+			<td class='th8_Lunatic_ASakuya'>√A 咲夜</td>
+			<td class='th8_Lunatic_AYoumu'>√A 妖夢</td>
+		  </tr>
+		  <tr>
+			<td class='th8_Lunatic_AYukari'>√A 紫</td>
+			<td class='th8_Lunatic_AAlice'>√A アリス</td>
+			<td class='th8_Lunatic_ARemilia'>√A レミリア</td>
+			<td class='th8_Lunatic_AYuyuko'>√A 幽々子</td>
+		  </tr>
+		  <tr>
+			<td class='th8_Lunatic_BKekkai'>√B 結界組</td>
+			<td class='th8_Lunatic_BEishou'>√B 詠唱組</td>
+			<td class='th8_Lunatic_BKouma'>√B 紅魔組</td>
+			<td class='th8_Lunatic_BYuumei'>√B 幽冥組</td>
+		  </tr>
+		  <tr>
+			<td class='th8_Lunatic_BReimu'>√B 霊夢</td>
+			<td class='th8_Lunatic_BMarisa'>√B 魔理沙</td>
+			<td class='th8_Lunatic_BSakuya'>√B 咲夜</td>
+			<td class='th8_Lunatic_BYoumu'>√B 妖夢</td>
+		  </tr>
+		  <tr>
+			<td class='th8_Lunatic_BYukari'>√B 紫</td>
+			<td class='th8_Lunatic_BAlice'>√B アリス</td>
+			<td class='th8_Lunatic_BRemilia'>√B レミリア</td>
+			<td class='th8_Lunatic_BYuyuko'>√B 幽々子</td>
+		  </tr>
+		</table>
+	  </td>
+	</tr>
+	<tr class='lunatic-only-row'>
+	  <th>花映塚</th>
+	  <td>
+		<table class='work-table th9'>
+		  <tr>
+			<td class='th9_Lunatic_Reimu'>霊夢</td>
+			<td class='th9_Lunatic_Marisa'>魔理沙</td>
+			<td class='th9_Lunatic_Sakuya'>咲夜</td>
+			<td class='th9_Lunatic_Youmu'>妖夢</td>
+		  </tr>
+		  <tr>
+			<td class='th9_Lunatic_Reisen'>鈴仙</td>
+			<td class='th9_Lunatic_Cirno'>チルノ</td>
+			<td class='th9_Lunatic_Lyrica'>リリカ</td>
+			<td class='th9_Lunatic_Mystia'>ミスティア</td>
+		  </tr>
+		  <tr>
+			<td class='th9_Lunatic_Tei'>てゐ</td>
+			<td class='th9_Lunatic_Aya'>文</td>
+			<td class='th9_Lunatic_Medicine'>メディスン</td>
+			<td class='th9_Lunatic_Yuuka'>幽香</td>
+		  </tr>
+		  <tr>
+			<td class='th9_Lunatic_Komachi'>小町</td>
+			<td class='th9_Lunatic_Eiki'>映姫</td>
+		  </tr>
+		</table>
+	  </td>
+	</tr>
+	<tr class='lunatic-only-row'>
+	  <th>風神録</th>
+	  <td>
+		<table class='work-table th10'>
+		  <tr>
+			<td class='th10_Lunatic_ReimuA'>霊夢A</td>
+			<td class='th10_Lunatic_ReimuB'>霊夢B</td>
+			<td class='th10_Lunatic_ReimuC'>霊夢C</td>
+		  </tr>
+		  <tr>
+			<td class='th10_Lunatic_MarisaA'>魔理沙A</td>
+			<td class='th10_Lunatic_MarisaB'>魔理沙B</td>
+			<td class='th10_Lunatic_MarisaC'>魔理沙C</td>
+		  </tr>
+		</table>
+	  </td>
+	</tr>
+	<tr class='lunatic-only-row'>
+	  <th>地霊殿</th>
+	  <td>
+		<table class='work-table th11'>
+		  <tr>
+			<td class='th11_Lunatic_ReimuA'>霊夢A</td>
+			<td class='th11_Lunatic_ReimuB'>霊夢B</td>
+			<td class='th11_Lunatic_ReimuC'>霊夢C</td>
+		  </tr>
+		  <tr>
+			<td class='th11_Lunatic_MarisaA'>魔理沙A</td>
+			<td class='th11_Lunatic_MarisaB'>魔理沙B</td>
+			<td class='th11_Lunatic_MarisaC'>魔理沙C</td>
+		  </tr>
+		</table>
+	  </td>
+	</tr>
+	<tr class='lunatic-only-row'>
+	  <th>星蓮船</th>
+	  <td>
+		<table class='work-table th12'>
+		  <tr>
+			<td class='th12_Lunatic_ReimuA'>霊夢A</td>
+			<td class='th12_Lunatic_MarisaA'>魔理沙A</td>
+			<td class='th12_Lunatic_SanaeA'>早苗A</td>
+		  </tr>
+		  <tr>
+			<td class='th12_Lunatic_ReimuB'>霊夢B</td>
+			<td class='th12_Lunatic_MarisaB'>魔理沙B</td>
+			<td class='th12_Lunatic_SanaeB'>早苗B</td>
+		  </tr>
+		</table>
+	  </td>
+	</tr>
+	<tr class='lunatic-only-row'>
+	  <th>神霊廟</th>
+	  <td>
+		<table class='work-table th13'>
+		  <tr>
+			<td class='th13_Lunatic_Reimu'>霊夢</td>
+			<td class='th13_Lunatic_Marisa'>魔理沙</td>
+			<td class='th13_Lunatic_Sanae'>早苗</td>
+			<td class='th13_Lunatic_Youmu'>妖夢</td>
+		  </tr>
+		</table>
+	  </td>
+	</tr>
+	<tr class='lunatic-only-row'>
+	  <th>輝針城</th>
+	  <td>
+		<table class='work-table th14'>
+		  <tr>
+			<td class='th14_Lunatic_ReimuA'>霊夢A</td>
+			<td class='th14_Lunatic_MarisaA'>魔理沙A</td>
+			<td class='th14_Lunatic_SakuyaA'>咲夜A</td>
+		  </tr>
+		  <tr>
+			<td class='th14_Lunatic_ReimuB'>霊夢B</td>
+			<td class='th14_Lunatic_MarisaB'>魔理沙B</td>
+			<td class='th14_Lunatic_SakuyaB'>咲夜B</td>
+		  </tr>
+		</table>
+	  </td>
+	</tr>
+	<tr class='lunatic-only-row'>
+	  <th>紺珠伝</th>
+	  <td>
+		<table class='work-table th15'>
+		  <tr>
+			<td class='th15_Lunatic_Reimu'>霊夢</td>
+			<td class='th15_Lunatic_Marisa'>魔理沙</td>
+			<td class='th15_Lunatic_Sanae'>早苗</td>
+			<td class='th15_Lunatic_Reisen'>鈴仙</td>
+		  </tr>
+		</table>
+	  </td>
+	</tr>
+	<tr class='lunatic-only-row'>
+	  <th>天空璋</th>
+	  <td>
+		<table class='work-table th16'>
+		  <tr>
+			<td class='th16_Lunatic_ReimuSpring'>霊夢(春)</td>
+			<td class='th16_Lunatic_CirnoSpring'>チルノ(春)</td>
+			<td class='th16_Lunatic_AyaSpring'>文(春)</td>
+			<td class='th16_Lunatic_MarisaSpring'>魔理沙(春)</td>
+		  </tr>
+		  <tr>
+			<td class='th16_Lunatic_ReimuSummer'>霊夢(夏)</td>
+			<td class='th16_Lunatic_CirnoSummer'>チルノ(夏)</td>
+			<td class='th16_Lunatic_AyaSummer'>文(夏)</td>
+			<td class='th16_Lunatic_MarisaSummer'>魔理沙(夏)</td>
+		  </tr>
+		  <tr>
+			<td class='th16_Lunatic_ReimuAutumn'>霊夢(秋)</td>
+			<td class='th16_Lunatic_CirnoAutumn'>チルノ(秋)</td>
+			<td class='th16_Lunatic_AyaAutumn'>文(秋)</td>
+			<td class='th16_Lunatic_MarisaAutumn'>魔理沙(秋)</td>
+		  </tr>
+		  <tr>
+			<td class='th16_Lunatic_ReimuWinter'>霊夢(冬)</td>
+			<td class='th16_Lunatic_CirnoWinter'>チルノ(冬)</td>
+			<td class='th16_Lunatic_AyaWinter'>文(冬)</td>
+			<td class='th16_Lunatic_MarisaWinter'>魔理沙(冬)</td>
+		  </tr>
+		</table>
+	  </td>
+	</tr>
+	<tr class='lunatic-only-row'>
+	  <th>鬼形獣</th>
+	  <td>
+		<table class='work-table th17'>
+		  <tr>
+			<td class='th17_Lunatic_ReimuA'>霊夢A</td>
+			<td class='th17_Lunatic_MarisaA'>魔理沙A</td>
+			<td class='th17_Lunatic_YoumuA'>妖夢A</td>
+		  </tr>
+		  <tr>
+			<td class='th17_Lunatic_ReimuB'>霊夢B</td>
+			<td class='th17_Lunatic_MarisaB'>魔理沙B</td>
+			<td class='th17_Lunatic_YoumuB'>妖夢B</td>
+		  </tr>
+		  <tr>
+			<td class='th17_Lunatic_ReimuC'>霊夢C</td>
+			<td class='th17_Lunatic_MarisaC'>魔理沙C</td>
+			<td class='th17_Lunatic_YoumuC'>妖夢C</td>
+		  </tr>
+		</table>
+	  </td>
+	</tr>
+	<tr class='lunatic-only-row'>
+	  <th>虹龍洞</th>
+	  <td>
+		<table class='work-table th18'>
+		  <tr>
+			<td class='th18_Lunatic_Reimu'>霊夢</td>
+			<td class='th18_Lunatic_Marisa'>魔理沙</td>
+			<td class='th18_Lunatic_Sanae'>早苗</td>
+			<td class='th18_Lunatic_Sakuya'>咲夜</td>
+		  </tr>
+		</table>
+	  </td>
+	</tr>
+  </table>
+
+
+
+
+
+  <table id='timeline'></table>
+
+
+
+
+
+  <p id='return'><a href='/pages/'>戻る</a></p>
+</body>
+
+</html>
+

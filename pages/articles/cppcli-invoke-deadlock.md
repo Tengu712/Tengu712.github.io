@@ -1,0 +1,292 @@
+---
+title: "Invokeとmutexによるデッドロック"
+genre: "prog"
+tags: [".net", "c++"]
+date: "2023/10/16"
+---
+
+## 概要
+
+当記事は、.NETのフォームのスレッド周りを理解していなかったがゆえに起こったデッドロックを解説する。
+
+
+
+## プログラム
+
+職場では、C++/CLIでWindowsアプリケーションを開発している。
+なぜC#ではなくC++であるのかといえば、恐らく、多くの外部ライブラリを用いているために、FFIシグネチャを書くのが面倒だからだろう。
+
+次のようなプログラムを実装することになった。
+
+- MainWindowが最小化されたとき、ChildWindowを開く
+- MainWindowが最小化を解除されたとき、ChildWindowを閉じる
+- Appは不定期的に、ChildWindowを更新する
+- AppとMainWindowは別スレッドである
+
+シーケンス図を描くと、次のようになる。
+
+![シーケンス図](https://img.skdassoc.work/posts/cppcli-invoke-deadlock/01.svg)
+
+AppとMainWindowは別スレッドであるため、排他制御が必要である。
+排他制御にはmutexとlock_guardを用いる。
+
+また、.NETのフォームは、別スレッドから変更を加えられない。
+従って、AppからChildWindowを更新するときは、Invokeを用いる。
+
+C++/CLIではアンマネージ型はマネージ型の参照をメンバとして持てない。
+解決策として、以下の方法がある。
+今回は、少々気持ち悪いが、二つ目の解決策を採用する。
+
+- MainWindowがChildWindowの生成・破棄を行い、AppはdelegateでChildWindowのコールバックを持つ
+- AppがChildWindowの生成・破棄を行い、MainWindowはAppを介してChildWindowを制御する
+
+コードは、次のようになる。
+
+<Details summary="main.cpp">
+```cpp
+#include "MainWindow.hpp"
+
+#include "App.hpp"
+
+#include <msclr/gcroot.h>
+#include <thread>
+
+int main() {
+    App *app = new App();
+
+    std::thread([&] { app->run(); }).detach();
+
+    MainWindow ^ mainWindow = gcnew MainWindow(app);
+    mainWindow->ShowDialog();
+
+    return 0;
+}
+```
+</Details>
+
+<Details summary="App.hpp">
+```cpp
+#pragma once
+
+#include <msclr/gcroot.h>
+#include <mute>
+
+ref class ChildWindow;
+
+class App {
+private:
+    std::mutex _mutex;
+    msclr::gcroot<ChildWindow ^> _childWindow;
+    bool isChildWindowActive(void);
+    void updateChildWindow(void);
+
+public:
+    App(void);
+    void run(void);
+    void onMainWindowMinimized(void);
+    void onMainWindowUnMinimized(void);
+};
+```
+</Details>
+
+<Details summary="App.cpp">
+```cpp
+#include "ChildWindow.hpp"
+
+#include "App.hpp"
+
+#include <Windows.h>
+
+App::App(void) : _mutex(), _childWindow(nullptr) {}
+
+bool App::isChildWindowActive(void) {
+    return !System::Object::ReferenceEquals(_childWindow, nullptr) && !_childWindow->IsDisposed;
+}
+
+void App::updateChildWindow(void) {
+    System::Console::WriteLine("[ debug ] App::updateChildWindow(): entry");
+    std::lock_guard<std::mutex> lk(_mutex);
+    System::Console::WriteLine("[ debug ] App::updateChildWindow(): start");
+
+    if (isChildWindowActive()) {
+        _childWindow->Update();
+    }
+
+    System::Console::WriteLine("[ debug ] App::updateChildWindow(): end");
+}
+
+void App::run(void) {
+    while (true) {
+        Sleep(2000);
+        System::Console::WriteLine("[ debug ] App::run()");
+        updateChildWindow();
+    }
+}
+
+void App::onMainWindowMinimized(void) {
+    std::lock_guard<std::mutex> lk(_mutex);
+
+    if (!isChildWindowActive()) {
+        _childWindow = gcnew ChildWindow();
+    }
+    _childWindow->Show();
+}
+
+void App::onMainWindowUnMinimized(void) {
+    System::Console::WriteLine("[ debug ] App::onMainWindowUnMinimized(): entry");
+    std::lock_guard<std::mutex> lk(_mutex);
+    System::Console::WriteLine("[ debug ] App::onMainWindowUnMinimized(): start");
+
+    if (isChildWindowActive()) {
+        _childWindow->Close();
+    }
+
+    System::Console::WriteLine("[ debug ] App::onMainWindowUnMinimized(): end");
+}
+```
+</Details>
+
+<Details summary="MainWindow.hpp">
+```cpp
+#pragma once
+
+#include "App.hpp"
+
+#using <System.dll>
+#using <System.Windows.Forms.dll>
+#using <System.Drawing.dll>
+
+public ref class MainWindow : public System::Windows::Forms::Form {
+public:
+    MainWindow(void) : app(nullptr) {
+        initializeComponent();
+    }
+    MainWindow(App *app) : app(app) {
+        initializeComponent();
+    }
+    ~MainWindow() {
+        if (components) delete components;
+    }
+
+private:
+    System::ComponentModel::Container ^ components;
+    App *app;
+
+    void initializeComponent(void) {
+        this->components = gcnew System::ComponentModel::Container();
+        this->Size = System::Drawing::Size(300, 200);
+        this->Text = "Main Window";
+        this->Resize += gcnew System::EventHandler(this, &MainWindow::onResized);
+    }
+    void onResized(Object ^ sender, System::EventArgs ^ e) {
+        if (this->app == nullptr) {
+            System::Console::WriteLine("[ warning ] MainWindow::onResize(): app is nullptr.");
+            return;
+        }
+        if (this->WindowState == System::Windows::Forms::FormWindowState::Minimized)
+            app->onMainWindowMinimized();
+        else
+            app->onMainWindowUnMinimized();
+    }
+};
+```
+</Details>
+
+<Details summary="ChildWindow.h">
+```cpp
+#pragma once
+
+#include "App.hpp"
+
+#include <Windows.h>
+
+#using <System.dll>
+#using <System.Windows.Forms.dll>
+#using <System.Drawing.dll>
+
+public ref class ChildWindow : public System::Windows::Forms::Form {
+public:
+    ChildWindow(void) {
+        initializeComponent();
+    }
+    ~ChildWindow() {
+        if (components) delete components;
+    }
+    void Update(void) {
+        System::Console::WriteLine("[ debug ] ChildWindow::Update(): before invoke 1");
+        this->Invoke(gcnew System::Action(this, &ChildWindow::updateInner));
+        System::Console::WriteLine("[ debug ] ChildWindow::Update(): after invoke 1");
+        Sleep(1000);
+        System::Console::WriteLine("[ debug ] ChildWindow::Update(): before invoke 2");
+        this->Invoke(gcnew System::Action(this, &ChildWindow::updateInner));
+        System::Console::WriteLine("[ debug ] ChildWindow::Update(): after invoke 2");
+    }
+
+private:
+    System::ComponentModel::Container ^ components;
+
+    void initializeComponent(void) {
+        this->components = gcnew System::ComponentModel::Container();
+        this->Size = System::Drawing::Size(100, 100);
+        this->Text = "Child Window";
+    }
+    void updateInner(void) {
+        System::Console::WriteLine("[ debug ] ChildWindow::updateInner()");
+    }
+};
+```
+</Details>
+
+
+
+## デッドロック
+
+上のコードは、実験を容易に行うために、以下の仕様を持っている。
+
+- Appは2秒に一度ChildWindow::Update()を呼び出す
+- ChildWindow::Update()は二回ChildWindow::updateInner()をInvokeする
+- Invokeの一回目と二回目との間には1秒のインターバルがある
+
+MainWindowを最小化てChildWindowを表示した後、一回目のInvokeの後、二回目のInvokeの前に、MainWindowを表示してChildWindowを閉じると、次のメッセージでデッドロックが発生する。
+
+```
+[ debug ] App::run()
+[ debug ] App::updateChildWindow(): entry
+[ debug ] App::updateChildWindow(): start
+[ debug ] ChildWindow::Update(): before invoke 1
+[ debug ] ChildWindow::updateInner()
+[ debug ] ChildWindow::Update(): after invoke 1
+[ debug ] App::onMainWindowUnMinimized(): entry
+[ debug ] ChildWindow::Update(): before invoke 2
+```
+
+想定では、Update指示中のClose指示は待機され、Update指示が完了するとClose指示が走る。
+しかし実際は、Close指示の待機はされているが、Update指示中のInvokeでスタックし、Update指示が永遠に完了しないのである。
+
+
+
+## スレッド系
+
+__MainWindowからの指示はすべてMainWindowのスレッド系に存在する__ 。
+
+私は、どのスレッドからであろうと、フォームを開くと、フォームごとにスレッドを持つものだと思っていた。
+従って、MainWindow→App→ChildWindowの指示も、ChildWindowにとっては「外部」からの指示であると思っていた。
+
+しかし実際は、MainWindow→App::onMainWindowMinimized()において、 __ChildWindowはMainWindowのスレッド系に生成される__ 。
+だから、MainWindow→App::onMainWindowUnMinimized()で、ChildWindowを直接Closeできるのである。
+
+このことに気を付けると、以下の順序でデッドロックが起こっていることがわかる。
+
+![デッドロックが起きるアクティビティ図](https://img.skdassoc.work/posts/cppcli-invoke-deadlock/02.svg)
+
+ChildWindow::updateInnerは、App::_mutexのロック解除を待機しているわけではない。
+MainThreadが既に待機状態であるから、待機しているのである。
+
+
+
+## 解決策
+
+簡単な解決策は、App::onMainWindowUnMinimized()での待機を別スレッドで行うことである。
+すると、以下のようになり、デッドロックは起こらない。
+
+![デッドロックが起きないアクティビティ図](https://img.skdassoc.work/posts/cppcli-invoke-deadlock/03.svg)

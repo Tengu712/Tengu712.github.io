@@ -1,0 +1,575 @@
+---
+title: "MVCからReduxまで"
+genre: "prog"
+tags: ["arch"]
+date: "2025/08/29"
+---
+
+## はじめに
+
+本記事はGUIアーキテクチャについて学習というか調査した記事になります。
+
+私はこの数年間、ゲームやツールの設計をどのようにすべきか悩んで来ました。
+自力で試行錯誤したり、ネットや本を調べたりしました。
+しかし、自力の試行錯誤は正誤を判定できず、
+「設計」と言うとDDDだのクリーンアーキテクチャだのWebサービスに特化したようなものばかりで溢れ、
+「オブジェクト設計」と言うとオブジェクト指向だのデザインパターンだのミクロなテクニックばかりで溢れ、
+「モジュール分割」と言うと各言語ごとの仕様ばかりで溢れ、
+「アーキテクチャ」と言うと技術選定だのメンタルモデルだの求めているものでない情報ばかりで溢れ、
+参考として信頼できそうなものは皆大規模なソフトウェアなのですから、参考になりませんでした。
+
+当然の話です。
+今更Windowsアプリを書いている奴なんて絶滅危惧種です。
+フルスクラッチでゲームを作るなんて少数派です。
+きっと、今は溢れかえっているWebサービスだって、強いフレームワークによって淘汰され、そのフレームワークの使い方で情報が溢れ返ります。
+私が普段作っているアプリケーションは、既存のプログラムを組み合わせるだけで、あっと言う間に作れる程度のものなのです。
+そんなもののための情報なんて、あるはずがありません。
+
+そんなこんなで我が道を進んでいましたが、突然、少し考えが変わりました。
+私は今年の2月頃から内定先の企業でiOSアプリ開発に携わっています。
+そのアプリはTCAに基づいています。
+ある程度TCAを理解していれば、そのアプリの開発には食いついていけます。
+しかし、それで良いのか？　そんな甘い理解で済ませて良いのか？　
+今更ながらそう思うようになり、GUIアーキテクチャを学ぶことにしました。
+あわよくば、GUIアーキテクチャをゲームにも応用できるかもしれない、と思いながら。
+
+この学習は当初一日や二日で終わる想定でした。
+GUIアーキテクチャに関する情報は数多くネット上に存在し、すぐに理解できるものだと見積もっていたからです。
+残念ながら、二日で終わることはありませんでした。
+ご存知の通り、それら情報は皆言っていることがバラバラに交錯していたからです。
+
+これは自分なりにでも良いから、自分のためだけでも良いから、情報を整理しないといけない。
+そんなモチベーションがあって、本記事を書くことにしました。
+つまり、私はフロントエンドのプロフェッショナルでも・アマチュアですらもありません。
+しかし、一応根気を詰めて調べたつもりです。
+もし、私のことを能く知らない人がこの記事を読む場合は、そのことをご容赦ください。
+
+_本記事では参考文献を[1][2]で、参考文献を提示できないがどう考えてもそうであることを[AFAIK]で、間違っているかもしれないが個人的に考えられることを[IMO]で示します。_
+_原則、[*]のスコープは段落の始まりからそれが現れるまでのすべて文章とします。_
+
+
+
+## MVC
+
+### 概要
+
+プレゼンテーションとドメインを分離するオブジェクト指向アーキテクチャ。
+
+歴史が長いためか、環境の変化や・勘違いの積重ねによって、多様になっている。
+何より、どんなに調べても知りたいことに対する正しいと確信できる情報が出て来ない。
+
+MVCは多様である。
+しかし、後述する理由によって、次の三種類に大別されると考えられる[IMO]。
+
+- Trygve ReenskaugのMVC
+- Smalltalk-80のMVC
+- MVパターンのMVC
+
+### Trygve ReenskaugのMVC
+
+TrygveはMVCの創始者である(と言って良いだろう)。
+TrygveのMVCはOriginal MVCと言われたりもする。
+Trygveは当時のUIアーキテクチャを発展させてThing-Model-View-Editorというアーキテクチャを作った[1][3]。
+ここでは次の四つの要素が導入されている[1]:
+
+- Model
+  - Thingの抽象化の表現。要はドメイン[IMO]。
+  - データとその処理をカプセル化したもの。
+  - Thingと一対一である必要はなく、複数のModelに、構造的に分割して良い。
+- View
+  - Modelの視覚的表現。
+  - Modelからデータを取得するよう直接メッセージを送信できる。
+  - Modelを更新するよう直接メッセージを送信できる。
+- Controller
+  - ユーザとシステムの仲介者。
+  - Viewを適切に画面上に配置する。
+  - ユーザの入力を監視し、意味のあるメッセージに変換し、Viewに通達する。
+- Editor
+  - Viewの編集機能を担う一時的なController。
+  - Viewごとに特殊化しなければならないためControllerとは分離されている。
+
+ただし、Thingはユーザの関心のあるものを意味する。
+例えば大きな橋の建設や論文のアイデア等なんでも良い[1]。
+
+ここで注目すべきはまだObserverパターンが使われていない点である。
+そのため、ViewがModelとやりとりを行っている。
+つまり、ユーザ→Controller→View→Model→Viewという流れを持つ[IMO]。
+
+また、注意すべきは視覚的表現の責務はあくまでViewが負うのであり、Controllerではない点である。
+つまり、ViewのライフサイクルはViewが管理する。
+また、Controllerは視覚的表現について無知であるため、例えば、Viewを直接「この色になれ」「ここに線を引け」のように操作することは許されていない。
+が、一方で、ControllerはViewを正しく配置する責務を負う[1]。
+どうやら、ウィンドウのどこにViewがあるかはModelの視覚的表現ではないから、Controllerが担当するらしい[IMO]。……？
+
+同様に、ユーザの入力についてViewは無知でなければならない。
+「SPACEキーが押された」というメソッドを生やし、Controllerから呼ぶようなことは許されない[1]。
+
+他に注意すべき点として、ViewとControllerが一対一でないことが挙げられる。
+現代のMVCではしばしばViewとControllerが一対一で作成される[IMO]。
+
+### Smalltalk-80のMVC
+
+TrygveがいないところでTrygveのMVCからSmalltalk-80のMVCが派生した[1]。
+TrygveのMVCから次の点が異なっている[2]:
+
+- ModelにViewやControllerを依存として登録できる (「依存」はObserverパターンのObserverと同義である)。
+- Controllerはユーザの入力を検知するとModelに更新メッセージを送信する。
+- Modelは適宜依存に対し更新を通知する。
+
+つまり、次の流れを持つことになる。
+
+1. ユーザが入力
+2. Controllerが入力を検知
+3. Controllerが意味のあるメッセージに変換
+4. ControllerがModelにメッセージを送信
+5. Modelがデータを変更
+6. ModelがViewに更新を通知
+7. ViewがModelのデータ取得のメッセージを送信
+8. ViewがModelのデータに基づいて視覚情報を更新
+
+### MVパターンのMVC
+
+時代が経て、ウィジェット(ボタンやテキストフィールドといった単体UI)がユーザの入力を検知できるようになると、
+実質的にControllerがViewに内蔵され、MVパターンとも呼ぶべき状態になった[4]。
+注意深く思い返せば、上の2種類のMVCではユーザの入力はControllerによって監視されていた。
+これは現代のGUI環境では考えにくいことである。
+.NETであれSwingであれSwiftUIであれWebであれ、ウィジェットのオブジェクトは標準でイベントハンドラを持っている。
+逆に言えば、かつてはこのイベントハンドラをControllerが担っていた。
+
+この環境ではControllerは不要である。
+しかし、MVCが有名であるせいか、ViewがModelを直接更新するのを嫌ってか、
+わざわざControllerを定義し、Viewからの入力情報をControllerに転送するようになった。
+これが現代のMVCである[IMO]。
+
+ちなみに、現代でもゲームや一部のアプリはネイティブのウィジェットを使わないため、ユーザ入力を直接監視することはできる。
+尚、次節に共通する話として、MVCはゲームに向かないとも言われている[5]。
+
+### MVCの弱点
+
+Martin FowlerはSmalltalk-80のMVCの弱点として次を挙げている[3]:
+
+1. Observerパターンによって何が起こっているかどうなって動いているのかわかりづらくなる
+2. 視覚的表現の「状態」をどこに配置すべきかわかりづらい
+
+1.は仕方のないものとしてスキップする。
+
+2.の問題について。
+例えば、あるテキストフィールドに入力された文字列によってそのテキストフィールド及びすぐ横のラベルの文字色を変えたいとする。
+ViewはModelの視覚的表現である。
+だとすれば、Modelに「どんな色になるべきか」を持ち、Viewがそれを反映するのが正解である。
+ここで、Modelは視覚的表現について無知でなければならないから、文字列の評価を現代でいうenum型で持ち、
+それと色との対応マップを持ったテキストフィールド・あるいはラベル・あるいはそれらの複合コンポーネントのサブクラスを定義するのが良い[4]。
+
+しかし、例えば、あるリストボックスとその選択されたアイテムの詳細が別ウィンドウにあるとする。
+ここで必要となる「どのアイテムが選択されているか」という「状態」をどこに配置するかが問題となる。
+「どのアイテムが選択されているか」という情報は視覚的表現のために必要なドメイン情報ではない。
+かといって、ウィンドウが別れているために、前述のようにサブクラスを定義して解決することもできない[4]。
+
+つまり、視覚的表現の比重が大きいようなアプリケーションにMVCは適応しづらい。
+
+### 参考文献
+
+1. [MVC (Trygve Reenskaug)](https://folk.universitetetioslo.no/trygver/themes/mvc/mvc-index.html)
+2. [A Cookbook for Using the Model-View-Controller User Interface Paradigm in Smalltalk-80 (Glenn E. Krasner, Stephen T. Pope)](https://ics.uci.edu/~dfredmil/ics227-SQ04/papers/KrasnerPope88.pdf)
+3. [GUI Architectures (Martin Fowler)](https://martinfowler.com/eaaDev/uiArchs.html)
+
+### 理解に役立った文献
+
+4. [MVPVM Design Pattern - The Model-View-Presenter-ViewModel Design Pattern for WPF (Bill Kratochvil)](https://learn.microsoft.com/en-us/archive/msdn-magazine/2011/december/mvpvm-design-pattern-the-model-view-presenter-viewmodel-design-pattern-for-wpf)
+5. [MVCパターンの適用限界を考える(5) (ynomura)](https://ynomura.pgw.jp/archives/2013/01/mvc5.html)
+
+
+
+## MVP
+
+### 概要
+
+MVCの派生アーキテクチャ。
+MVCが勘違いされる要因となったControllerが欠落した環境でのアーキテクチャである。
+
+MVC同様歴史が長く、多様である。
+ここでは次のMVPを正しいものとして扱う:
+
+- Dolphin SmalltalkのMVP
+- Martin FlowerのMVP
+
+### Dolphin SmalltalkによるMVP
+
+MVPはMike Potelによって考案され、これに感化されたDolphin Smalltalkによって発展した[1]。
+PotelのMVPでは更新するデータの範囲を表現するSelectionsやどのようにデータを変更するかを表現するCommandsによってModelを操作するよう主張しているが、
+Dolphin Smalltalkはそのような機構を持っていない[1][2]。
+
+MVPはそれぞれ次のようである[3]:
+
+- Model
+  - ドメインの表現。
+  - UIについて無知である。
+- View
+  - Modelの視覚的表現。
+  - OSのGUIシステムによってユーザ入力をハンドルする。ハンドルした入力は殆どの場合Presenterに転送される。
+  - Modelに直接変更メッセージを送信することを禁止しない。
+- Presenter
+  - Viewを制御するもの。
+  - ユーザ入力によってModelやViewがどのように変更されるかを制御する。
+  - Viewから受け取った入力情報を意味のあるメッセージに変換する。
+  - Viewに直接変更メッセージを送信できる。
+
+次のような流れを持つ:
+
+- ユーザ入力→View→Presenter→Model→View
+- ユーザ入力→View->Presenter->View
+- ユーザ入力→View→Model->View
+
+なぜこのような仕様になっているかを理解するには、「MVC」への不満を理解する必要がある。
+前述した通り、MVCには視覚的表現の比重が大きくなると厄介事が起こるという弱点がある。
+例えば、リストボックスとその選択されたアイテムの詳細を表示する場合、どこに「どのアイテムが選択されているか」を配置するかわからない。
+他にも、例えば、あるテキストフィールドに無効な文字列が入力されているときに限り保存ボタンを無効化したい場合、どこに「文字列のヴァリデーション」を配置するかわからない。
+アニメーションをしたい場合も同様に、どこに状態や処理を配置するかわからない。
+そこで先人VisualWorksの開発者らはApplication Modelを導入した。
+これは視覚的表現にまつわる状態や処理が配置されるオブジェクトであり、MとVPの間に配置され、両者を仲介する。
+以下のような流れで問題を解決する仕組みであった[1]:
+
+1. ユーザ入力→Controller→Application Modelと伝達される
+2. Application Modelで何らかの処理を行う
+3. Application ModelがProperty Objectを変更する
+4. Property ObjectがViewに変更を通知する
+5. ViewがProperty Objectからデータを取得する
+6. Viewが見た目を更新する
+
+Dolphin Smalltalkの開発者らはこの段階のMVCを「MVC」と称して、次の不満を語っている[1][3]:
+
+- Application ModelはViewを直接知らないため、Observerパターンを使った回りくどい方法でViewを更新することになる
+- 一応Application ModelがViewを直接操作することは許されていたが、「Model」はViewについて無知であるべきという原則に反する
+- 当時の時点でウィジェットは入力イベントをハンドルできるようになっていたから、Controllerは不要
+
+そのため、Viewと強く連結して動作するPresenterを導入し、Controllerを落としたのである。
+
+### Martin FowlerのMVP
+
+Martin Fowlerはテストを容易にするために、Pasive ViewとSupervising Controllerの2種類のMVPを定義している[1]。
+それぞれ、次の特徴を持つ:
+
+- Passive View: 視覚的表現に関する操作のすべてをPresenterに委譲する
+- Supervising Controller: 視覚的表現に関する操作の一部をPresenterに委譲する
+
+本来Viewの責務であった操作をPresenterに委譲することで、Viewをテストダブルに差し替え、UIのテストを行えるようになるのである。
+
+尚、両者の大きな違いとして、Passive ViewではViewがModelについて無知であるという点がある。
+
+### 参考文献
+
+1. [GUI Architectures (Martin Fowler)](https://martinfowler.com/eaaDev/uiArchs.html)
+2. [MVP: Model-View-Presenter The Taligent Programming Model for C++ and Java (Mike Potel)](https://www.wildcrest.com/Potel/Portfolio/mvp.pdf)
+3. [TWISTING THE TRIAD (Andy Bower, Blair McGlashan)](https://mvc.givan.se/papers/Twisting_the_Triad.pdf)
+
+
+
+## MVVM
+
+### 概要
+
+John Gossmanによって考案されたアーキテクチャ。
+Martin FowlerのPresentation Modelから派生した[8]。
+このPresentation ModelはMVCからの派生であるため、厳密にはMVVMはMVCの派生である[2]。
+
+### Presentation Model
+
+Presentation Modelは視覚的表現の状態や処理をPresentation Modelという視覚的表現に関するModelに配置するアーキテクチャである。
+Model、View、Presentation Modelの三つ組で構築する[1]。
+
+ここで注意すべき点はPresentation ModelがModelである点である。
+あくまでModelなので、Viewが主体的に視覚的表現に関する操作を行う。
+そして、Viewは真のModelについて無知である[1]。
+この点でMVPのアプローチとは異なる[IMO]。
+
+また、Presentation ModelはObserverパターンではなく手動でViewとPresentation Modelを同期する。
+この点でVisualWorksのApplication Modelとは異なる[IMO]。
+
+[1]にはViewを超えたPresentation Modelの同期について記されていない。
+例えば、あるボタンを押すと色が変わるラベルがあるとして、ボタン押下→Presentation Model更新→View更新→ラベル色更新の流れで実装できる。
+しかし、このラベルが別のView (つまり、別フォームや別ウィンドウ)に配置されているとき、どのように更新するかわからない。
+ViewがそのViewのインスタンスを参照し、更新(同期)メソッドを呼ぶことで愚直に解決できるが、私の経験上それはスパゲッティ化する。
+
+### WPFのMVVM
+
+MVVMはWPFの文脈で誕生した。
+WPFでは外観を非プログラマブルな言語であるXAMLで宣言的に記述するという特徴を持つ。
+このXAMLへViewModelという視覚的表現のモデルをデータバインディングすることでアプリケーションを駆動する[2]。
+
+Presentetion Modelとの違いは、WPFのシステムがViewとViewModelの同期を行う点である。
+Presentation ModelではViewが主体となってPresentation Model上のデータを参照しView自身を更新する。
+現代でも.NETで行われる手法である。
+一方WPFではXAMLへのView ModelのデータバインディングがWPFによって自動で行われる。
+つまり、ViewとViewModelは互いに無知である[2]。
+
+このようにすることで、Model・View・ViewModelの分離を促進するため、視覚的表現に関するテストがしやすくなる。
+また、ViewがXAMLによって記述されるため、非プログラマであるデザイナーが外観を記述できるという恩恵を受ける[2]。
+
+### Vue.jsのMVVM
+
+Vue.jsでは`<template>`にHTML風の記法で外観を記述し、`<script setup>`内のデータやロジックをバインドする。
+これは前節のWPFの手法と能く似ている[IMO]。
+
+Vue.jsはMVVMに基づいているとしばしば言われるが、
+Vue.js公式は次のようにバージョンごとに異なる声明を出している:
+
+- v1: VueインスタンスはMVVMのViewModelである[4]。
+- v2: Vue.jsは一部MVVMに影響を受けているため、Vueインスタンスを慣習的にViewModelにあやかって`vm`と命名する[5]。
+- v3: (MVVMに関する記載なし)
+
+v1時代のVue.jsではHTML上のあるDOM要素とscript上のあるVueインスタンスを同期することでアプリケーションを駆動させていた[4]。
+これは、言ってしまえばWeb版WPFであり、確かにMVVMと言って良い[IMO]。
+
+一方、v2時代以降のVue.jsでは、本節の冒頭に書いた通り、単一のファイルに外観を表現する`<template>`とその状態・処理を記述する`<script setup>`を書く。
+このSingle File Component (SFC)と呼ばれる形式は、言うなれば、ViewとViewModelが単一のファイルに書かれる形式である。
+このために、あるViewModelに対して異なるViewを適応することができなくなっており、WPFとは少々異なる[IMO]。
+
+また、WPFが双方向データバインディングであるのに対し、Vue.jsは単方向データバインディングであるという違いもある[IMO]。
+例えば、テキストフィールドに文字列データをバインドする場合、
+WPFではテキストフィールドに`{Binding Foo}`を指定すると、View上で値が変わればViewModel上でも値が変わるし、ViewModel上でFooを更新すればViewに反映される[AFAIK]。
+一方、Vue.jsで同様のことをするには`v-model="foo"`を指定するが、これは`:value="foo" @input="event => foo = event.target.value"`の糖衣構文である。
+
+### MVVMの弱点
+
+ViewはModelについて無知である。
+しかし、ViewはModelの視覚的表現である。
+従って、ViewとModelの間に立つViewModelがModelへのアクセスAPIを持つことになる。
+当然ながら、Viewが必要とするModelのデータが多ければ多いほど、そのAPIの数は増える。
+APIの数が増えるほど、ボイラープレートコードが増えることになる[3]。
+
+また、[3]ではデータバインディングの都合上メモリ効率が落ちるという弱点が語られている。
+
+他にも、基本的にはViewModelはModelをプロキシプロパティとして持つことになるが、ViewにとってそれがModelを反映しているか保証しない。
+つまり、ModelとViewModelが正しく同期されているか不明瞭であるという弱点がある[AFAIK]。
+
+### 参考文献
+
+1. [Presentation Model (Martin Fowler)](https://martinfowler.com/eaaDev/PresentationModel.html)
+2. [Introduction to Model/View/ViewModel pattern for building WPF apps (John Gossman)](https://learn.microsoft.com/en-us/archive/blogs/johngossman/introduction-to-modelviewviewmodel-pattern-for-building-wpf-apps)
+3. [Advantages and disadvantages of M-V-VM (John Gossman?)](https://learn.microsoft.com/en-us/archive/blogs/johngossman/advantages-and-disadvantages-of-m-v-vm)
+4. [The Vue Instance (Vue.js)](https://v1.vuejs.org/guide/instance.html)
+5. [The Vue Instance (Vue.js)](https://v2.vuejs.org/v2/guide/instance)
+6. [Form Input Bindings (Vue.js)](https://vuejs.org/guide/essentials/forms)
+
+### 理解に役立った文献
+
+7. [起源から整理するGUIアーキテクチャパターン (中條剛)](https://zenn.dev/chooyan/articles/3b1105edd58f20)
+8. [Patterns - WPF Apps With The Model-View-ViewModel Design Pattern (Josh Smith)](https://learn.microsoft.com/en-us/archive/msdn-magazine/2009/february/patterns-wpf-apps-with-the-model-view-viewmodel-design-pattern)
+
+
+
+## Elmアーキテクチャ
+
+### 概要
+
+Elm言語で自然と発生したアーキテクチャ[1]。
+Elm言語は純粋関数型言語の一つである。
+その点、SmalltalkあるいはC#のオブジェクト指向的なMVC系列とは異なる。
+
+主に次の要素から構成される[1]:
+
+- Model: アプリケーションの状態
+- View: 外観
+- Update: Messageに基づいて新しいModelを作成するための関数
+- Message: ViewからUpdateを呼び出す際の情報
+
+次の流れを持つ[1]:
+
+1. ユーザが入力する
+2. ViewがMessageをランタイムへ発行する
+3. ランタイムがModelとMessageを伴ってUpdateを呼び出す
+4. Updateが新しいModelを作成してランタイムへ渡す
+5. ランタイムがModelを更新する
+6. ランタイムがModelを伴ってViewを呼び出す
+7. Viewが更新される
+
+Updateは新しいModelを返すだけでなく、あるMessageを返すCommandを返すことができる。
+CommandはElmの副作用を扱うための仕組みである。
+UpdateではCommandを返す関数を実行し、その返戻値を返す。
+するとランタイムはCommandがラッピングしていた本体を実行し、その返戻値をUpdateにディスパッチする。
+つまり、Messageを連鎖できるのである[1]。
+
+必ずMessageを介してUpdateを呼び出すことで、何が起きてModelが更新されたかがわかりやすくなる。
+これにより、次の恩恵を受ける[AFAIK]:
+
+- 何が起きるか(何をすべきか)を一箇所にまとめることができる
+- Model更新の追跡がしやすくデバッグが容易になる
+- 過去の状態を遡って確認できる
+
+### MVVMとの違い
+
+一見するとMVVMと違いがないように見えるが、いくつか違いがある。
+
+WPFは外観をXAMLというプログラムコードとは異なる言語で記述する。
+一方、Elmアーキテクチャでは外観の定義もプログラムコードと同じElm言語で記述する[1]。
+
+まず、Modelは「アプリケーションの状態」と説明されている[1]。
+MVC系列ではModelはドメインモデルであった。
+そのため、ドメインとは関係のない視覚的表現に関わる状態や処理をどこに配置するかが論点になっていた。
+一方、ElmアーキテクチャではModelは「アプリケーション」の「状態」である。
+そのため、視覚的表現に関する処理はViewの責任である。
+例えば、数値で管理されている金額「19800」を「$19,800」のように表示する場合、WPFではViewModelに書くが、ElmアーキテクチャではViewに書く[AFAIK]。
+
+前述の通り、Elm言語は純粋関数型言語である。
+UpdateはModelとMessageを引数に取りModelを返すカリー化された純粋関数である。
+従って、UpdateができるのはModelの更新に限られる。
+WPFと同じことをしていても、パラダイムが異なる。
+尚、厳密にはUpdateの返戻型はModelそのものではない。
+これは副作用を伴う処理に委譲するためである[1]。
+
+ViewとUpdateとはMessageという抽象によって仲介される。
+WPFでは双方向データバインディングによってView側でViewModel上のデータを直接更新する。
+あるいはまた、Vue.jsでは`<script setup>`上のイベントハンドラを`v-on`によって呼び出してデータを更新する。
+しかし、Elmアーキテクチャではデータを更新するためには必ず「何が起こるか」「何をすべきか」をMessageで表現しElmランタイムへ伝える[1]。
+言ってしまえば、ViewはModelの更新について完全に無知である[IMO]。
+
+### 参考文献
+
+1. [Elm について (はじめに) (Elm-jp)](https://guide.elm-lang.jp/)
+
+
+
+## Flux/Redux
+
+### 概要
+
+FluxはFacebookによって考案されたアーキテクチャである。
+同じくFacebookが手がけるReactの文脈で登場した。
+現在は開発が終了している[1]。
+
+また、ReduxはFluxの関数型版である。
+公式にElmアーキテクチャにも影響を受けていることを表明している[2]。
+
+### Flux
+
+主に次の要素で構成される[1]:
+
+- Dispatcher
+  - Actionを受け取り、予め登録されたStoreの処理にディスパッチするもの
+  - アプリケーションに唯一シングルトンインスタンスが存在する
+- Store
+  - アプリケーションのデータを保持するもの
+  - データはDispatcherに登録した処理によってのみ変更される
+  - アプリケーションに複数個シングルトンインスタンスが存在する
+- Action
+  - Storeの処理に必要な情報
+  - 何のActionかを示す`type`プロパティを持つJSONオブジェクト
+- View
+  - 外観
+  - Storeのデータを必要であれば加工して表示できる
+  - ユーザの入力に反応してDispatcherへActionを発行する
+
+ユーザ入力→View→Action→Dispatcher→Store→(ランタイム)→Viewという流れを持つ。
+
+Actionは必ずしもViewから発行されるわけではない。
+サーバレスポンス・タイマーといった非同期処理やプッシュ通知・ブラウザイベント等の外部システムに起因して発行され、適切にStoreを更新することができる[AFAIK]。
+
+Elmアーキテクチャとよく似ているが、Elm言語が純粋関数型言語であるのに対し、JavaScriptはマルチパラダイム言語である。
+そのため、Reactでは`useState()`等を使ってコンポーネントに状態・処理を内包できる。
+とすると、わざわざfluxというパッケージを導入する意味はないと思われるが、そうではない。
+Storeは「アプリケーション」の「データ」を保持するものである。
+逆に言えば、Reactコンポーネント内の「状態」はコンポーネントの状態に過ぎない。
+従って、Reactの`useState()`等だけに頼っていると、異なるコンポーネント間の連携のために地獄のようなPropsやContextを書くことになる。
+それを嫌って、グローバル環境に安全に状態・処理を配置できるライブラリとしてfluxが作られたのである[IMO]。
+
+また、言ってしまえば、StoreはMVC系列のModelであり、MVVMが抱えていたModelとViewModelの同期問題の解決となっている[3][IMO]。
+
+### Redux
+
+主に次の要素で構成される[3][4]:
+
+- Action
+  - 状態の更新に必要な情報
+  - 何のActionかを示す`type`プロパティを持つJSONオブジェクト
+- Reducer
+  - Actionをもとに新しい状態を作成する関数
+- Store
+  - 状態とReducerを持つオブジェクト
+  - アプリケーションに唯一シングルトンインスタンスが存在する
+  - 状態及びそれに対応するReducerを複数個持ちうる
+- View
+  - 外観
+  - Storeのデータを必要であれば加工して表示できる
+  - ユーザ入力に反応してStoreにActionを発行する
+
+Fluxと決定的に異なるのはDispatcherが存在しない点である。
+FluxではDispatcherというアプリケーション唯一無二のオブジェクトにStoreの更新処理を登録しておき、ここへ渡されたActionをすべての更新処理へ転送していた。
+つまり、Storeとその更新処理は実質的に分離されており、Storeはあくまで状態置き場であった。
+一方Reduxでは、Actionから更新処理へのディスパッチはプログラマの責務としてReducerという関数に書き起こし、それをStoreに持たせている。
+これにより、各更新処理でのActionのバリデーションが不要になる他、Reducerを差し替えることでテストが容易になるという恩恵を受ける[3]。
+
+また、Fluxでは更新処理内でStoreを直接更新していたが、ReduxではReducer内で新しく作成した状態をランタイムに渡して更新する。
+これはElmアーキテクチャを倣う不変性を意識した仕様であり、次の恩恵を受ける[3][IMO]:
+
+- インスタンスが変わるために状態の変更を高速に検知することができる
+- 過去の状態がメモリに残るためツールによるデバッグが容易になる
+- 変更が一度に行われるため並列処理への対応が容易になる
+
+尚、Reducer内からActionを発行できない。
+そのため、連鎖的なActionが必要な場合は、呼び出し側の責任となる[5]。
+
+### TCA
+
+The Composable Architecture (TCA)はSwift向けのライブラリである。
+ReduxとElmアーキテクチャに影響を受けている。
+名前に反してアーキテクチャではなくライブラリであるため、章としては立項せずここに記載する[6]。
+
+TCAは次の点でReduxと異なる[AFAIK]:
+
+- Reducer内で状態を直接更新する
+- Reducer内から異なるReducerに対してActionを発行できる
+- Actionがenumである (厳密には`Equatable`を実装した型である)
+- Storeがシングルトンではない
+- 一つのビューインスタンスに個別のStoreインスタンスを持たせることが推奨されている
+
+厳密にはTCAのReducerは`Reducer`プロトコルを実装したオブジェクトである。
+ReduxにおけるReducerに該当するのは`Reduce`クロージャである。
+この`Reduce`の返戻型は`Effect<Action>`であり、ここに同一あるいは別のReducerのActionを指定することでActionを連鎖できる。
+これはElmアーキテクチャのCommandの影響である[6][AFAIK]。
+
+ReduxにおいてStoreのインスタンスはグローバル環境に配置されたアプリケーション唯一無二のシングルトンである。
+従って、それを必要とするViewはどこからでもStoreにアクセスすることができ、そのStoreは同一のインスタンスである。
+一方、TCAでは一つのビューインスタンスに対して個別のStoreインスタンスを与える。
+これは実質的にViewとStoreがセットで定義されることを意味し、StoreはView専属の状態管理オブジェクトとなる。
+もしグローバルなStoreが欲しい場合は、どこかでインスタンスを作成し、`@Dependency`で参照する[AFAIK]。
+
+### 参考文献
+
+1. [flux (GitHub)](https://github.com/facebookarchive/flux)
+2. [Prior Art (Redux)](https://redux.js.org/understanding/history-and-design/prior-art)
+3. [Redux Essentials, Part 1: Redux Overview and Concepts (Redux)](https://redux.js.org/tutorials/essentials/part-1-overview-concepts)
+4. [Redux Fundamentals, Part 4: Store (Redux)](https://redux.js.org/tutorials/fundamentals/part-4-store)
+5. [Reducing Boilerplate (Redux)](https://redux.js.org/usage/reducing-boilerplate#action-creators)
+6. [swift-composable-architecture (GitHub)](https://github.com/pointfreeco/swift-composable-architecture)
+
+
+
+## おわりに
+
+骨が折れました。
+が、色々と調べて大変学びになりました。
+最初の頃は「UIアーキテクチャの歴史はドメインとプレゼンテーションの分離の歴史だ」と思っていましたが、全然そんなことはありませんでした。
+ではUIアーキテクチャとは何なのでしょう。
+たぶん、一言では表せないのだと思います。
+何かに不満を持った人が新しいものを生み出した。
+そうして、どこか、少しずつ、進化してきた。
+そういうものなのだと思います。
+
+ただ、はっきりと気づいたことがあります。
+私はこういう記事を読む度に「サンプルコードも書け！　これじゃどう実装すれば良いかわからないだろうが！」と発狂する人生を歩んできたのですが。
+読んでわかる通り、本記事には一切のサンプルコードも載せていません。
+これは「どう実装すれば良いかわからない・実装してみたけど上手くいかない場合は環境やプロダクトが適していないだけ」という気づきのためです。
+UIアーキテクチャは思想です。
+どのオブジェクトを定義してどこでインスタンスを作って……というところまでは範囲していなくて良いのです。
+確かに新しめのアーキテクチャはライブラリとして頒布されており、どう実装すれば良いかを示す文献が用意されています。
+が、結局のところWPFなりReactなりに乗っかっているわけで、例えばC++やそれこそSmalltalkでも実装できるんですか、という話になります。
+その土台となる環境ごと実装したならば、きっとそれは別のアーキテクチャになっているはずです。
+環境に合わないアーキテクチャを選択する愚かしさは、MVCからCが欠落しても尚MVCを使い続けようとする愚かしさと同じです。
+それを歴史は物語っています。
+
+
+
+## 雑記
+
+- WPFとかひっさびさに見たわ。
+- SVVS？　許して。疲れた。

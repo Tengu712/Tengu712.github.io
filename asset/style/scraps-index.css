@@ -1,0 +1,12 @@
+.card {
+    margin: 16px 0;
+}
+
+.card>a:first-child {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.filter-display {
+    text-align: center;
+}

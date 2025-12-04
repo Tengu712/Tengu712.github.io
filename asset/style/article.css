@@ -1,0 +1,8 @@
+.catch-icon {
+    margin-top: 16px;
+    text-align: center;
+}
+
+.catch-icon>svg {
+    width: 96px;
+}
