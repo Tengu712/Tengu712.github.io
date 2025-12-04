@@ -93,7 +93,7 @@ pub fn generate_scraps_index_html(metas: Vec<(String, Value)>) -> String {
         .collect::<Vec<_>>();
 
     styles.insert(StrPtr(style::SCRAPS_INDEX));
-    metas.sort_by(|(_, meta1), (_, meta2)| meta2.topic.cmp(&meta1.topic));
+    metas.sort_by(|(_, meta1), (_, meta2)| meta1.topic.cmp(&meta2.topic));
 
     buf.push_str("<h1>Scraps</h1>");
     for (id, meta) in metas {
