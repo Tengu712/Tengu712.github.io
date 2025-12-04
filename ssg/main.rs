@@ -107,6 +107,23 @@ fn generate_articles_and_index() {
     .unwrap();
 }
 
+fn generate_scraps_and_index() {
+    let metas = glob::glob("pages/scraps/*.md")
+        .unwrap()
+        .map(|p| {
+            let p = p.unwrap();
+            let id = get_file_stem(&p);
+            let value = process_markdown_source(&p, Layout::Scrap);
+            (id, value)
+        })
+        .collect::<Vec<_>>();
+    fs::write(
+        "dist/scraps/index.html",
+        defaults::generate_scraps_index_html(metas),
+    )
+    .unwrap();
+}
+
 fn generate_pages() {
     glob::glob("pages/pages/**/*").unwrap().for_each(|p| {
         let p = p.unwrap();
@@ -140,6 +157,7 @@ fn copy_publics() {
 fn main() {
     clear_dist();
     generate_articles_and_index();
+    generate_scraps_and_index();
     generate_pages();
     generate_about();
     copy_publics();

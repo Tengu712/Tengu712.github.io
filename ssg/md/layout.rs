@@ -7,3 +7,4 @@ use serde_yaml::Value;
 
 pub mod article;
 pub mod basic;
+pub mod scrap;

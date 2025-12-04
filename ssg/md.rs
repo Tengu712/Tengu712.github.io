@@ -13,6 +13,7 @@ mod layout;
 pub enum Layout {
     Basic,
     Article,
+    Scrap,
 }
 
 fn parse(content: &str) -> (Node, Value) {
@@ -82,6 +83,7 @@ pub fn to_html(mdtxt: &str, layout: Layout, url: String) -> (String, Value) {
     let content = match layout {
         Layout::Basic => layout::basic::to_html(&mdast, &mut styles),
         Layout::Article => layout::article::to_html(&mdast, &value, &mut styles),
+        Layout::Scrap => layout::scrap::to_html(&mdast, &value, &mut styles),
     };
     let h2s = if index == Some(false) {
         Vec::new()

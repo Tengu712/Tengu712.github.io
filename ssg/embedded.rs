@@ -17,12 +17,14 @@ pub mod style {
 
     // ページ固有
     pub const ARTICLES_INDEX: &str = include_str!("../asset/style/articles-index.css");
+    pub const SCRAPS_INDEX: &str = include_str!("../asset/style/scraps-index.css");
 
     // レイアウト
     pub const ARTICLE: &str = include_str!("../asset/style/article.css");
 
     // コンポーネント
     pub const META: &str = include_str!("../asset/style/meta.css");
+    pub const SCRAP_META: &str = include_str!("../asset/style/scrap-meta.css");
 
     // 他
     pub const KATEX_MIN_CSS: &str = include_str!("../asset/style/katex.min.css");

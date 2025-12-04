@@ -1,0 +1,13 @@
+.scrap-meta {
+    display: flex;
+    gap: 4px;
+}
+
+.scrap-meta>* {
+    color: #777;
+    font-size: 14px;
+}
+
+.scrap-meta a {
+    text-decoration: none !important;
+}
