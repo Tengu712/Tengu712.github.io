@@ -5,69 +5,13 @@
 
 use super::Styles;
 use crate::{embedded::style, strutil::StrPtr};
-use markdown::mdast::{
-    AttributeContent, AttributeValue, MdxJsxFlowElement, MdxJsxTextElement, Node,
-};
+use markdown::mdast::Node;
 
 mod code;
+mod jsx;
 mod table;
 
-enum MdxJsx<'a> {
-    Flow(&'a MdxJsxFlowElement),
-    Text(&'a MdxJsxTextElement),
-}
-
-fn find_jsx_attribute<'a>(attributes: &'a [AttributeContent], name: &str) -> &'a str {
-    for a in attributes {
-        let AttributeContent::Property(prop) = a else {
-            continue;
-        };
-        if prop.name != name {
-            continue;
-        }
-        return match prop.value.as_ref().unwrap() {
-            AttributeValue::Expression(v) => &v.value,
-            AttributeValue::Literal(v) => v,
-        };
-    }
-    panic!("{name}がねえ: {:?}", attributes);
-}
-
-fn component_to_html(n: MdxJsx, buf: &mut String, styles: &mut Styles) {
-    let (name, children) = match n {
-        MdxJsx::Flow(n) => (n.name.as_ref().unwrap(), &n.children),
-        MdxJsx::Text(n) => (n.name.as_ref().unwrap(), &n.children),
-    };
-    if name == "Center" {
-        buf.push_str("<div style=\"text-align: center\">");
-        mdasts_to_html(children, buf, styles);
-        buf.push_str("</div>");
-    } else if name == "Small" {
-        buf.push_str("<div style=\"font-size: 14px; color: #777\"><p>");
-        mdasts_to_html(children, buf, styles);
-        buf.push_str("</p></div>");
-    } else if name == "DoubleImages" {
-        let (src1, src2) = match n {
-            MdxJsx::Flow(n) => (
-                find_jsx_attribute(&n.attributes, "src1"),
-                find_jsx_attribute(&n.attributes, "src2"),
-            ),
-            MdxJsx::Text(n) => (
-                find_jsx_attribute(&n.attributes, "src1"),
-                find_jsx_attribute(&n.attributes, "src2"),
-            ),
-        };
-        buf.push_str("<div class=\"double-imgs-container\"><img src=\"");
-        buf.push_str(src1);
-        buf.push_str("\"><img src=\"");
-        buf.push_str(src2);
-        buf.push_str("\"></div>");
-    } else if name == "Tombstone" {
-        buf.push_str("<p style=\"text-align: right\">■</p>");
-    } else {
-        panic!("{name}コンポーネントはねえよ");
-    }
-}
+use jsx::MdxJsx;
 
 pub fn mdast_to_html(node: &Node, buf: &mut String, styles: &mut Styles) {
     match node {
@@ -77,7 +21,7 @@ pub fn mdast_to_html(node: &Node, buf: &mut String, styles: &mut Styles) {
             mdasts_to_html(&n.children, buf, styles);
             buf.push_str("</blockquote>");
         }
-        Node::MdxJsxFlowElement(n) => component_to_html(MdxJsx::Flow(n), buf, styles),
+        Node::MdxJsxFlowElement(n) => jsx::to_html(MdxJsx::Flow(n), buf, styles),
         Node::List(n) if n.ordered => {
             buf.push_str("<ol>");
             mdasts_to_html(&n.children, buf, styles);
@@ -121,7 +65,7 @@ pub fn mdast_to_html(node: &Node, buf: &mut String, styles: &mut Styles) {
             }
             buf.push_str("</div>");
         }
-        Node::MdxJsxTextElement(n) => component_to_html(MdxJsx::Text(n), buf, styles),
+        Node::MdxJsxTextElement(n) => jsx::to_html(MdxJsx::Text(n), buf, styles),
         Node::Link(n) => {
             buf.push_str("<a href=\"");
             buf.push_str(&n.url);

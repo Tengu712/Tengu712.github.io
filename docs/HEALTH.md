@@ -12,6 +12,7 @@ flowchart TD
     md::layout::basic --> md::convert
     md::layout::article --> md::convert
     md::convert --> md::convert::code
+    md::convert <--> md::convert::jsx
     md::convert <--> md::convert::table
     main --> defaults
     defaults --> template
