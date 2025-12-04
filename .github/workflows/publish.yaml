@@ -11,17 +11,18 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
         with:
           path: skdassoc.com
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-      - run: bun i
-      - run: bun run build
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - run: cargo run
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
+
   deploy:
     needs: build
     permissions:
