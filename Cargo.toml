@@ -1,0 +1,10 @@
+[package]
+name = "ssg"
+version = "0.1.0"
+edition = "2024"
+
+[[bin]]
+name = "ssg"
+path = "ssg/main.rs"
+
+[dependencies]
