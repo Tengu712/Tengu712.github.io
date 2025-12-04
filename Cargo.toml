@@ -9,13 +9,8 @@ path = "ssg/main.rs"
 
 [dependencies]
 glob = "0.3.3"
+katex-rs = "0.2"
 markdown = "1.0.0"
 serde = { version = "1.0.228", features = ["derive"] }
 serde_yaml = "0.9.34"
 syntect = "5.3.0"
-
-[target.'cfg(windows)'.dependencies]
-katex = { version = "0.4", default-features = false, features = ["duktape"] }
-
-[target.'cfg(not(windows))'.dependencies]
-katex = { version = "0.4" }

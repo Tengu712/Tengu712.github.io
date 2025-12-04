@@ -28,7 +28,7 @@ pub fn to_html(n: MdxJsx, buf: &mut String, styles: &mut Styles) {
         MdxJsx::Text(n) => (n.name.as_ref().unwrap(), &n.children),
     };
     if name == "Center" {
-        buf.push_str("<div style=\"text-align: center\">");
+        buf.push_str("<div style=\"text-align: center; margin: 36px 0\">");
         mdasts_to_html(children, buf, styles);
         buf.push_str("</div>");
     } else if name == "Details" {

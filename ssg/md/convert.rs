@@ -5,6 +5,7 @@
 
 use super::Styles;
 use crate::{embedded::style, strutil::StrPtr};
+use katex::{KatexContext, Settings};
 use markdown::mdast::Node;
 
 mod code;
@@ -34,13 +35,22 @@ pub fn mdast_to_html(node: &Node, buf: &mut String, styles: &mut Styles) {
         }
         Node::Yaml(_) => (),
         Node::InlineCode(n) => {
+            // NOTE: 変換しないと`<template>`のような文字列で
+            //       <code><template></code>が出力されておかしくなる。
+            let v = n
+                .value
+                .replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;");
             buf.push_str("<code>");
-            buf.push_str(&n.value);
+            buf.push_str(&v);
             buf.push_str("</code>");
         }
         Node::InlineMath(n) => {
             styles.insert(StrPtr(style::KATEX_MIN_CSS));
-            buf.push_str(&katex::render(&n.value).unwrap());
+            let ctx = KatexContext::default();
+            let settings = Settings::default();
+            buf.push_str(&katex::render_to_string(&ctx, &n.value, &settings).unwrap());
         }
         Node::Delete(n) => {
             buf.push_str("<del>");
@@ -82,8 +92,9 @@ pub fn mdast_to_html(node: &Node, buf: &mut String, styles: &mut Styles) {
         Node::Code(n) => buf.push_str(&code::to_html(&n.value, &n.lang)),
         Node::Math(n) => {
             styles.insert(StrPtr(style::KATEX_MIN_CSS));
-            let opts = katex::Opts::builder().display_mode(true).build().unwrap();
-            buf.push_str(&katex::render_with_opts(&n.value, opts).unwrap());
+            let ctx = KatexContext::default();
+            let settings = Settings::builder().display_mode(true).build();
+            buf.push_str(&katex::render_to_string(&ctx, &n.value, &settings).unwrap());
         }
         Node::Heading(n) => {
             match n.depth {

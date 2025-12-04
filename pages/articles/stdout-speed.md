@@ -52,18 +52,18 @@ LARGE_INTEGER before;
 LARGE_INTEGER after;
 
 void test_printf(const char *msg) {
-    QueryPerformanceCounter(&amp;before);
+    QueryPerformanceCounter(&before);
     for (int i = 0; i < 10000; ++i) {
         printf("hello %s\n", msg);
 #ifdef IOFBF
         fflush(stdout);
 #endif
     }
-    QueryPerformanceCounter(&amp;after);
+    QueryPerformanceCounter(&after);
 }
 
 void test_fwrite(const char *msg) {
-    QueryPerformanceCounter(&amp;before);
+    QueryPerformanceCounter(&before);
     for (int i = 0; i < 10000; ++i) {
         fwrite("hello ", sizeof(char), 6, stdout);
         fwrite(msg, sizeof(char), strlen(msg), stdout);
@@ -72,11 +72,11 @@ void test_fwrite(const char *msg) {
         fflush(stdout);
 #endif
     }
-    QueryPerformanceCounter(&amp;after);
+    QueryPerformanceCounter(&after);
 }
 
 int main() {
-    QueryPerformanceFrequency(&amp;freq);
+    QueryPerformanceFrequency(&freq);
 #ifdef IOFBF
     setvbuf(stdout, NULL, _IOFBF, 1024);
 #endif

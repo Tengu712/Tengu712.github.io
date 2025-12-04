@@ -23,7 +23,9 @@ static THEME: LazyLock<Theme> = LazyLock::new(init_theme);
 
 pub fn to_html(code: &str, lang: &Option<String>) -> String {
     let syntax = if let Some(lang) = lang {
-        SYNTAX_SET.find_syntax_by_extension(lang).unwrap()
+        SYNTAX_SET
+            .find_syntax_by_extension(lang)
+            .unwrap_or_else(|| panic!("そんな言語はねえよ: {}", lang))
     } else {
         SYNTAX_SET.find_syntax_plain_text()
     };
