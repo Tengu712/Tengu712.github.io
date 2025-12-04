@@ -1,7 +1,7 @@
 ---
 title: "printf vs fwrite"
 genre: "experiment"
-tags: ["c/c++"]
+tags: ["c/cpp"]
 date: "2023/03/20"
 ---
 
