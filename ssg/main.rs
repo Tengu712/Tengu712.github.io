@@ -47,6 +47,21 @@ fn replace_root_with_dist(path: &Path) -> PathBuf {
     new_path
 }
 
+fn to_url(path: &Path) -> String {
+    let url = path.strip_prefix("dist").unwrap();
+    let url = url.with_extension("");
+    let mut url = url
+        .components()
+        .map(|n| n.as_os_str().to_str().unwrap())
+        .collect::<Vec<_>>();
+    if let Some(n) = url.last()
+        && *n == "index"
+    {
+        url.pop();
+    }
+    format!("https://skdassoc.com/{}/", url.join("/"))
+}
+
 fn ensure_dir(path: &Path) {
     if let Some(parent) = path.parent() {
         fs::create_dir_all(parent).unwrap();
@@ -57,7 +72,7 @@ fn process_markdown_source(path: &Path, layout: Layout) -> Value {
     let dst_path = to_index_html_path(path);
     let dst_path = replace_root_with_dist(&dst_path);
     let content = fs::read_to_string(path).unwrap();
-    let (html, value) = md::to_html(&content, layout);
+    let (html, value) = md::to_html(&content, layout, to_url(&dst_path));
     ensure_dir(&dst_path);
     fs::write(dst_path, html).unwrap();
     value

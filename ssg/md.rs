@@ -1,6 +1,6 @@
 //! Markdown文字列をHTML文字列に変換するモジュール
 
-use crate::template::{self, H2s, Styles};
+use crate::template::{self, *};
 use markdown::{
     Constructs, ParseOptions,
     mdast::{Node, Yaml},
@@ -71,7 +71,7 @@ fn collect_h2s(mdast: &Node) -> H2s {
     h2s
 }
 
-pub fn to_html(mdtxt: &str, layout: Layout) -> (String, Value) {
+pub fn to_html(mdtxt: &str, layout: Layout, url: String) -> (String, Value) {
     let (mdast, value) = parse(mdtxt);
 
     let title = value["title"].as_str().unwrap();
@@ -89,8 +89,11 @@ pub fn to_html(mdtxt: &str, layout: Layout) -> (String, Value) {
         collect_h2s(&mdast)
     };
 
-    (
-        template::generate_basic_html(styles, title, &content, h2s),
-        value,
-    )
+    let ogp = OGPInfo {
+        otype: "article".to_string(),
+        url,
+    };
+    let html = template::generate_basic_html(ogp, styles, title, &content, h2s);
+
+    (html, value)
 }

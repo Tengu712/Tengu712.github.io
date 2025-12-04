@@ -4,7 +4,7 @@ use crate::{
     component,
     embedded::*,
     strutil::StrPtr,
-    template::{self, H2s, Styles},
+    template::{self, H2s, OGPInfo, Styles},
 };
 use serde::Deserialize;
 use serde_yaml::Value;
@@ -55,5 +55,9 @@ pub fn generate_articles_index_html(metas: Vec<(String, Value)>) -> String {
     }
     buf.push_str(FILTER_SCRIPT);
 
-    template::generate_basic_html(styles, "天狗会議録", &buf, H2s::new())
+    let ogp = OGPInfo {
+        otype: "website".to_string(),
+        url: "https://skdassoc.com/".to_string(),
+    };
+    template::generate_basic_html(ogp, styles, "天狗会議録", &buf, H2s::new())
 }
