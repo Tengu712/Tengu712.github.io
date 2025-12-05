@@ -142,6 +142,10 @@ fn generate_about() {
     process_markdown_source(Path::new("pages/about/index.md"), Layout::Basic);
 }
 
+fn generate_404() {
+    fs::write("dist/404.html", defaults::generate_404_html()).unwrap();
+}
+
 fn copy_publics() {
     glob::glob("public/**/*").unwrap().for_each(|src| {
         let src = src.unwrap();
@@ -160,5 +164,6 @@ fn main() {
     generate_scraps_and_index();
     generate_pages();
     generate_about();
+    generate_404();
     copy_publics();
 }

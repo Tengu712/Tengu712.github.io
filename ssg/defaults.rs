@@ -113,3 +113,21 @@ pub fn generate_scraps_index_html(metas: Vec<(String, Value)>) -> String {
     };
     template::generate_basic_html(ogp, styles, "Scraps", &buf, H2s::new())
 }
+
+pub fn generate_404_html() -> String {
+    const CONTENT: &str = "\
+        <div>ないよ</div>\
+        <script>\
+            const curpath = window.location.pathname;\
+            if (currentPath.startsWith('/posts/')) {\
+                const newPath = currentPath.replace('/posts/', '/articles/');\
+                window.location.href = newPath;\
+            }\
+        </script>\
+    ";
+    let ogp = OGPInfo {
+        otype: "article".to_string(),
+        url: "https://skdassoc.com/404.html".to_string(),
+    };
+    template::generate_basic_html(ogp, Styles::new(), CONTENT, "ないよ", H2s::new())
+}
