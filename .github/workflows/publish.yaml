@@ -21,6 +21,9 @@ jobs:
 
       - run: cargo run
 
+      - name: Check
+        run: test $(( $(find pages public -type f | wc -l) + 2 )) -eq $(find dist -type f | wc -l)
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
