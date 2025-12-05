@@ -118,9 +118,9 @@ pub fn generate_404_html() -> String {
     const CONTENT: &str = "\
         <div>ないよ</div>\
         <script>\
-            const curpath = window.location.pathname;\
-            if (currentPath.startsWith('/posts/')) {\
-                const newPath = currentPath.replace('/posts/', '/articles/');\
+            const curPath = window.location.pathname;\
+            if (curPath.startsWith('/posts/')) {\
+                const newPath = curPath.replace('/posts/', '/articles/');\
                 window.location.href = newPath;\
             }\
         </script>\
@@ -129,5 +129,5 @@ pub fn generate_404_html() -> String {
         otype: "article".to_string(),
         url: "https://skdassoc.com/404.html".to_string(),
     };
-    template::generate_basic_html(ogp, Styles::new(), CONTENT, "ないよ", H2s::new())
+    template::generate_basic_html(ogp, Styles::new(), "ぺーじのっとふぁうんと", CONTENT, H2s::new())
 }
