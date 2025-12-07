@@ -83,6 +83,9 @@ li p {
 pre {
     margin: 16px 0;
     padding: 24px;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
     border-radius: 5px;
     overflow-x: auto;
     overflow-wrap: break-word;
@@ -144,6 +147,7 @@ pre {
 .triad-center {
     width: 100%;
     max-width: 620px;
+    min-width: 0;
 }
 
 .triad-center a {
