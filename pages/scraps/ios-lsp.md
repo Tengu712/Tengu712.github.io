@@ -30,12 +30,7 @@ return {
     'Package.swift',
     '.git',
   },
-  cmd = {
-    'xcrun',
-    '--toolchain',
-    'swift',
-    'sourcekit-lsp',
-  },
+  cmd = {'sourcekit-lsp'},
 }
 ```
 
