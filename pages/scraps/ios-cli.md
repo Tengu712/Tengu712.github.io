@@ -22,7 +22,6 @@ DEVICE_ID="00000000-0000-0000-0000-000000000000"
 PROJECT_NAME="PROJECT_NAME"
 SCHEME_NAME="SCHEME_NAME"
 CONFIGURATION="Debug|Release"
-BUILD_PATH="./build"
 
 # 定数定義(自動)
 PROJECT_FILE="$PROJECT_NAME.xcodeproj"
@@ -64,7 +63,7 @@ fi
 
 # ビルド
 # NOTE: 標準出力と標準エラーをxcodebuild.logにリダイレクト。
-#       xcpretty等を使うと良いかもしれない。
+#       出力内容が煩わしいのと、LSPで使うので。
 echo "trace: building..."
 xcodebuild \
 	-project "$PROJECT_FILE" \
@@ -72,7 +71,6 @@ xcodebuild \
 	-sdk "$PLATFORM" \
 	-destination "platform=iOS Simulator,id=$DEVICE_ID" \
 	-configuration "$CONFIGURATION" \
-	-derivedDataPath "$BUILD_PATH" \
 	build \
 	&> xcodebuild.log
 if [ "${PIPESTATUS[0]}" -ne 0 ]; then
@@ -82,9 +80,9 @@ fi
 echo "trace: build succeeded."
 
 # .app生成確認
-APP_PATH="$BUILD_PATH/Build/Products/$CONFIGURATION-$PLATFORM/$SCHEME_NAME.app"
+APP_PATH=$(find ~/Library/Developer/Xcode/DerivedData -name "$SCHEME_NAME.app" -type d | head -n 1)
 if [ ! -d "$APP_PATH" ]; then
-	echo "error: $APP_PATH not found."
+	echo "error: app path '$APP_PATH' not found."
 	exit 1
 fi
 echo "info: app path is $APP_PATH."
