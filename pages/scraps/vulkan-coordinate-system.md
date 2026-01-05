@@ -8,22 +8,7 @@ index: false
 [Vulkan 1.4.335 - A Specification (with all registered extensions)](https://registry.khronos.org/vulkan/specs/latest/html/vkspec.html#preamble)
 の中の座標系に関する部分をつまみ食いする。
 
-パイプラインの一連の流れは「10. Pipelines」に書かれている。
-パイプライン上の各シェーダはざっくり下のように構造化される:
-
-1. プリミティブ処理
-   - Primitive Shading
-      1. Vertex Shader
-      2. Tessellation Control Shader (optimal)
-      3. Tessellation Evaluation Shader (optimal)
-      4. Geometry Shader (optimal)
-   - Mesh Shading
-      1. Task Shader (optimal)
-      2. Mesh Shader
-2. フラグメント処理
-   1. Fragment Shader
-
-頂点処理終了時点の座標系はclip座標系である。
+プリミティブ処理終了時点の座標系はclip座標系である。
 Clip座標系は3+1次元の同次座標系。
 Clip座標を
 
