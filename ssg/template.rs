@@ -103,7 +103,7 @@ pub fn generate_basic_html(
                 </div>\
             </div>\
             <div class=\"footer\">\
-                2022-2025, Tengu712, Skydog Association\
+                2022-2026, Tengu712, Skydog Association\
             </div>\
         </body>\
         </html>\
