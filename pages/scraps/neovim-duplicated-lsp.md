@@ -1,7 +1,7 @@
 ---
 title: Neovim LSPクライアント多重起動回避
 topic: neovim
-tags: []
+tags: ["lsp"]
 index: false
 ---
 
