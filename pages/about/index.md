@@ -5,12 +5,9 @@ index: false
 
 # About
 
-## Me
+天狗。SKD、Tengu712とも。
 
-- 天狗。SKD、Tengu712とも
-- 東京理科大学創域理工学研究科情報計算科学専攻二年生
-
-## Links
+プログラマ。
 
 - [GitHub](https://github.com/Tengu712)
 - [YouTube](https://www.youtube.com/@tengu7123)
