@@ -1,7 +1,7 @@
 ---
 title: オーバーレイウィンドウ
 topic: windowsapi
-tags: ["c++"]
+tags: []
 index: false
 ---
 
