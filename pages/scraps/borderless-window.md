@@ -1,7 +1,7 @@
 ---
 title: Win32APIボーダーレスウィンドウ
 topic: windowsapi
-tags: []
+tags: ["c/cpp"]
 index: false
 ---
 

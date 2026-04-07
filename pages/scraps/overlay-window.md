@@ -1,7 +1,7 @@
 ---
 title: オーバーレイウィンドウ
 topic: gui
-tags: ["cocoa", "windowsapi"]
+tags: ["cocoa", "c/cpp", "swift", "windowsapi"]
 index: false
 ---
 

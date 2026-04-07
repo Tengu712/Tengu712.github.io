@@ -1,6 +1,6 @@
 ---
 title: 非resizableなNSWindowのフルスクリーン時コンテントサイズ
-topic: macos
+topic: cocoa
 tags: ["swift"]
 index: false
 ---

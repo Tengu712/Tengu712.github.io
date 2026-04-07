@@ -1,7 +1,7 @@
 ---
 title: "ウィンドウアプリケーションの列挙"
 topic: "windowsapi"
-tags: []
+tags: ["c/cpp"]
 index: false
 ---
 
