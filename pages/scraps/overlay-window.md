@@ -1,11 +1,11 @@
 ---
 title: オーバーレイウィンドウ
-topic: windowsapi
-tags: []
+topic: gui
+tags: ["cocoa", "windowsapi"]
 index: false
 ---
 
-次は画面上の左上原点座標(100, 100)に幅高(300, 300)の赤色の円を表示する例:
+次はWindowsで画面上の左上原点座標(100, 100)に幅高(300, 300)の赤色の円を表示する例:
 
 ```cpp
 #include <Windows.h>
@@ -114,4 +114,80 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE, LPSTR, int) {
 	}
 	return 0;
 }
+```
+
+次はmacOSで画面上の左下原点座標(100, 100)に幅高(300, 300)の赤色の円を表示する例:
+
+```swift
+import Cocoa
+
+func showErrorDialog(_ message: String) {
+  let alert = NSAlert()
+  alert.messageText = "Error"
+  alert.informativeText = message
+  alert.alertStyle = .critical
+  alert.addButton(withTitle: "OK")
+  alert.runModal()
+}
+
+class OverlayPanel: NSPanel {
+    override var canBecomeKey: Bool { false }  // the window can't be a key window
+    override var canBecomeMain: Bool { false } // the window can't be a main window
+}
+
+class OverlayView: NSView {
+    override func draw(_ dirtyRect: NSRect) {
+        super.draw(dirtyRect)
+
+        guard let ctx = NSGraphicsContext.current?.cgContext else { return }
+
+        ctx.setFillColor(NSColor.red.cgColor)
+        ctx.fillEllipse(in: CGRect(x: 100, y: 100, width: 300, height: 300))
+    }
+
+    // the view skip the hit test
+    override func hitTest(_ point: NSPoint) -> NSView? { nil }
+}
+
+class AppDelegate: NSObject, NSApplicationDelegate {
+    var panel: OverlayPanel?
+
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        let fullScreenRect = NSScreen.screens.reduce(NSRect.zero) {
+            $0.union($1.frame)
+        }
+
+        panel = OverlayPanel(
+            contentRect: fullScreenRect,
+            styleMask: [.borderless, .nonactivatingPanel], // the window is borderless and can't be focused with click
+            backing: .buffered,
+            defer: false
+        )
+
+        guard let panel else {
+            showErrorDialog("Failed to create an overlay panel")
+            return
+        }
+
+        panel.backgroundColor = .clear
+        panel.isOpaque        = false
+        panel.level           = .screenSaver // the window appears above all other windows
+        panel.ignoresMouseEvents = true      // the window passes clicks through to the background
+        panel.collectionBehavior = [         // the window doesn't appear in window switcher, task bar and mission control
+            .canJoinAllSpaces,
+            .stationary,
+            .ignoresCycle,
+        ]
+
+        let view = OverlayView(frame: panel.contentView!.bounds)
+        view.autoresizingMask = [.width, .height]
+        panel.contentView = view
+        panel.orderFrontRegardless()
+    }
+}
+
+let app = NSApplication.shared
+let delegate = AppDelegate()
+app.delegate = delegate
+app.run()
 ```
