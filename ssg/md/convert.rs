@@ -8,6 +8,7 @@ use crate::{embedded::style, strutil::StrPtr};
 use katex::{KatexContext, Settings};
 use markdown::mdast::Node;
 
+mod alert;
 mod code;
 mod jsx;
 mod table;
@@ -18,9 +19,16 @@ pub fn mdast_to_html(node: &Node, buf: &mut String, styles: &mut Styles) {
     match node {
         Node::Root(n) => mdasts_to_html(&n.children, buf, styles),
         Node::Blockquote(n) => {
-            buf.push_str("<blockquote>");
-            mdasts_to_html(&n.children, buf, styles);
-            buf.push_str("</blockquote>");
+            if let Some(alert_type) = alert::detect_alert_type(&n.children) {
+                styles.insert(StrPtr(style::ALERT));
+                buf.push_str(&format!("<div class=\"alert alert-{alert_type}\">"));
+                alert::to_html(&n.children, buf, styles);
+                buf.push_str("</div>");
+            } else {
+                buf.push_str("<blockquote>");
+                mdasts_to_html(&n.children, buf, styles);
+                buf.push_str("</blockquote>");
+            }
         }
         Node::MdxJsxFlowElement(n) => jsx::to_html(MdxJsx::Flow(n), buf, styles),
         Node::List(n) if n.ordered => {
@@ -88,6 +96,7 @@ pub fn mdast_to_html(node: &Node, buf: &mut String, styles: &mut Styles) {
             mdasts_to_html(&n.children, buf, styles);
             buf.push_str("</strong>");
         }
+        Node::Break(_) => buf.push_str("<br>"),
         Node::Text(n) => buf.push_str(&n.value),
         Node::Code(n) => buf.push_str(&code::to_html(&n.value, &n.lang)),
         Node::Math(n) => {

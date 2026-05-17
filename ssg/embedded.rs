@@ -23,6 +23,7 @@ pub mod style {
     pub const ARTICLE: &str = include_str!("../asset/style/article.css");
 
     // コンポーネント
+    pub const ALERT: &str = include_str!("../asset/style/alert.css");
     pub const META: &str = include_str!("../asset/style/meta.css");
     pub const SCRAP_META: &str = include_str!("../asset/style/scrap-meta.css");
 
