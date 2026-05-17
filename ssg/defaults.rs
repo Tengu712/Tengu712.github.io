@@ -129,5 +129,11 @@ pub fn generate_404_html() -> String {
         otype: "article".to_string(),
         url: "https://skdassoc.com/404.html".to_string(),
     };
-    template::generate_basic_html(ogp, Styles::new(), "ぺーじのっとふぁうんと", CONTENT, H2s::new())
+    template::generate_basic_html(
+        ogp,
+        Styles::new(),
+        "ぺーじのっとふぁうんと",
+        CONTENT,
+        H2s::new(),
+    )
 }
